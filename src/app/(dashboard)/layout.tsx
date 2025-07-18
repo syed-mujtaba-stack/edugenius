@@ -1,4 +1,5 @@
 
+
 'use client';
 import {
   BookText,
@@ -18,6 +19,7 @@ import {
   Music4,
   Briefcase,
   Mic,
+  FileSignature,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -65,6 +67,7 @@ export default function DashboardLayout({
     { href: '/summarize', label: 'Chapter Summarizer', icon: BookText, keywords: ['summarizer', 'summary', 'chapter'] },
     { href: '/q-and-a', label: 'Q&A Generator', icon: MessageSquarePlus, keywords: ['q&a', 'questions', 'answers'] },
     { href: '/test-generator', label: 'Test Generator', icon: FileText, keywords: ['test generator', 'test', 'exam'] },
+    { href: '/essay-evaluator', label: 'Essay Evaluator', icon: FileSignature, keywords: ['essay evaluator', 'essay', 'writing'] },
     { href: '/ask-ai', label: 'AI Tutor', icon: Bot, keywords: ['ai tutor', 'tutor', 'ask'] },
     { href: '/video-generator', label: 'Video Generator', icon: Music4, keywords: ['video generator', 'audio', 'voice'] },
     { href: '/career-counseling', label: 'Career Counseling', icon: Briefcase, keywords: ['career', 'counseling', 'advice'] },
