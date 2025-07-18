@@ -8,6 +8,8 @@ import {
   FileText,
   Shield,
   Users,
+  Video,
+  School,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -45,6 +47,11 @@ export default function DashboardLayout({
       icon: LayoutDashboard,
     },
     {
+      href: '/courses',
+      label: 'Video Courses',
+      icon: Video,
+    },
+    {
       href: '/summarize',
       label: 'Chapter Summarizer',
       icon: BookText,
@@ -63,6 +70,11 @@ export default function DashboardLayout({
       href: '/teacher-dashboard',
       label: 'Teacher Dashboard',
       icon: LayoutDashboard,
+    },
+    {
+        href: '/classroom',
+        label: 'My Classroom',
+        icon: School,
     },
     {
       href: '/admin-dashboard',
@@ -86,7 +98,7 @@ export default function DashboardLayout({
               <SidebarMenuItem key={item.href}>
                 <SidebarMenuButton
                   asChild
-                  isActive={pathname === item.href}
+                  isActive={pathname.startsWith(item.href) && (item.href !== '/dashboard' || pathname === '/dashboard')}
                   tooltip={item.label}
                 >
                   <Link href={item.href}>
