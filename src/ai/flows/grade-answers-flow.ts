@@ -1,6 +1,6 @@
 'use server';
 /**
- * @fileOverview An AI agent for grading student answers.
+ * @fileOverview An AI agent for grading student answers and detecting potential cheating.
  *
  * - gradeAnswers - A function that handles the answer grading process.
  * - GradeAnswersInput - The input type for the gradeAnswers function.
@@ -30,6 +30,7 @@ const GradedAnswerSchema = z.object({
 const GradeAnswersOutputSchema = z.object({
   score: z.number().describe('The final score as a percentage.'),
   results: z.array(GradedAnswerSchema).describe('An array of graded answers with feedback.'),
+  cheatingAnalysis: z.string().describe('An analysis of the student\'s answers for any signs of cheating, such as copy-pasting from an external source or answers that are too perfect.'),
 });
 export type GradeAnswersOutput = z.infer<typeof GradeAnswersOutputSchema>;
 
@@ -41,9 +42,11 @@ const prompt = ai.definePrompt({
   name: 'gradeAnswersPrompt',
   input: { schema: GradeAnswersInputSchema },
   output: { schema: GradeAnswersOutputSchema },
-  prompt: `You are an AI teacher. Your task is to grade the student's answers based on the provided questions and correct answers.
+  prompt: `You are an AI teacher. Your task is to grade the student's answers and also analyze for potential cheating.
 
-For each question, determine if the student's answer is correct. For non-MCQ questions, the answer might be phrased differently but still be correct. Provide brief, constructive feedback for each answer, especially if it's incorrect.
+First, for each question, determine if the student's answer is correct. For non-MCQ questions, the answer might be phrased differently but still be correct. Provide brief, constructive feedback for each answer, especially if it's incorrect.
+
+Second, analyze the set of answers for any signs of academic dishonesty. Look for answers that seem copy-pasted, use vocabulary inconsistent with the student's level, or are suspiciously perfect. Provide a brief cheating analysis summary.
 
 Finally, calculate the total score as a percentage based on the number of correct answers.
 

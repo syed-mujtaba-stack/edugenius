@@ -2,9 +2,10 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import { FileText, Download, PlayCircle } from 'lucide-react';
+import { FileText, Download, PlayCircle, Award } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import { Progress } from '@/components/ui/progress';
+
 
 const courseData = {
     'python-basics': {
@@ -19,7 +20,23 @@ const courseData = {
         resources: [
             { name: 'Course Syllabus.pdf', type: 'note' },
             { name: 'Chapter 1 Quiz.zip', type: 'quiz' },
-        ]
+        ],
+        progress: 100, // example progress
+    },
+     'web-development': {
+        title: 'Full Stack Web Development',
+        instructor: 'Imran Malik',
+        description: 'Learn to build modern web applications with React, Node.js, and more.',
+        modules: [
+            { title: 'HTML & CSS Fundamentals', duration: '45 mins', content: 'Structure and style your first webpage.' },
+            { title: 'JavaScript Essentials', duration: '1 hour', content: 'Learn the core language of the web.' },
+            { title: 'React for Beginners', duration: '1.5 hours', content: 'Build dynamic user interfaces.' },
+        ],
+        resources: [
+            { name: 'Project Setup Guide.pdf', type: 'note' },
+            { name: 'Final Project Brief.pdf', type: 'assignment' },
+        ],
+        progress: 50,
     }
     // Add other course data here...
 };
@@ -70,7 +87,25 @@ export default function CourseDetailPage({ params }: { params: { courseId: strin
             </Card>
         </div>
 
-        <div className="md:col-span-1">
+        <div className="md:col-span-1 space-y-6">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Course Progress</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="flex items-center gap-4">
+                        <Progress value={course.progress} className="w-full" />
+                        <span className="font-bold">{course.progress}%</span>
+                    </div>
+                    {course.progress === 100 && (
+                        <Button className="w-full mt-4">
+                            <Award className="mr-2 h-4 w-4" />
+                            Generate Certificate
+                        </Button>
+                    )}
+                </CardContent>
+            </Card>
+
             <Card>
                 <CardHeader>
                     <CardTitle>Course Content</CardTitle>

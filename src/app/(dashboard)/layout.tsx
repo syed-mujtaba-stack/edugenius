@@ -12,6 +12,7 @@ import {
   School,
   Bot,
   Bell,
+  Bookmark,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -88,6 +89,11 @@ export default function DashboardLayout({
         href: '/classroom',
         label: 'My Classroom',
         icon: School,
+    },
+    {
+      href: '/bookmarks',
+      label: 'Bookmarks',
+      icon: Bookmark,
     },
     {
       href: '/admin-dashboard',

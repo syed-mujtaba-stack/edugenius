@@ -31,10 +31,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Download, Loader2, AlertTriangle, FileDown } from 'lucide-react';
+import { Download, Loader2, AlertTriangle, FileDown, Camera } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Switch } from "@/components/ui/switch";
 import jsPDF from 'jspdf';
 
 
@@ -52,6 +53,7 @@ const formSchema = z.object({
     .max(10, 'Cannot exceed 10 questions for now.'),
   questionType: z.enum(['mcq', 'short', 'long']),
   testMode: z.enum(['practice', 'exam']),
+  proctoringEnabled: z.boolean().default(false),
 });
 
 const curriculumLevels = [
@@ -84,9 +86,9 @@ export default function TestGeneratorPage() {
   const [isGrading, setIsGrading] = useState(false);
   const [gradingResult, setGradingResult] = useState<GradeAnswersOutput | null>(null);
   const [cheatingAlerts, setCheatingAlerts] = useState(0);
-
+  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const testContentRef = useRef<HTMLDivElement>(null);
-
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -101,6 +103,7 @@ export default function TestGeneratorPage() {
       numberOfQuestions: 5,
       questionType: 'mcq',
       testMode: 'practice',
+      proctoringEnabled: false,
     },
   });
 
@@ -109,6 +112,42 @@ export default function TestGeneratorPage() {
       answers: [],
     },
   });
+
+  const testMode = form.watch('testMode');
+  const proctoringEnabled = form.watch('proctoringEnabled');
+
+  useEffect(() => {
+    if (testMode !== 'exam' || !proctoringEnabled || !testResult || gradingResult) return;
+    
+    const getCameraPermission = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({video: true});
+        setHasCameraPermission(true);
+
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      } catch (error) {
+        console.error('Error accessing camera:', error);
+        setHasCameraPermission(false);
+        toast({
+          variant: 'destructive',
+          title: 'Camera Access Denied',
+          description: 'Please enable camera permissions in your browser settings to use proctoring.',
+        });
+      }
+    };
+
+    getCameraPermission();
+
+    // Cleanup function to stop video stream
+    return () => {
+        if(videoRef.current && videoRef.current.srcObject) {
+            const stream = videoRef.current.srcObject as MediaStream;
+            stream.getTracks().forEach(track => track.stop());
+        }
+    }
+  }, [testMode, proctoringEnabled, testResult, gradingResult, toast]);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
@@ -135,6 +174,7 @@ export default function TestGeneratorPage() {
     setTestResult(null);
     setGradingResult(null);
     setCheatingAlerts(0);
+    setHasCameraPermission(null);
     examForm.reset({ answers: [] });
     
     try {
@@ -143,6 +183,12 @@ export default function TestGeneratorPage() {
       const questionCount = (result.mcqs?.length || 0) + (result.shortQuestions?.length || 0) + (result.longQuestions?.length || 0);
       if (questionCount > 0) {
         examForm.reset({ answers: Array(questionCount).fill({ value: '' }) });
+      } else {
+        toast({
+            title: "No Questions Generated",
+            description: "The AI didn't generate any questions for the given parameters. Please try again with a different topic or settings.",
+            variant: "destructive"
+        })
       }
     } catch (error) {
       console.error('Error creating test:', error);
@@ -173,7 +219,8 @@ export default function TestGeneratorPage() {
     try {
       const result = await gradeAnswers({ answers: answersToGrade });
       setGradingResult(result);
-    } catch (error) {
+    } catch (error)
+ {
       console.error('Error grading test:', error);
       toast({
         title: 'Grading Failed',
@@ -187,20 +234,14 @@ export default function TestGeneratorPage() {
   
   const handleExportToPdf = () => {
     if (!testContentRef.current) return;
-
-    const doc = new jsPDF({
-      orientation: 'p',
-      unit: 'pt',
-      format: 'a4',
-    });
-
+    const doc = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
     doc.html(testContentRef.current, {
       async callback(doc) {
         doc.save('practice-test.pdf');
       },
       margin: [40, 40, 40, 40],
       autoPaging: 'text',
-      width: 515, // A4 width in points - margins
+      width: 515,
       windowWidth: testContentRef.current.scrollWidth,
     });
   };
@@ -290,6 +331,13 @@ export default function TestGeneratorPage() {
                             <p className="text-6xl font-bold text-primary">{gradingResult.score}%</p>
                         </div>
                         <Progress value={gradingResult.score} className="mt-4" />
+                         <Alert className="mt-4">
+                            <AlertTriangle className="h-4 w-4" />
+                            <AlertTitle>AI Cheating Analysis</AlertTitle>
+                            <AlertDescription>
+                                {gradingResult.cheatingAnalysis}
+                            </AlertDescription>
+                        </Alert>
                     </div>
                     <div>
                         <h3 className="font-semibold mb-2">Detailed Feedback</h3>
@@ -309,6 +357,21 @@ export default function TestGeneratorPage() {
                     </div>
                 </div>
              ) : (
+                <>
+                {proctoringEnabled && (
+                    <Card className="mb-6">
+                        <CardHeader><CardTitle className="flex items-center gap-2"><Camera /> AI Proctoring</CardTitle></CardHeader>
+                        <CardContent>
+                             <video ref={videoRef} className="w-full aspect-video rounded-md bg-muted" autoPlay muted />
+                             {hasCameraPermission === false && (
+                                <Alert variant="destructive" className="mt-2">
+                                    <AlertTitle>Camera Access Required</AlertTitle>
+                                    <AlertDescription>Please allow camera access to use proctoring.</AlertDescription>
+                                </Alert>
+                             )}
+                        </CardContent>
+                    </Card>
+                )}
                 <Form {...examForm}>
                     <form onSubmit={examForm.handleSubmit(onExamSubmit)} className="space-y-8">
                         {allQuestions.map((q, index) => (
@@ -344,19 +407,12 @@ export default function TestGeneratorPage() {
                             )}
                             />
                         ))}
-
                         <Button type="submit" disabled={isGrading} className="w-full">
-                            {isGrading ? (
-                                <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Grading...
-                                </>
-                            ) : (
-                                'Submit for Grading'
-                            )}
+                            {isGrading ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" />Grading...</>) : ('Submit for Grading')}
                         </Button>
                     </form>
                 </Form>
+                </>
              )}
         </CardContent>
      </Card>
@@ -391,7 +447,6 @@ export default function TestGeneratorPage() {
                       </FormItem>
                     )}
                   />
-                  
                   {showBoardSelection && (
                     <FormField control={form.control} name="board"
                       render={({ field }) => (
@@ -474,17 +529,39 @@ export default function TestGeneratorPage() {
                       </FormItem>
                     )}
                   />
-                   <FormField control={form.control} name="testMode" render={({ field }) => (
-                      <FormItem className="space-y-3"><FormLabel>Mode</FormLabel>
-                        <FormControl>
-                          <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex space-x-4">
-                            <FormItem className="flex items-center space-x-2 space-y-0"><FormControl><RadioGroupItem value="practice" /></FormControl><FormLabel className="font-normal">Practice</FormLabel></FormItem>
-                            <FormItem className="flex items-center space-x-2 space-y-0"><FormControl><RadioGroupItem value="exam" /></FormControl><FormLabel className="font-normal">Exam</FormLabel></FormItem>
-                          </RadioGroup>
-                        </FormControl><FormMessage />
-                      </FormItem>
+                   <div className="space-y-3">
+                     <FormField control={form.control} name="testMode" render={({ field }) => (
+                        <FormItem><FormLabel>Mode</FormLabel>
+                          <FormControl>
+                            <RadioGroup onValueChange={(value) => {field.onChange(value); if(value === 'practice') {form.setValue('proctoringEnabled', false)}}} defaultValue={field.value} className="flex space-x-4">
+                              <FormItem className="flex items-center space-x-2 space-y-0"><FormControl><RadioGroupItem value="practice" /></FormControl><FormLabel className="font-normal">Practice</FormLabel></FormItem>
+                              <FormItem className="flex items-center space-x-2 space-y-0"><FormControl><RadioGroupItem value="exam" /></FormControl><FormLabel className="font-normal">Exam</FormLabel></FormItem>
+                            </RadioGroup>
+                          </FormControl><FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    {testMode === 'exam' && (
+                        <FormField
+                            control={form.control}
+                            name="proctoringEnabled"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                                    <div className="space-y-0.5">
+                                        <FormLabel>AI Proctoring</FormLabel>
+                                        <p className="text-xs text-muted-foreground">Enable webcam to monitor test.</p>
+                                    </div>
+                                    <FormControl>
+                                        <Switch
+                                            checked={field.value}
+                                            onCheckedChange={field.onChange}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
                     )}
-                  />
+                   </div>
                 </div>
                 <Button type="submit" disabled={isLoading}>
                   {isLoading ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating Test...</>) : ('Generate Test')}
@@ -501,7 +578,7 @@ export default function TestGeneratorPage() {
             </div>
         )}
 
-        {testResult && (
+        {testResult && allQuestions.length > 0 && (
             form.getValues('testMode') === 'practice' ? renderPracticeMode() : renderExamMode()
         )}
       </div>
