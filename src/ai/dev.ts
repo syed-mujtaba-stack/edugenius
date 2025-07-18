@@ -7,3 +7,4 @@ import '@/ai/flows/create-test.ts';
 import '@/ai/flows/grade-answers-flow.ts';
 import '@/ai/flows/generate-lesson-plan.ts';
 import '@/ai/flows/ask-ai-tutor.ts';
+import '@/ai/flows/generate-learning-path.ts';

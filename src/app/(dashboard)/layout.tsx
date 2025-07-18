@@ -13,6 +13,7 @@ import {
   Bot,
   Bell,
   Bookmark,
+  TrendingUp,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -49,6 +50,11 @@ export default function DashboardLayout({
       href: '/dashboard',
       label: 'Dashboard',
       icon: LayoutDashboard,
+    },
+     {
+      href: '/learning-path',
+      label: 'Learning Path',
+      icon: TrendingUp,
     },
     {
       href: '/courses',
