@@ -38,7 +38,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState, useRef } from 'react';
 import { Badge } from '@/components/ui/badge';
-import { toast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { findBestMatch } from 'string-similarity';
 
 // Extend the Window interface for webkitSpeechRecognition
@@ -58,6 +58,7 @@ export default function DashboardLayout({
   const router = useRouter();
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<any>(null);
+  const { toast } = useToast();
 
   const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, keywords: ['dashboard', 'home', 'main'] },
@@ -92,7 +93,8 @@ export default function DashboardLayout({
       };
 
       recognition.onerror = (event: any) => {
-        console.error('Speech recognition error', event.error);
+        // Use console.warn for non-critical errors like network issues to avoid error overlay
+        console.warn('Speech recognition error:', event.error);
         toast({ title: "MJ Error", description: `Could not understand. Error: ${event.error}`, variant: "destructive" });
         setIsListening(false);
       };
@@ -146,9 +148,14 @@ export default function DashboardLayout({
     if (isListening) {
       recognitionRef.current.stop();
     } else {
-      recognitionRef.current.start();
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+      } catch (e) {
+        // This can happen if recognition is already active.
+        console.warn("Could not start speech recognition", e);
+      }
     }
-    setIsListening(!isListening);
   };
 
 
