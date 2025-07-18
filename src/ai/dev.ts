@@ -1,1 +1,6 @@
-// Flows will be imported for their side effects in this file.
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/summarize-chapter.ts';
+import '@/ai/flows/generate-q-and-a.ts';
+import '@/ai/flows/create-test.ts';
