@@ -4,8 +4,8 @@ import { Logo } from "@/components/logo";
 
 export default function Home() {
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-background">
-      <main className="relative z-10 flex flex-col items-center justify-center text-center p-4">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-background p-4">
+      <main className="relative z-10 flex flex-col items-center justify-center text-center">
         <div className="mb-8">
           <Logo className="h-24 w-24 text-primary" />
         </div>
@@ -15,13 +15,13 @@ export default function Home() {
         <p className="mt-4 max-w-2xl text-lg md:text-xl text-primary/80">
           Unlock Your Learning Potential with AI. Summarize chapters, generate Q&As, and create personalized tests in seconds.
         </p>
-        <div className="mt-8 flex gap-4">
-           <Button asChild size="lg" className="font-bold text-lg">
+        <div className="mt-8 flex flex-col sm:flex-row gap-4 w-full max-w-xs sm:max-w-none">
+           <Button asChild size="lg" className="font-bold text-lg flex-1">
             <Link href="/dashboard">Get Started</Link>
           </Button>
         </div>
       </main>
-      <footer className="relative z-10 py-6 text-center text-sm text-primary/60">
+      <footer className="relative z-10 py-6 mt-8 text-center text-sm text-primary/60">
         <p>© {new Date().getFullYear()} EduGenius. All rights reserved.</p>
       </footer>
     </div>
