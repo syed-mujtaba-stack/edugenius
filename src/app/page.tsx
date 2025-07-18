@@ -1,11 +1,10 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import Image from "next/image";
 import { Logo } from "@/components/logo";
 
 export default function Home() {
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-black">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-background">
       <main className="relative z-10 flex flex-col items-center justify-center text-center p-4">
         <div className="mb-8">
           <Logo className="h-24 w-24 text-primary" />
@@ -17,8 +16,11 @@ export default function Home() {
           Unlock Your Learning Potential with AI. Summarize chapters, generate Q&As, and create personalized tests in seconds.
         </p>
         <div className="mt-8 flex gap-4">
-          <Button asChild size="lg" className="font-bold text-lg">
-            <Link href="/dashboard">Get Started</Link>
+           <Button asChild size="lg" className="font-bold text-lg">
+            <Link href="/sign-in">Sign In</Link>
+          </Button>
+          <Button asChild size="lg" variant="outline" className="font-bold text-lg">
+            <Link href="/sign-up">Sign Up</Link>
           </Button>
         </div>
       </main>
