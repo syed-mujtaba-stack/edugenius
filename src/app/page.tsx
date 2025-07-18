@@ -1,6 +1,13 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "EduGenius: AI-Powered Learning for Pakistani Students",
+  description: "Welcome to EduGenius. Unlock your learning potential with our AI-powered platform. Summarize chapters, generate Q&As, create personalized tests, get career advice, and more. Built for students in Pakistan.",
+};
+
 
 export default function Home() {
   return (

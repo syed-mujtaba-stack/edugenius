@@ -1,12 +1,18 @@
 'use client';
 import Link from 'next/link';
 import { useState } from 'react';
+import type { Metadata } from 'next';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Search, Youtube } from 'lucide-react';
+
+export const metadata: Metadata = {
+    title: "Free Video Courses",
+    description: "Browse a curated list of high-quality, free video courses from YouTube on programming, AI, web development, science, and more. Start learning a new skill today!",
+};
 
 const courses = [
   {
