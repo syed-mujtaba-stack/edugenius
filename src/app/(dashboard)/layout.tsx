@@ -14,6 +14,7 @@ import {
   Bell,
   Bookmark,
   TrendingUp,
+  Music4
 } from 'lucide-react';
 import {
   Sidebar,
@@ -80,6 +81,11 @@ export default function DashboardLayout({
       href: '/ask-ai',
       label: 'AI Tutor',
       icon: Bot,
+    },
+     {
+        href: '/video-generator',
+        label: 'Video Generator',
+        icon: Music4,
     },
     {
       href: '/community',

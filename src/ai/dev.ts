@@ -8,3 +8,4 @@ import '@/ai/flows/grade-answers-flow.ts';
 import '@/ai/flows/generate-lesson-plan.ts';
 import '@/ai/flows/ask-ai-tutor.ts';
 import '@/ai/flows/generate-learning-path.ts';
+import '@/ai/flows/generate-audio-from-text.ts';
