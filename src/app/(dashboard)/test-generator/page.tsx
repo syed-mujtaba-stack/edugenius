@@ -7,6 +7,7 @@ import { createTest, CreateTestOutput } from '@/ai/flows/create-test';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
   Select,
   SelectContent,
@@ -33,6 +34,9 @@ import { DownloadButton } from '@/components/download-button';
 import { Loader2 } from 'lucide-react';
 
 const formSchema = z.object({
+  curriculumLevel: z.string().min(1, 'Please select a curriculum level.'),
+  board: z.string().optional(),
+  medium: z.enum(['english', 'urdu']),
   subject: z.string().min(2, 'Subject must be at least 2 characters.'),
   topic: z.string().min(2, 'Topic must be at least 2 characters.'),
   difficultyLevel: z.enum(['easy', 'medium', 'hard']),
@@ -43,6 +47,25 @@ const formSchema = z.object({
     .max(20, 'Cannot exceed 20 questions.'),
 });
 
+const curriculumLevels = [
+    "Montessori",
+    "Grade 1-8",
+    "Matric (Grade 9-10)",
+    "Intermediate (Grade 11-12)",
+    "A/O Levels",
+    "Graduation (BCom, BSc, BA, etc.)",
+    "Computer/IT Courses",
+];
+
+const boards = [
+    "Sindh Board",
+    "Punjab Board",
+    "Federal Board",
+    "KPK Board",
+    "Balochistan Board",
+];
+
+
 export default function TestGeneratorPage() {
   const [testResult, setTestResult] = useState<CreateTestOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,6 +74,9 @@ export default function TestGeneratorPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      curriculumLevel: '',
+      board: '',
+      medium: 'english',
       subject: '',
       topic: '',
       difficultyLevel: 'medium',
@@ -84,6 +110,10 @@ export default function TestGeneratorPage() {
       .join('\n\n');
   };
 
+  const selectedLevel = form.watch('curriculumLevel');
+  const showBoardSelection = ["Matric (Grade 9-10)", "Intermediate (Grade 11-12)"].includes(selectedLevel);
+
+
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
       <div className="flex items-center">
@@ -96,8 +126,91 @@ export default function TestGeneratorPage() {
           </CardHeader>
           <CardContent>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <FormField
+                    control={form.control}
+                    name="curriculumLevel"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Curriculum Level</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a level" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {curriculumLevels.map(level => (
+                                <SelectItem key={level} value={level}>{level}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  {showBoardSelection && (
+                    <FormField
+                      control={form.control}
+                      name="board"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Board</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select a board" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                               {boards.map(board => (
+                                <SelectItem key={board} value={board}>{board}</SelectItem>
+                               ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+                  
+                  <FormField
+                    control={form.control}
+                    name="medium"
+                    render={({ field }) => (
+                      <FormItem className="space-y-3">
+                        <FormLabel>Medium</FormLabel>
+                        <FormControl>
+                          <RadioGroup
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                            className="flex space-x-4"
+                          >
+                            <FormItem className="flex items-center space-x-2 space-y-0">
+                              <FormControl>
+                                <RadioGroupItem value="english" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                English
+                              </FormLabel>
+                            </FormItem>
+                            <FormItem className="flex items-center space-x-2 space-y-0">
+                              <FormControl>
+                                <RadioGroupItem value="urdu" />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                Urdu
+                              </FormLabel>
+                            </FormItem>
+                          </RadioGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   <FormField
                     control={form.control}
                     name="subject"
@@ -105,7 +218,7 @@ export default function TestGeneratorPage() {
                       <FormItem>
                         <FormLabel>Subject</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g., Biology" {...field} />
+                          <Input placeholder="e.g., Biology, Python" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -118,7 +231,7 @@ export default function TestGeneratorPage() {
                       <FormItem>
                         <FormLabel>Topic</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g., Cell Structure" {...field} />
+                          <Input placeholder="e.g., Cell Structure, Data Types" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

@@ -23,6 +23,9 @@ const CreateTestInputSchema = z.object({
     .positive()
     .default(10) // Providing a default value
     .describe('The number of questions to generate for the test.'),
+  curriculumLevel: z.string().describe('The curriculum level for the test (e.g., Grade 12, Graduation).'),
+  board: z.string().optional().describe('The educational board (e.g., Sindh, Punjab, Federal).'),
+  medium: z.enum(['english', 'urdu']).describe('The language medium for the test.'),
 });
 export type CreateTestInput = z.infer<typeof CreateTestInputSchema>;
 
@@ -46,9 +49,12 @@ const prompt = ai.definePrompt({
   output: {schema: CreateTestOutputSchema},
   prompt: `You are an expert test generator. Generate a practice test with {{numberOfQuestions}} questions, tailored to the student's needs based on the following parameters:
 
+Curriculum Level: {{curriculumLevel}}
+{{#if board}}Board: {{board}}{{/if}}
 Subject: {{subject}}
 Topic: {{topic}}
 Difficulty Level: {{difficultyLevel}}
+Medium: {{medium}}
 
 The test questions should be challenging and designed to assess the student's understanding of the material. Each question should have a clear and concise answer.
 
