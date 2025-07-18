@@ -1,3 +1,4 @@
+
 'use client';
 import {
   BookText,
@@ -28,6 +29,7 @@ import {
   SidebarFooter,
   SidebarProvider,
   SidebarInset,
+  SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { Logo } from '@/components/logo';
 import { usePathname, useRouter } from 'next/navigation';
@@ -159,11 +161,14 @@ export default function DashboardLayout({
           <div className="flex items-center justify-between">
              <div className="flex items-center gap-2">
                 <Logo className="w-8 h-8 text-primary" />
-                <span className="font-headline text-2xl text-primary">EduGenius</span>
+                <span className="font-headline text-2xl text-primary group-data-[collapsible=icon]:hidden">EduGenius</span>
              </div>
-             <button className="p-1 rounded-full hover:bg-accent">
-                <Bell className="h-5 w-5" />
-             </button>
+             <div className='flex items-center gap-2'>
+                <button className="p-1 rounded-full hover:bg-accent md:hidden">
+                    <Bell className="h-5 w-5" />
+                </button>
+                <SidebarTrigger className='md:hidden' />
+             </div>
           </div>
         </SidebarHeader>
         <SidebarContent>
@@ -201,7 +206,21 @@ export default function DashboardLayout({
           </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
-      <SidebarInset>{children}</SidebarInset>
+      <SidebarInset>
+        <header className="sticky top-0 z-10 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 md:hidden">
+            <div className="flex items-center gap-2">
+                <Logo className="w-6 h-6 text-primary" />
+                <span className="font-headline text-xl text-primary">EduGenius</span>
+            </div>
+             <div className='flex items-center gap-2'>
+                <button className="p-1 rounded-full hover:bg-accent">
+                    <Bell className="h-5 w-5" />
+                </button>
+                <SidebarTrigger />
+             </div>
+        </header>
+        {children}
+      </SidebarInset>
     </SidebarProvider>
   );
 }
