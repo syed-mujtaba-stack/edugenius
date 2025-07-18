@@ -14,7 +14,8 @@ import {
   Bell,
   Bookmark,
   TrendingUp,
-  Music4
+  Music4,
+  Briefcase
 } from 'lucide-react';
 import {
   Sidebar,
@@ -86,6 +87,11 @@ export default function DashboardLayout({
         href: '/video-generator',
         label: 'Video Generator',
         icon: Music4,
+    },
+    {
+      href: '/career-counseling',
+      label: 'Career Counseling',
+      icon: Briefcase,
     },
     {
       href: '/community',
