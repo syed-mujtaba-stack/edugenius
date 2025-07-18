@@ -23,7 +23,6 @@ import {
 import { Logo } from '@/components/logo';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useAuth } from '@/hooks/use-auth';
 import { useEffect } from 'react';
 
 export default function DashboardLayout({
@@ -33,20 +32,13 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, userRole, loading, logout } = useAuth();
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/sign-in');
-    }
-  }, [user, loading, router]);
 
   const handleLogout = async () => {
-    await logout();
     router.push('/');
   };
 
-  const studentMenuItems = [
+  const menuItems = [
     {
       href: '/dashboard',
       label: 'Dashboard',
@@ -67,38 +59,17 @@ export default function DashboardLayout({
       label: 'Test Generator',
       icon: FileText,
     },
-  ];
-
-  const teacherMenuItems = [
-    {
+     {
       href: '/teacher-dashboard',
       label: 'Teacher Dashboard',
       icon: LayoutDashboard,
     },
-    {
-      href: '/manage-students',
-      label: 'Manage Students',
-      icon: Users,
-    },
-  ];
-
-   const adminMenuItems = [
     {
       href: '/admin-dashboard',
       label: 'Admin Dashboard',
       icon: Shield,
     },
   ];
-
-  const menuItems = userRole === 'teacher' ? teacherMenuItems : userRole === 'admin' ? adminMenuItems : studentMenuItems;
-
-   if (loading || !user) {
-    return (
-        <div className="flex h-screen w-full items-center justify-center">
-            <div className="text-2xl">Loading...</div>
-        </div>
-    );
-  }
 
   return (
     <SidebarProvider>

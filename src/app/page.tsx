@@ -17,10 +17,7 @@ export default function Home() {
         </p>
         <div className="mt-8 flex gap-4">
            <Button asChild size="lg" className="font-bold text-lg">
-            <Link href="/sign-in">Sign In</Link>
-          </Button>
-          <Button asChild size="lg" variant="outline" className="font-bold text-lg">
-            <Link href="/sign-up">Sign Up</Link>
+            <Link href="/dashboard">Get Started</Link>
           </Button>
         </div>
       </main>
