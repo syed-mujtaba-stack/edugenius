@@ -55,9 +55,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
-    // onAuthStateChanged will handle the rest
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    const userDocRef = doc(db, 'users', user.uid);
+    const userDoc = await getDoc(userDocRef);
+     if (!userDoc.exists()) {
+        await setDoc(userDocRef, { 
+          email: user.email,
+          role: "student", // Default role
+          name: user.displayName,
+          photoURL: user.photoURL
+        });
+     }
+    // onAuthStateChanged will handle setting the state
   };
+
 
   const value = { user, userRole, loading, logout, signInWithGoogle };
 
