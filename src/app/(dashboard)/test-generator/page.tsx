@@ -1,11 +1,12 @@
 'use client';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useState, useEffect, useRef } from 'react';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { createTest, CreateTestOutput } from '@/ai/flows/create-test';
+import { gradeAnswers, GradeAnswersOutput } from '@/ai/flows/grade-answers-flow';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
@@ -30,8 +31,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { DownloadButton } from '@/components/download-button';
-import { Loader2 } from 'lucide-react';
+import { Download, Loader2, AlertTriangle, FileDown } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { Progress } from '@/components/ui/progress';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import jsPDF from 'jspdf';
+
 
 const formSchema = z.object({
   curriculumLevel: z.string().min(1, 'Please select a curriculum level.'),
@@ -44,7 +49,9 @@ const formSchema = z.object({
     .number()
     .int()
     .min(1, 'Must have at least 1 question.')
-    .max(20, 'Cannot exceed 20 questions.'),
+    .max(10, 'Cannot exceed 10 questions for now.'),
+  questionType: z.enum(['mcq', 'short', 'long']),
+  testMode: z.enum(['practice', 'exam']),
 });
 
 const curriculumLevels = [
@@ -65,10 +72,21 @@ const boards = [
     "Balochistan Board",
 ];
 
+type Question = {
+    question: string;
+    answer: string;
+    options?: string[];
+};
 
 export default function TestGeneratorPage() {
   const [testResult, setTestResult] = useState<CreateTestOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isGrading, setIsGrading] = useState(false);
+  const [gradingResult, setGradingResult] = useState<GradeAnswersOutput | null>(null);
+  const [cheatingAlerts, setCheatingAlerts] = useState(0);
+
+  const testContentRef = useRef<HTMLDivElement>(null);
+
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -80,17 +98,52 @@ export default function TestGeneratorPage() {
       subject: '',
       topic: '',
       difficultyLevel: 'medium',
-      numberOfQuestions: 10,
+      numberOfQuestions: 5,
+      questionType: 'mcq',
+      testMode: 'practice',
     },
   });
+
+  const examForm = useForm<{ answers: { value: string }[] }>({
+    defaultValues: {
+      answers: [],
+    },
+  });
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden' && testResult && form.getValues('testMode') === 'exam' && !gradingResult) {
+        setCheatingAlerts(prev => prev + 1);
+        toast({
+          title: 'Warning: Tab Switch Detected',
+          description: `You have switched tabs ${cheatingAlerts + 1} time(s). This is not allowed during an exam.`,
+          variant: 'destructive',
+        });
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [testResult, gradingResult, form, toast, cheatingAlerts]);
+
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     setTestResult(null);
-
+    setGradingResult(null);
+    setCheatingAlerts(0);
+    examForm.reset({ answers: [] });
+    
     try {
       const result = await createTest(values);
       setTestResult(result);
+      const questionCount = (result.mcqs?.length || 0) + (result.shortQuestions?.length || 0) + (result.longQuestions?.length || 0);
+      if (questionCount > 0) {
+        examForm.reset({ answers: Array(questionCount).fill({ value: '' }) });
+      }
     } catch (error) {
       console.error('Error creating test:', error);
       toast({
@@ -103,16 +156,211 @@ export default function TestGeneratorPage() {
     }
   }
 
-  const formatTestToText = () => {
-    if (!testResult) return '';
-    return testResult.testQuestions
-      .map((q, i) => `${i + 1}. Question: ${q.question}\n   Answer: ${q.answer}`)
-      .join('\n\n');
+  const allQuestions: Question[] = [
+    ...(testResult?.mcqs || []),
+    ...(testResult?.shortQuestions || []),
+    ...(testResult?.longQuestions || [])
+  ];
+
+  async function onExamSubmit(data: { answers: { value: string }[] }) {
+    setIsGrading(true);
+    const answersToGrade = allQuestions.map((q, i) => ({
+      question: q.question,
+      correctAnswer: q.answer,
+      studentAnswer: data.answers[i].value,
+    }));
+
+    try {
+      const result = await gradeAnswers({ answers: answersToGrade });
+      setGradingResult(result);
+    } catch (error) {
+      console.error('Error grading test:', error);
+      toast({
+        title: 'Grading Failed',
+        description: 'The AI failed to grade your test. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsGrading(false);
+    }
+  }
+  
+  const handleExportToPdf = () => {
+    if (!testContentRef.current) return;
+
+    const doc = new jsPDF({
+      orientation: 'p',
+      unit: 'pt',
+      format: 'a4',
+    });
+
+    doc.html(testContentRef.current, {
+      async callback(doc) {
+        doc.save('practice-test.pdf');
+      },
+      margin: [40, 40, 40, 40],
+      autoPaging: 'text',
+      width: 515, // A4 width in points - margins
+      windowWidth: testContentRef.current.scrollWidth,
+    });
   };
 
   const selectedLevel = form.watch('curriculumLevel');
   const showBoardSelection = ["Matric (Grade 9-10)", "Intermediate (Grade 11-12)"].includes(selectedLevel);
 
+  const renderPracticeMode = () => (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle>Generated Practice Test</CardTitle>
+        <Button onClick={handleExportToPdf} variant="outline" size="sm">
+            <FileDown className="mr-2 h-4 w-4" />
+            Export to PDF
+        </Button>
+      </CardHeader>
+      <CardContent ref={testContentRef} className="prose dark:prose-invert max-w-none">
+        {testResult?.mcqs && testResult.mcqs.length > 0 && (
+          <>
+            <h3>Multiple Choice Questions</h3>
+            <Accordion type="single" collapsible className="w-full">
+                {testResult.mcqs.map((qa, index) => (
+                <AccordionItem value={`mcq-${index}`} key={`mcq-${index}`}>
+                    <AccordionTrigger className="text-left">
+                    {index + 1}. {qa.question}
+                    </AccordionTrigger>
+                    <AccordionContent>
+                    <ul className="list-disc pl-5 mt-2 space-y-1">
+                        {qa.options.map((opt, i) => (
+                        <li key={i} className={opt === qa.answer ? 'font-bold text-primary' : ''}>
+                            {opt}
+                        </li>
+                        ))}
+                    </ul>
+                    <p className="mt-2"><strong>Correct Answer:</strong> {qa.answer}</p>
+                    </AccordionContent>
+                </AccordionItem>
+                ))}
+            </Accordion>
+          </>
+        )}
+        {[
+            {title: "Short Questions", questions: testResult?.shortQuestions},
+            {title: "Long Questions", questions: testResult?.longQuestions},
+        ].map((section, sIndex) => (
+            section.questions && section.questions.length > 0 && (
+                <div key={sIndex}>
+                    <h3 className="mt-6">{section.title}</h3>
+                    <Accordion type="single" collapsible className="w-full">
+                        {section.questions.map((qa, index) => (
+                        <AccordionItem value={`qa-${sIndex}-${index}`} key={`qa-${sIndex}-${index}`}>
+                            <AccordionTrigger className="text-left">
+                            {index + 1}. {qa.question}
+                            </AccordionTrigger>
+                            <AccordionContent>
+                            <strong>Answer:</strong> {qa.answer}
+                            </AccordionContent>
+                        </AccordionItem>
+                        ))}
+                    </Accordion>
+                </div>
+            )
+        ))}
+      </CardContent>
+    </Card>
+  );
+
+  const renderExamMode = () => (
+     <Card>
+        <CardHeader>
+            <CardTitle>Exam Mode</CardTitle>
+            <Alert variant="destructive" className="mt-4">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertTitle>Cheating Warning</AlertTitle>
+                <AlertDescription>
+                    Switching tabs during the exam is prohibited. Your activity is being monitored.
+                </AlertDescription>
+            </Alert>
+        </CardHeader>
+        <CardContent>
+             {gradingResult ? (
+                <div className="space-y-6">
+                    <div>
+                        <CardTitle className="mb-4">Exam Results</CardTitle>
+                        <div className="text-center">
+                            <p className="text-lg text-muted-foreground">Your Score</p>
+                            <p className="text-6xl font-bold text-primary">{gradingResult.score}%</p>
+                        </div>
+                        <Progress value={gradingResult.score} className="mt-4" />
+                    </div>
+                    <div>
+                        <h3 className="font-semibold mb-2">Detailed Feedback</h3>
+                        <Accordion type="single" collapsible className="w-full">
+                            {gradingResult.results.map((res, index) => (
+                                <AccordionItem value={`res-${index}`} key={`res-${index}`}>
+                                <AccordionTrigger className={`text-left ${res.isCorrect ? 'text-green-500' : 'text-red-500'}`}>
+                                    {index + 1}. {res.question}
+                                </AccordionTrigger>
+                                <AccordionContent className="space-y-2">
+                                    <p><strong>Your Answer:</strong> {examForm.getValues(`answers.${index}.value`)}</p>
+                                    <p><strong>Feedback:</strong> {res.feedback}</p>
+                                </AccordionContent>
+                                </AccordionItem>
+                            ))}
+                        </Accordion>
+                    </div>
+                </div>
+             ) : (
+                <Form {...examForm}>
+                    <form onSubmit={examForm.handleSubmit(onExamSubmit)} className="space-y-8">
+                        {allQuestions.map((q, index) => (
+                            <FormField
+                            key={index}
+                            control={examForm.control}
+                            name={`answers.${index}.value`}
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>{index + 1}. {q.question}</FormLabel>
+                                <FormControl>
+                                    {form.getValues('questionType') === 'mcq' && q.options ? (
+                                    <RadioGroup
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                        className="space-y-1"
+                                    >
+                                        {q.options.map((option, optIndex) => (
+                                            <FormItem className="flex items-center space-x-3" key={optIndex}>
+                                                <FormControl>
+                                                <RadioGroupItem value={option} />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">{option}</FormLabel>
+                                            </FormItem>
+                                        ))}
+                                    </RadioGroup>
+                                    ) : (
+                                    <Textarea placeholder="Type your answer here..." {...field} />
+                                    )}
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                        ))}
+
+                        <Button type="submit" disabled={isGrading} className="w-full">
+                            {isGrading ? (
+                                <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Grading...
+                                </>
+                            ) : (
+                                'Submit for Grading'
+                            )}
+                        </Button>
+                    </form>
+                </Form>
+             )}
+        </CardContent>
+     </Card>
+  );
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
@@ -136,179 +384,125 @@ export default function TestGeneratorPage() {
                         <FormLabel>Curriculum Level</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a level" />
-                            </SelectTrigger>
+                            <SelectTrigger><SelectValue placeholder="Select a level" /></SelectTrigger>
                           </FormControl>
-                          <SelectContent>
-                            {curriculumLevels.map(level => (
-                                <SelectItem key={level} value={level}>{level}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
+                          <SelectContent>{curriculumLevels.map(level => <SelectItem key={level} value={level}>{level}</SelectItem>)}</SelectContent>
+                        </Select><FormMessage />
                       </FormItem>
                     )}
                   />
                   
                   {showBoardSelection && (
-                    <FormField
-                      control={form.control}
-                      name="board"
+                    <FormField control={form.control} name="board"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Board</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a board" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                               {boards.map(board => (
-                                <SelectItem key={board} value={board}>{board}</SelectItem>
-                               ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
+                            <FormControl><SelectTrigger><SelectValue placeholder="Select a board" /></SelectTrigger></FormControl>
+                            <SelectContent>{boards.map(board => <SelectItem key={board} value={board}>{board}</SelectItem>)}</SelectContent>
+                          </Select><FormMessage />
                         </FormItem>
                       )}
                     />
                   )}
-                  
-                  <FormField
-                    control={form.control}
-                    name="medium"
-                    render={({ field }) => (
-                      <FormItem className="space-y-3">
-                        <FormLabel>Medium</FormLabel>
-                        <FormControl>
-                          <RadioGroup
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                            className="flex space-x-4"
-                          >
-                            <FormItem className="flex items-center space-x-2 space-y-0">
-                              <FormControl>
-                                <RadioGroupItem value="english" />
-                              </FormControl>
-                              <FormLabel className="font-normal">
-                                English
-                              </FormLabel>
-                            </FormItem>
-                            <FormItem className="flex items-center space-x-2 space-y-0">
-                              <FormControl>
-                                <RadioGroupItem value="urdu" />
-                              </FormControl>
-                              <FormLabel className="font-normal">
-                                Urdu
-                              </FormLabel>
-                            </FormItem>
-                          </RadioGroup>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="subject"
+                  <FormField control={form.control} name="subject"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Subject</FormLabel>
-                        <FormControl>
-                          <Input placeholder="e.g., Biology, Python" {...field} />
-                        </FormControl>
+                        <FormControl><Input placeholder="e.g., Biology, Python" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="topic"
+                  <FormField control={form.control} name="topic"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Topic</FormLabel>
-                        <FormControl>
-                          <Input placeholder="e.g., Cell Structure, Data Types" {...field} />
-                        </FormControl>
+                        <FormControl><Input placeholder="e.g., Cell Structure, Data Types" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="difficultyLevel"
+                  <FormField control={form.control} name="difficultyLevel"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Difficulty</FormLabel>
+                      <FormItem><FormLabel>Difficulty</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select difficulty" />
-                            </SelectTrigger>
-                          </FormControl>
+                          <FormControl><SelectTrigger><SelectValue placeholder="Select difficulty" /></SelectTrigger></FormControl>
                           <SelectContent>
                             <SelectItem value="easy">Easy</SelectItem>
                             <SelectItem value="medium">Medium</SelectItem>
                             <SelectItem value="hard">Hard</SelectItem>
                           </SelectContent>
-                        </Select>
+                        </Select><FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                   <FormField
+                    control={form.control}
+                    name="questionType"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Question Type</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl><SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger></FormControl>
+                          <SelectContent>
+                            <SelectItem value="mcq">MCQ</SelectItem>
+                            <SelectItem value="short">Short Answer</SelectItem>
+                            <SelectItem value="long">Long Answer</SelectItem>
+                          </SelectContent>
+                        </Select><FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField control={form.control} name="numberOfQuestions"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Number of Questions</FormLabel>
+                        <FormControl><Input type="number" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="numberOfQuestions"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Number of Questions</FormLabel>
+                  <FormField control={form.control} name="medium" render={({ field }) => (
+                      <FormItem className="space-y-3"><FormLabel>Medium</FormLabel>
                         <FormControl>
-                          <Input type="number" {...field} />
-                        </FormControl>
-                        <FormMessage />
+                          <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex space-x-4">
+                            <FormItem className="flex items-center space-x-2 space-y-0"><FormControl><RadioGroupItem value="english" /></FormControl><FormLabel className="font-normal">English</FormLabel></FormItem>
+                            <FormItem className="flex items-center space-x-2 space-y-0"><FormControl><RadioGroupItem value="urdu" /></FormControl><FormLabel className="font-normal">Urdu</FormLabel></FormItem>
+                          </RadioGroup>
+                        </FormControl><FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                   <FormField control={form.control} name="testMode" render={({ field }) => (
+                      <FormItem className="space-y-3"><FormLabel>Mode</FormLabel>
+                        <FormControl>
+                          <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex space-x-4">
+                            <FormItem className="flex items-center space-x-2 space-y-0"><FormControl><RadioGroupItem value="practice" /></FormControl><FormLabel className="font-normal">Practice</FormLabel></FormItem>
+                            <FormItem className="flex items-center space-x-2 space-y-0"><FormControl><RadioGroupItem value="exam" /></FormControl><FormLabel className="font-normal">Exam</FormLabel></FormItem>
+                          </RadioGroup>
+                        </FormControl><FormMessage />
                       </FormItem>
                     )}
                   />
                 </div>
                 <Button type="submit" disabled={isLoading}>
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Generating Test...
-                    </>
-                  ) : (
-                    'Generate Test'
-                  )}
+                  {isLoading ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating Test...</>) : ('Generate Test')}
                 </Button>
               </form>
             </Form>
           </CardContent>
         </Card>
 
+        {isLoading && (
+            <div className="flex items-center justify-center p-8">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <p className="ml-4 text-lg">AI is generating your test, please wait...</p>
+            </div>
+        )}
+
         {testResult && (
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Generated Test</CardTitle>
-              <DownloadButton content={formatTestToText()} filename="practice-test.txt" />
-            </CardHeader>
-            <CardContent>
-              <Accordion type="single" collapsible className="w-full">
-                {testResult.testQuestions.map((qa, index) => (
-                  <AccordionItem value={`item-${index}`} key={index}>
-                    <AccordionTrigger className="text-left">
-                      {index + 1}. {qa.question}
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <strong>Answer:</strong> {qa.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </CardContent>
-          </Card>
+            form.getValues('testMode') === 'practice' ? renderPracticeMode() : renderExamMode()
         )}
       </div>
     </main>

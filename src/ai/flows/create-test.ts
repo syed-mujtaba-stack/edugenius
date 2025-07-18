@@ -26,16 +26,25 @@ const CreateTestInputSchema = z.object({
   curriculumLevel: z.string().describe('The curriculum level for the test (e.g., Grade 12, Graduation).'),
   board: z.string().optional().describe('The educational board (e.g., Sindh, Punjab, Federal).'),
   medium: z.enum(['english', 'urdu']).describe('The language medium for the test.'),
+  questionType: z.enum(['mcq', 'short', 'long']).describe('The type of questions (e.g., MCQ, Short, Long).'),
 });
 export type CreateTestInput = z.infer<typeof CreateTestInputSchema>;
 
-const CreateTestOutputSchema = z.object({
-  testQuestions: z.array(
-    z.object({
+const MCQSchema = z.object({
+      question: z.string().describe('The multiple-choice question.'),
+      options: z.array(z.string()).describe('An array of 4-5 options for the question.'),
+      answer: z.string().describe('The correct option.'),
+    });
+
+const StandardQuestionSchema = z.object({
       question: z.string().describe('The test question.'),
-      answer: z.string().describe('The answer to the test question.'),
-    })
-  ).describe('An array of test questions and answers.'),
+      answer: z.string().describe('The detailed answer to the test question.'),
+    });
+
+const CreateTestOutputSchema = z.object({
+  mcqs: z.array(MCQSchema).optional().describe('An array of multiple-choice questions.'),
+  shortQuestions: z.array(StandardQuestionSchema).optional().describe('An array of short answer questions.'),
+  longQuestions: z.array(StandardQuestionSchema).optional().describe('An array of long answer questions.'),
 });
 export type CreateTestOutput = z.infer<typeof CreateTestOutputSchema>;
 
@@ -47,7 +56,7 @@ const prompt = ai.definePrompt({
   name: 'createTestPrompt',
   input: {schema: CreateTestInputSchema},
   output: {schema: CreateTestOutputSchema},
-  prompt: `You are an expert test generator. Generate a practice test with {{numberOfQuestions}} questions, tailored to the student's needs based on the following parameters:
+  prompt: `You are an expert test generator. Generate a practice test with {{numberOfQuestions}} questions of '{{questionType}}' type, tailored to the student's needs based on the following parameters:
 
 Curriculum Level: {{curriculumLevel}}
 {{#if board}}Board: {{board}}{{/if}}
@@ -55,10 +64,15 @@ Subject: {{subject}}
 Topic: {{topic}}
 Difficulty Level: {{difficultyLevel}}
 Medium: {{medium}}
+Question Type: {{questionType}}
 
 The test questions should be challenging and designed to assess the student's understanding of the material. Each question should have a clear and concise answer.
 
-Output the questions and answers in JSON format.
+- If the question type is 'mcq', generate multiple-choice questions. Each question must have 4 options and one correct answer. The output should be in the 'mcqs' array.
+- If the question type is 'short', generate short answer questions. The output should be in the 'shortQuestions' array.
+- If the question type is 'long', generate long answer questions. The output should be in the 'longQuestions' array.
+
+Output the questions and answers in the specified JSON format.
 `,
 });
 
