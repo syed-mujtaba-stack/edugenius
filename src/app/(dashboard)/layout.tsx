@@ -10,6 +10,8 @@ import {
   Users,
   Video,
   School,
+  Bot,
+  Bell,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -26,6 +28,7 @@ import { Logo } from '@/components/logo';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect } from 'react';
+import { Badge } from '@/components/ui/badge';
 
 export default function DashboardLayout({
   children,
@@ -67,6 +70,16 @@ export default function DashboardLayout({
       icon: FileText,
     },
      {
+      href: '/ask-ai',
+      label: 'AI Tutor',
+      icon: Bot,
+    },
+    {
+      href: '/community',
+      label: 'Community',
+      icon: Users,
+    },
+     {
       href: '/teacher-dashboard',
       label: 'Teacher Dashboard',
       icon: LayoutDashboard,
@@ -87,9 +100,14 @@ export default function DashboardLayout({
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
-          <div className="flex items-center gap-2">
-            <Logo className="w-8 h-8 text-primary" />
-            <span className="font-headline text-2xl text-primary">EduGenius</span>
+          <div className="flex items-center justify-between">
+             <div className="flex items-center gap-2">
+                <Logo className="w-8 h-8 text-primary" />
+                <span className="font-headline text-2xl text-primary">EduGenius</span>
+             </div>
+             <button className="p-1 rounded-full hover:bg-accent">
+                <Bell className="h-5 w-5" />
+             </button>
           </div>
         </SidebarHeader>
         <SidebarContent>
