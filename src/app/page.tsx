@@ -5,7 +5,7 @@ import { Logo } from "@/components/logo";
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen w-full flex flex-col items-center justify-center bg-background overflow-hidden">
+    <div className="relative min-h-screen w-full flex flex-col items-center justify-center bg-black overflow-hidden">
       <Image
         src="https://placehold.co/1920x1080.png"
         alt="Background"
