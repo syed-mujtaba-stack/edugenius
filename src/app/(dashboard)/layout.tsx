@@ -38,7 +38,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState, useRef } from 'react';
 import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from '@/hooks/use-toast';
 import { findBestMatch } from 'string-similarity';
 
 // Extend the Window interface for webkitSpeechRecognition
@@ -56,7 +56,6 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { toast } = useToast();
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<any>(null);
 
@@ -102,7 +101,7 @@ export default function DashboardLayout({
         setIsListening(false);
       };
     }
-  }, [toast]);
+  }, []);
   
   const speak = (text: string, callback?: () => void) => {
       if ('speechSynthesis' in window) {
