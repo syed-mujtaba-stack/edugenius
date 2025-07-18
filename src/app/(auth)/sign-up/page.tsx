@@ -1,9 +1,9 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth, db } from '@/lib/firebase';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -20,11 +20,31 @@ import Link from 'next/link';
 import { Logo } from '@/components/logo';
 import { Loader2 } from 'lucide-react';
 
+function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+      >
+        <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-1.5c-.83 0-1.5.67-1.5 1.5V12h3l-.5 3h-2.5v6.8c4.56-.93 8-4.96 8-9.8z" />
+      </svg>
+    );
+}
+
 export default function SignUpPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('student');
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
 
@@ -51,6 +71,37 @@ export default function SignUpPage() {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    setIsGoogleLoading(true);
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(userDocRef);
+      if (!userDoc.exists()) {
+        await setDoc(userDocRef, {
+          email: user.email,
+          role: 'student', 
+          name: user.displayName,
+          photoURL: user.photoURL,
+        });
+      }
+      toast({ title: 'Success', description: 'Account created successfully.' });
+      router.push('/dashboard');
+    } catch (error: any) {
+       toast({
+        title: 'Error',
+        description: 'Could not sign up with Google. Please try again.',
+        variant: 'destructive',
+      });
+      console.error("Google Sign-Up Error: ", error);
+    } finally {
+        setIsGoogleLoading(false);
+    }
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
       <Card className="mx-auto max-w-sm w-full">
@@ -72,7 +123,7 @@ export default function SignUpPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                disabled={isLoading}
+                disabled={isLoading || isGoogleLoading}
               />
             </div>
             <div className="grid gap-2">
@@ -83,12 +134,12 @@ export default function SignUpPage() {
                 required 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                disabled={isLoading}
+                disabled={isLoading || isGoogleLoading}
                />
             </div>
             <div className="grid gap-2">
                 <Label htmlFor="role">I am a...</Label>
-                 <Select value={role} onValueChange={setRole} disabled={isLoading}>
+                 <Select value={role} onValueChange={setRole} disabled={isLoading || isGoogleLoading}>
                     <SelectTrigger id="role">
                         <SelectValue placeholder="Select a role" />
                     </SelectTrigger>
@@ -98,10 +149,28 @@ export default function SignUpPage() {
                     </SelectContent>
                 </Select>
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full" disabled={isLoading || isGoogleLoading}>
                 {isLoading ? <Loader2 className="animate-spin" /> : 'Create an account'}
             </Button>
           </form>
+          <div className="relative my-4">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+          </div>
+           <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading || isGoogleLoading}>
+            {isGoogleLoading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+                <GoogleIcon className="mr-2 h-4 w-4" />
+            )}
+            Google
+          </Button>
           <div className="mt-4 text-center text-sm">
             Already have an account?{' '}
             <Link href="/sign-in" className="underline">

@@ -1,6 +1,6 @@
 'use client';
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { onAuthStateChanged, User, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { onAuthStateChanged, User, signOut, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth, db } from '@/lib/firebase';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
@@ -11,6 +11,7 @@ interface AuthContextType {
   userRole: UserRole;
   loading: boolean;
   logout: () => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,15 +24,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        setUser(user);
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        const userDocRef = doc(db, 'users', user.uid);
+        const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
           setUserRole(userDoc.data().role || 'student');
         } else {
-            // Default new users to student, can be changed by admin
-            await setDoc(doc(db, "users", user.uid), { role: "student" });
+            // If user signs in via other means and is not in DB, create them
+            await setDoc(userDocRef, { 
+              email: user.email,
+              role: "student",
+              name: user.displayName,
+              photoURL: user.photoURL
+            });
             setUserRole('student');
         }
+        setUser(user);
       } else {
         setUser(null);
         setUserRole(null);
@@ -46,7 +53,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     await signOut(auth);
   };
 
-  const value = { user, userRole, loading, logout };
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+    // onAuthStateChanged will handle the rest
+  };
+
+  const value = { user, userRole, loading, logout, signInWithGoogle };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
