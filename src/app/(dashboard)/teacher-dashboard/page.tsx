@@ -1,5 +1,11 @@
+import type { Metadata } from 'next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, FileText, Activity } from 'lucide-react';
+
+export const metadata: Metadata = {
+    title: "Teacher Dashboard",
+    description: "Manage your classes, students, and lessons. View class activity, average test scores, and student progress.",
+};
 
 export default function TeacherDashboardPage() {
   return (

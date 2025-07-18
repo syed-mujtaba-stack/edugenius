@@ -1,5 +1,11 @@
+import type { Metadata } from 'next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Bookmark } from 'lucide-react';
+
+export const metadata: Metadata = {
+    title: "My Bookmarks",
+    description: "Access all your saved courses, summaries, and tests in one place. Your bookmarked content will appear here for easy access.",
+};
 
 export default function BookmarksPage() {
   return (

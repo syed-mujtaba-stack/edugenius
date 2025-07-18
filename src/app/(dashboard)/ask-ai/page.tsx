@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-import type { Metadata } from 'next';
 import { askAiTutor } from '@/ai/flows/ask-ai-tutor';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,11 +7,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Bot, User } from 'lucide-react';
-
-export const metadata: Metadata = {
-    title: "AI Tutor",
-    description: "Get instant answers to your academic questions from our AI Tutor. Ask about any topic and get clear, simple explanations to help you study better.",
-};
 
 interface ChatMessage {
   role: 'user' | 'bot';

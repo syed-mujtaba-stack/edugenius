@@ -1,5 +1,11 @@
+import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DashboardCharts } from '@/components/dashboard-charts';
+
+export const metadata: Metadata = {
+    title: "Dashboard",
+    description: "Your personal dashboard. Track your progress, view your stats like tests taken, average scores, summaries created, and daily study streak.",
+};
 
 export default function DashboardPage() {
   return (
