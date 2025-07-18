@@ -217,8 +217,14 @@ export default function TestGeneratorPage() {
     }));
 
     try {
+      // Add number of cheating alerts to the prompt for grading
       const result = await gradeAnswers({ answers: answersToGrade });
-      setGradingResult(result);
+      let cheatingAnalysis = result.cheatingAnalysis;
+      if (cheatingAlerts > 0) {
+        cheatingAnalysis += ` The student also switched tabs ${cheatingAlerts} time(s) during the exam.`;
+      }
+      setGradingResult({ ...result, cheatingAnalysis });
+
     } catch (error)
  {
       console.error('Error grading test:', error);
@@ -424,152 +430,155 @@ export default function TestGeneratorPage() {
         <h1 className="font-headline text-3xl md:text-4xl">AI Test Generator</h1>
       </div>
       <div className="grid gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Create a New Test</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <FormField
-                    control={form.control}
-                    name="curriculumLevel"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Curriculum Level</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger><SelectValue placeholder="Select a level" /></SelectTrigger>
-                          </FormControl>
-                          <SelectContent>{curriculumLevels.map(level => <SelectItem key={level} value={level}>{level}</SelectItem>)}</SelectContent>
-                        </Select><FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  {showBoardSelection && (
-                    <FormField control={form.control} name="board"
-                      render={({ field }) => (
+        {!testResult && (
+            <Card>
+            <CardHeader>
+                <CardTitle>Create a New Test</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <FormField
+                        control={form.control}
+                        name="curriculumLevel"
+                        render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Board</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl><SelectTrigger><SelectValue placeholder="Select a board" /></SelectTrigger></FormControl>
-                            <SelectContent>{boards.map(board => <SelectItem key={board} value={board}>{board}</SelectItem>)}</SelectContent>
-                          </Select><FormMessage />
+                            <FormLabel>Curriculum Level</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                                <SelectTrigger><SelectValue placeholder="Select a level" /></SelectTrigger>
+                            </FormControl>
+                            <SelectContent>{curriculumLevels.map(level => <SelectItem key={level} value={level}>{level}</SelectItem>)}</SelectContent>
+                            </Select><FormMessage />
                         </FormItem>
-                      )}
+                        )}
                     />
-                  )}
-                  <FormField control={form.control} name="subject"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Subject</FormLabel>
-                        <FormControl><Input placeholder="e.g., Biology, Python" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField control={form.control} name="topic"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Topic</FormLabel>
-                        <FormControl><Input placeholder="e.g., Cell Structure, Data Types" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField control={form.control} name="difficultyLevel"
-                    render={({ field }) => (
-                      <FormItem><FormLabel>Difficulty</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl><SelectTrigger><SelectValue placeholder="Select difficulty" /></SelectTrigger></FormControl>
-                          <SelectContent>
-                            <SelectItem value="easy">Easy</SelectItem>
-                            <SelectItem value="medium">Medium</SelectItem>
-                            <SelectItem value="hard">Hard</SelectItem>
-                          </SelectContent>
-                        </Select><FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                   <FormField
-                    control={form.control}
-                    name="questionType"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Question Type</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl><SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger></FormControl>
-                          <SelectContent>
-                            <SelectItem value="mcq">MCQ</SelectItem>
-                            <SelectItem value="short">Short Answer</SelectItem>
-                            <SelectItem value="long">Long Answer</SelectItem>
-                          </SelectContent>
-                        </Select><FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField control={form.control} name="numberOfQuestions"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Number of Questions</FormLabel>
-                        <FormControl><Input type="number" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField control={form.control} name="medium" render={({ field }) => (
-                      <FormItem className="space-y-3"><FormLabel>Medium</FormLabel>
-                        <FormControl>
-                          <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex space-x-4">
-                            <FormItem className="flex items-center space-x-2 space-y-0"><FormControl><RadioGroupItem value="english" /></FormControl><FormLabel className="font-normal">English</FormLabel></FormItem>
-                            <FormItem className="flex items-center space-x-2 space-y-0"><FormControl><RadioGroupItem value="urdu" /></FormControl><FormLabel className="font-normal">Urdu</FormLabel></FormItem>
-                          </RadioGroup>
-                        </FormControl><FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                   <div className="space-y-3">
-                     <FormField control={form.control} name="testMode" render={({ field }) => (
-                        <FormItem><FormLabel>Mode</FormLabel>
-                          <FormControl>
-                            <RadioGroup onValueChange={(value) => {field.onChange(value); if(value === 'practice') {form.setValue('proctoringEnabled', false)}}} defaultValue={field.value} className="flex space-x-4">
-                              <FormItem className="flex items-center space-x-2 space-y-0"><FormControl><RadioGroupItem value="practice" /></FormControl><FormLabel className="font-normal">Practice</FormLabel></FormItem>
-                              <FormItem className="flex items-center space-x-2 space-y-0"><FormControl><RadioGroupItem value="exam" /></FormControl><FormLabel className="font-normal">Exam</FormLabel></FormItem>
-                            </RadioGroup>
-                          </FormControl><FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    {testMode === 'exam' && (
-                        <FormField
-                            control={form.control}
-                            name="proctoringEnabled"
-                            render={({ field }) => (
-                                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                                    <div className="space-y-0.5">
-                                        <FormLabel>AI Proctoring</FormLabel>
-                                        <p className="text-xs text-muted-foreground">Enable webcam to monitor test.</p>
-                                    </div>
-                                    <FormControl>
-                                        <Switch
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                    </FormControl>
-                                </FormItem>
-                            )}
+                    {showBoardSelection && (
+                        <FormField control={form.control} name="board"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Board</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl><SelectTrigger><SelectValue placeholder="Select a board" /></SelectTrigger></FormControl>
+                                <SelectContent>{boards.map(board => <SelectItem key={board} value={board}>{board}</SelectItem>)}</SelectContent>
+                            </Select><FormMessage />
+                            </FormItem>
+                        )}
                         />
                     )}
-                   </div>
-                </div>
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating Test...</>) : ('Generate Test')}
-                </Button>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
+                    <FormField control={form.control} name="subject"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Subject</FormLabel>
+                            <FormControl><Input placeholder="e.g., Biology, Python" {...field} /></FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    <FormField control={form.control} name="topic"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Topic</FormLabel>
+                            <FormControl><Input placeholder="e.g., Cell Structure, Data Types" {...field} /></FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    <FormField control={form.control} name="difficultyLevel"
+                        render={({ field }) => (
+                        <FormItem><FormLabel>Difficulty</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl><SelectTrigger><SelectValue placeholder="Select difficulty" /></SelectTrigger></FormControl>
+                            <SelectContent>
+                                <SelectItem value="easy">Easy</SelectItem>
+                                <SelectItem value="medium">Medium</SelectItem>
+                                <SelectItem value="hard">Hard</SelectItem>
+                            </SelectContent>
+                            </Select><FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="questionType"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Question Type</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl><SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger></FormControl>
+                            <SelectContent>
+                                <SelectItem value="mcq">MCQ</SelectItem>
+                                <SelectItem value="short">Short Answer</SelectItem>
+                                <SelectItem value="long">Long Answer</SelectItem>
+                            </SelectContent>
+                            </Select><FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    <FormField control={form.control} name="numberOfQuestions"
+                        render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Number of Questions</FormLabel>
+                            <FormControl><Input type="number" {...field} /></FormControl>
+                            <FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    <FormField control={form.control} name="medium" render={({ field }) => (
+                        <FormItem className="space-y-3"><FormLabel>Medium</FormLabel>
+                            <FormControl>
+                            <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="flex space-x-4">
+                                <FormItem className="flex items-center space-x-2 space-y-0"><FormControl><RadioGroupItem value="english" /></FormControl><FormLabel className="font-normal">English</FormLabel></FormItem>
+                                <FormItem className="flex items-center space-x-2 space-y-0"><FormControl><RadioGroupItem value="urdu" /></FormControl><FormLabel className="font-normal">Urdu</FormLabel></FormItem>
+                            </RadioGroup>
+                            </FormControl><FormMessage />
+                        </FormItem>
+                        )}
+                    />
+                    <div className="space-y-3">
+                        <FormField control={form.control} name="testMode" render={({ field }) => (
+                            <FormItem><FormLabel>Mode</FormLabel>
+                            <FormControl>
+                                <RadioGroup onValueChange={(value) => {field.onChange(value); if(value === 'practice') {form.setValue('proctoringEnabled', false)}}} defaultValue={field.value} className="flex space-x-4">
+                                <FormItem className="flex items-center space-x-2 space-y-0"><FormControl><RadioGroupItem value="practice" /></FormControl><FormLabel className="font-normal">Practice</FormLabel></FormItem>
+                                <FormItem className="flex items-center space-x-2 space-y-0"><FormControl><RadioGroupItem value="exam" /></FormControl><FormLabel className="font-normal">Exam</FormLabel></FormItem>
+                                </RadioGroup>
+                            </FormControl><FormMessage />
+                            </FormItem>
+                        )}
+                        />
+                        {testMode === 'exam' && (
+                            <FormField
+                                control={form.control}
+                                name="proctoringEnabled"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                                        <div className="space-y-0.5">
+                                            <FormLabel>AI Proctoring</FormLabel>
+                                            <p className="text-xs text-muted-foreground">Enable webcam to monitor test.</p>
+                                        </div>
+                                        <FormControl>
+                                            <Switch
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                        )}
+                    </div>
+                    </div>
+                    <Button type="submit" disabled={isLoading}>
+                    {isLoading ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating Test...</>) : ('Generate Test')}
+                    </Button>
+                </form>
+                </Form>
+            </CardContent>
+            </Card>
+        )}
+
 
         {isLoading && (
             <div className="flex items-center justify-center p-8">
@@ -579,7 +588,14 @@ export default function TestGeneratorPage() {
         )}
 
         {testResult && allQuestions.length > 0 && (
-            form.getValues('testMode') === 'practice' ? renderPracticeMode() : renderExamMode()
+            <>
+                <div className="flex justify-end">
+                    <Button variant="outline" onClick={() => { setTestResult(null); setGradingResult(null); form.reset(form.getValues()); }}>
+                        Create New Test
+                    </Button>
+                </div>
+                {form.getValues('testMode') === 'practice' ? renderPracticeMode() : renderExamMode()}
+            </>
         )}
       </div>
     </main>
