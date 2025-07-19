@@ -1,5 +1,5 @@
+'use client';
 
-import type { Metadata } from 'next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -12,11 +12,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-
-export const metadata: Metadata = {
-    title: "Community Hub",
-    description: "Join the EduGenius community. Ask questions, help fellow students, participate in discussions, and get expert help from teachers.",
-};
 
 const discussions = [
   {
