@@ -14,10 +14,10 @@ Welcome to EduGenius, a modern, AI-driven educational platform built with Next.j
 -   **Adaptive Learning:** The system reinforces learning by suggesting repetitions for weaker areas.
 -   **Daily Study Routine:** A built-in routine generator helps students build consistent study habits and track their progress with a daily streak.
 
-### 📹 2. AI-Generated Audio Lessons
+### 📹 2. AI Video & Audio Generator
+-   **AI Text-to-Video (Experimental):** Generate short, high-quality videos from a simple text prompt using Google's Veo model.
 -   **Text-to-Speech:** Converts text-based notes or any pasted text into high-quality audio voice-overs.
--   **Downloadable Audio:** Allows students to save audio lessons for offline learning.
--   **(Future Vision):** Plans include auto-generating full video lessons with AI avatars and sign language support.
+-   **Downloadable Media:** Allows students to save generated videos and audio lessons for offline learning.
 
 ### 💼 3. Career Counseling & Skill Mapping
 -   **AI-Powered Guidance:** The AI suggests suitable career paths (e.g., Science, Business, AI, Design) based on a student's interests and strengths.
@@ -58,6 +58,7 @@ Welcome to EduGenius, a modern, AI-driven educational platform built with Next.j
 
 ### ✨ 10. Advanced Features
 -   **Voice Assistant ("MJ"):** A voice-powered assistant that helps users navigate the app using voice commands.
+-   **Custom API Key:** Users can add their own Gemini API key for unlimited access to AI features.
 -   **Smart Search:** An efficient search and filter system to easily find courses.
 -   **Bookmark Content:** Allows users to save important content for quick access later.
 -   **Responsive Design:** A fully responsive, mobile-first layout ensures a seamless experience on all devices.
