@@ -1,5 +1,6 @@
+
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { generateAudioFromText } from '@/ai/flows/generate-audio-from-text';
 import { generateVideoFromPrompt } from '@/ai/flows/generate-video-from-prompt';
 import { Button } from '@/components/ui/button';
@@ -11,6 +12,9 @@ import { Loader2, Music4, Download, Clapperboard, Film } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 export default function VideoGeneratorPage() {
+  // Common State
+  const [apiKey, setApiKey] = useState<string | null>(null);
+
   // TTS State
   const [text, setText] = useState('');
   const [audioDataUri, setAudioDataUri] = useState<string | null>(null);
@@ -23,6 +27,21 @@ export default function VideoGeneratorPage() {
 
   const { toast } = useToast();
 
+  useEffect(() => {
+    const fetchApiKey = () => {
+      const storedKey = localStorage.getItem('user-gemini-api-key');
+      setApiKey(storedKey);
+    };
+
+    fetchApiKey();
+    window.addEventListener('apiKeyUpdated', fetchApiKey);
+
+    return () => {
+      window.removeEventListener('apiKeyUpdated', fetchApiKey);
+    };
+  }, []);
+
+
   const handleGenerateAudio = async () => {
     if (!text.trim()) {
       toast({ title: 'Error', description: 'Please enter some text to generate audio.', variant: 'destructive' });
@@ -31,6 +50,8 @@ export default function VideoGeneratorPage() {
     setIsAudioLoading(true);
     setAudioDataUri(null);
     try {
+      // Note: The audio flow doesn't currently support custom API keys in its signature.
+      // It will use the globally configured key.
       const result = await generateAudioFromText(text);
       setAudioDataUri(result.media);
     } catch (error) {
@@ -49,12 +70,13 @@ export default function VideoGeneratorPage() {
     setIsVideoLoading(true);
     setVideoDataUri(null);
     try {
-      const result = await generateVideoFromPrompt({ prompt });
+      const result = await generateVideoFromPrompt({ prompt, apiKey: apiKey || undefined });
       setVideoDataUri(result.video);
       toast({ title: 'Success!', description: 'Your video has been generated.' });
     } catch (error) {
       console.error('Error generating video:', error);
-      toast({ title: 'Error', description: 'Failed to generate video. This is an experimental feature and may fail. Please try again.', variant: 'destructive' });
+      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+      toast({ title: 'Error Generating Video', description: `Failed to generate video. This is an experimental feature and may fail. Details: ${errorMessage}`, variant: 'destructive' });
     } finally {
       setIsVideoLoading(false);
     }
