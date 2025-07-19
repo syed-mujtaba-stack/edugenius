@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -64,7 +65,7 @@ export default function CommunityPage() {
                   <div className="flex items-start gap-3 mt-2">
                      <Avatar>
                         <AvatarImage src={d.avatar} alt={`@${d.userHandle}`} data-ai-hint={d.dataAiHint} />
-                        <AvatarFallback>{d.user.charAt(0)}</Fallback>
+                        <AvatarFallback>{d.user.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div className="flex-grow">
                         <p className="font-medium">{d.user} <span className="text-muted-foreground text-sm">@{d.userHandle}</span></p>
@@ -114,7 +115,7 @@ export default function CommunityPage() {
                  <div key={i} className="flex items-center gap-3">
                     <Avatar>
                         <AvatarImage src={`https://placehold.co/40x40.png`} alt={name} data-ai-hint="person portrait" />
-                        <AvatarFallback>{name.charAt(0)}</Fallback>
+                        <AvatarFallback>{name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <p className="font-medium">{name}</p>
                  </div>
