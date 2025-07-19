@@ -8,8 +8,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Music4, Download, Clapperboard, Film } from 'lucide-react';
+import { Loader2, Music4, Download, Clapperboard, Film, AlertTriangle } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default function VideoGeneratorPage() {
   // Common State
@@ -76,7 +77,12 @@ export default function VideoGeneratorPage() {
     } catch (error) {
       console.error('Error generating video:', error);
       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
-      toast({ title: 'Error Generating Video', description: `Failed to generate video. This is an experimental feature and may fail. Details: ${errorMessage}`, variant: 'destructive' });
+      toast({ 
+          title: 'Error Generating Video', 
+          description: `This is an experimental feature and may have failed. Please check your API key or try a different prompt. Details: ${errorMessage}`, 
+          variant: 'destructive',
+          duration: 9000,
+        });
     } finally {
       setIsVideoLoading(false);
     }
@@ -90,10 +96,17 @@ export default function VideoGeneratorPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2"><Film />AI Text-to-Video Generator (Experimental)</CardTitle>
-          <CardDescription>Create a short video from a text description using AI. This may take up to a minute.</CardDescription>
+          <CardTitle className="flex items-center gap-2"><Film />AI Text-to-Video Generator</CardTitle>
+          <CardDescription>Create a short video from a text description using AI. This feature is experimental and may take up to a minute.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          <Alert variant="destructive">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Experimental Feature</AlertTitle>
+            <AlertDescription>
+                Video generation has a very low quota and may fail often. If you encounter errors, please try again later or use your own API key via the API Settings page.
+            </AlertDescription>
+          </Alert>
           <div className="flex gap-2">
             <Input
               placeholder="e.g., A majestic dragon soaring over a mystical forest at dawn"
@@ -123,7 +136,7 @@ export default function VideoGeneratorPage() {
           <Card>
             <CardHeader><CardTitle>Generated Video</CardTitle></CardHeader>
             <CardContent className="space-y-4">
-                <video controls src={videoDataUri} className="w-full rounded-md" />
+                <video controls src={videoDataUri} className="w-full rounded-md bg-muted" />
                 <Button asChild variant="outline">
                     <a href={videoDataUri} download="generated-video.mp4">
                         <Download className="mr-2 h-4 w-4" />

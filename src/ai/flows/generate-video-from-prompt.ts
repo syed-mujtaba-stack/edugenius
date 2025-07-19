@@ -29,6 +29,7 @@ async function downloadAndEncodeVideo(video: MediaPart, apiKey?: string): Promis
         throw new Error('GEMINI_API_KEY environment variable not set and no custom key provided.');
     }
     
+    // The media URL from the operation does not contain the API key, so we add it.
     const videoUrlWithKey = `${video.media!.url}&key=${finalApiKey}`;
     const videoResponse = await fetch(videoUrlWithKey);
 
@@ -76,16 +77,16 @@ const generateVideoFromPromptFlow = ai.defineFlow(
         throw new Error(`Video generation failed: ${operation.error.message}`);
     }
 
-    const videoPart = operation.output?.message?.content.find((p) => !!p.media && p.media.contentType === 'video/mp4');
+    // First, try to find the video part with the specific 'video/mp4' content type.
+    let videoPart = operation.output?.message?.content.find((p) => !!p.media && p.media.contentType === 'video/mp4');
+    
+    // If not found, fall back to finding any part with a 'video/*' content type.
     if (!videoPart) {
-        // Look for any video part if specific content type is not present
-        const anyVideoPart = operation.output?.message?.content.find((p) => !!p.media && p.media.contentType?.startsWith('video/'));
-        if (!anyVideoPart) {
-          throw new Error('No video found in the completed operation result.');
-        }
-        console.warn("Video content type is not 'video/mp4', but proceeding anyway.", anyVideoPart.media);
-        const videoDataUri = await downloadAndEncodeVideo(anyVideoPart, apiKey);
-        return { video: videoDataUri };
+      videoPart = operation.output?.message?.content.find((p) => !!p.media && p.media.contentType?.startsWith('video/'));
+    }
+
+    if (!videoPart) {
+        throw new Error('No video found in the completed operation result. The model may not have produced a video for this prompt.');
     }
     
     const videoDataUri = await downloadAndEncodeVideo(videoPart, apiKey);
