@@ -67,7 +67,7 @@ export default function CommunityPage() {
                   <div className="flex items-start gap-3 mt-2">
                      <Avatar>
                         <AvatarImage src={d.avatar} alt={`@${d.userHandle}`} />
-                        <AvatarFallback>{d.user.charAt(0)}</AvatarFallback>
+                        <AvatarFallback>{d.user.charAt(0)}</Fallback>
                     </Avatar>
                     <div className="flex-grow">
                         <p className="font-medium">{d.user} <span className="text-muted-foreground text-sm">@{d.userHandle}</span></p>
