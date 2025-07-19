@@ -43,7 +43,7 @@ const teachers = [
     { name: 'Mr. Javed Ali', subject: 'Physics' },
     { name: 'Ms. Sana Khan', subject: 'Chemistry' },
     { name: 'Mr. Imran Malik', subject: 'Computer Science' },
-]
+];
 
 export default function CommunityPage() {
   return (
