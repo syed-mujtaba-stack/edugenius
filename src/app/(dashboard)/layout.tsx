@@ -20,6 +20,7 @@ import {
   Briefcase,
   Mic,
   FileSignature,
+  Cog,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -200,6 +201,18 @@ export default function DashboardLayout({
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu>
+             <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === '/api-settings'}
+                  tooltip="API Settings"
+                >
+                  <Link href="/api-settings">
+                    <Cog />
+                    <span>API Settings</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             <SidebarMenuItem>
                 <SidebarMenuButton onClick={toggleListening} tooltip="Voice Assistant" isActive={isListening}>
                   <Mic />
