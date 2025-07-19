@@ -67,3 +67,4 @@ Welcome to EduGenius, a modern, AI-driven educational platform built with Next.j
 -   **Admin Dashboard:** A central control panel to view system analytics and manage users.
 -   **Teacher Dashboard:** A dedicated dashboard for teachers to monitor student progress, class activity, and manage lessons.
 -   **Virtual Classroom:** A space for teachers to manage their students and learning materials.
+# edugenius
