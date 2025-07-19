@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,7 +23,8 @@ const discussions = [
     topic: 'Chapter 5: Chemical Reactions',
     user: 'Aisha Ahmed',
     userHandle: 'aisha_ahmed',
-    avatar: '/avatars/01.png',
+    avatar: 'https://placehold.co/40x40.png',
+    dataAiHint: 'woman portrait',
     question: 'Can someone explain the difference between synthesis and decomposition reactions with an example?',
     replies: 5,
   },
@@ -30,7 +32,8 @@ const discussions = [
     topic: 'Python Basics: Loops',
     user: 'Bilal Khan',
     userHandle: 'bilal_k',
-    avatar: '/avatars/02.png',
+    avatar: 'https://placehold.co/40x40.png',
+    dataAiHint: 'man portrait',
     question: 'I\'m stuck on a `for` loop problem for my assignment. Can anyone help me debug?',
     replies: 8,
   },
@@ -65,8 +68,8 @@ export default function CommunityPage() {
                   <p className="text-sm font-semibold text-primary">{d.topic}</p>
                   <div className="flex items-start gap-3 mt-2">
                      <Avatar>
-                        <AvatarImage src={d.avatar} alt={`@${d.userHandle}`} />
-                        <AvatarFallback>{d.user.charAt(0)}</Fallback>
+                        <AvatarImage src={d.avatar} alt={`@${d.userHandle}`} data-ai-hint={d.dataAiHint} />
+                        <AvatarFallback>{d.user.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div className="flex-grow">
                         <p className="font-medium">{d.user} <span className="text-muted-foreground text-sm">@{d.userHandle}</span></p>
@@ -115,7 +118,7 @@ export default function CommunityPage() {
               {['Ali Raza', 'Fatima Sheikh', 'Ahmed Hassan'].map((name, i) => (
                  <div key={i} className="flex items-center gap-3">
                     <Avatar>
-                        <AvatarImage src={`/avatars/0${i+3}.png`} alt={name} />
+                        <AvatarImage src={`https://placehold.co/40x40.png`} alt={name} data-ai-hint="person portrait" />
                         <AvatarFallback>{name.charAt(0)}</Fallback>
                     </Avatar>
                     <p className="font-medium">{name}</p>
@@ -128,5 +131,3 @@ export default function CommunityPage() {
     </main>
   );
 }
-// Note: This is a placeholder UI. Full community features require a backend database and real-time capabilities.
-// The Avatar images are placeholders and will not load.
