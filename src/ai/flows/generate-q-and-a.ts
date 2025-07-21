@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview AI-powered question and answer generator for a given topic.
@@ -12,6 +13,7 @@ import {z} from 'genkit';
 
 const GenerateQAndAInputSchema = z.object({
   topic: z.string().describe('The topic for which to generate questions and answers.'),
+  apiKey: z.string().optional(),
 });
 export type GenerateQAndAInput = z.infer<typeof GenerateQAndAInputSchema>;
 
@@ -44,7 +46,7 @@ const generateQAndAFlow = ai.defineFlow(
     outputSchema: GenerateQAndAOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
+    const {output} = await prompt(input, { apiKey: input.apiKey });
     return output!;
   }
 );

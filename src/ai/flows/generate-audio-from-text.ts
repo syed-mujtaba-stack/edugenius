@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview Converts text to speech using an AI model.
@@ -38,22 +39,29 @@ async function toWav(
   });
 }
 
+const GenerateAudioInputSchema = z.object({
+  text: z.string(),
+  apiKey: z.string().optional(),
+});
+export type GenerateAudioInput = z.infer<typeof GenerateAudioInputSchema>;
+
+
 const GenerateAudioOutputSchema = z.object({
   media: z.string().describe("The generated audio as a data URI in WAV format."),
 });
 export type GenerateAudioOutput = z.infer<typeof GenerateAudioOutputSchema>;
 
-export async function generateAudioFromText(text: string): Promise<GenerateAudioOutput> {
-  return generateAudioFromTextFlow(text);
+export async function generateAudioFromText(input: GenerateAudioInput): Promise<GenerateAudioOutput> {
+  return generateAudioFromTextFlow(input);
 }
 
 const generateAudioFromTextFlow = ai.defineFlow(
   {
     name: 'generateAudioFromTextFlow',
-    inputSchema: z.string(),
+    inputSchema: GenerateAudioInputSchema,
     outputSchema: GenerateAudioOutputSchema,
   },
-  async (query) => {
+  async ({ text, apiKey }) => {
     const { media } = await ai.generate({
       model: googleAI.model('gemini-2.5-flash-preview-tts'),
       config: {
@@ -64,8 +72,8 @@ const generateAudioFromTextFlow = ai.defineFlow(
           },
         },
       },
-      prompt: query,
-    });
+      prompt: text,
+    }, { apiKey });
 
     if (!media?.url) {
       throw new Error('No media was returned from the TTS model.');

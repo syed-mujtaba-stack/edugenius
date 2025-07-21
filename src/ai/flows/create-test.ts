@@ -1,3 +1,4 @@
+
 // src/ai/flows/create-test.ts
 'use server';
 /**
@@ -27,6 +28,7 @@ const CreateTestInputSchema = z.object({
   board: z.string().optional().describe('The educational board (e.g., Sindh, Punjab, Federal).'),
   medium: z.enum(['english', 'urdu']).describe('The language medium for the test.'),
   questionType: z.enum(['mcq', 'short', 'long']).describe('The type of questions (e.g., MCQ, Short, Long).'),
+  apiKey: z.string().optional(),
 });
 export type CreateTestInput = z.infer<typeof CreateTestInputSchema>;
 
@@ -83,7 +85,7 @@ const createTestFlow = ai.defineFlow(
     outputSchema: CreateTestOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
+    const {output} = await prompt(input, { apiKey: input.apiKey });
     return output!;
   }
 );

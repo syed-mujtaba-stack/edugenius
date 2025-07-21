@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview Generates career advice and a roadmap for a student.
@@ -14,6 +15,7 @@ const GenerateCareerAdviceInputSchema = z.object({
   interests: z.array(z.string()).describe('A list of subjects or topics the student is interested in.'),
   strengths: z.array(z.string()).describe('A list of subjects or skills the student is good at.'),
   currentEducation: z.string().describe('The student\'s current level of education (e.g., "Matric Commerce", "A-Levels Pre-Engineering").'),
+  apiKey: z.string().optional(),
 });
 export type GenerateCareerAdviceInput = z.infer<typeof GenerateCareerAdviceInputSchema>;
 
@@ -67,7 +69,7 @@ const generateCareerAdviceFlow = ai.defineFlow(
     outputSchema: GenerateCareerAdviceOutputSchema,
   },
   async (input) => {
-    const { output } = await prompt(input);
+    const { output } = await prompt(input, { apiKey: input.apiKey });
     return output!;
   }
 );

@@ -88,9 +88,24 @@ export default function TestGeneratorPage() {
   const [gradingResult, setGradingResult] = useState<GradeAnswersOutput | null>(null);
   const [cheatingAlerts, setCheatingAlerts] = useState(0);
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+  const [apiKey, setApiKey] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const testContentRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  
+  useEffect(() => {
+    const fetchApiKey = () => {
+      const storedKey = localStorage.getItem('user-openrouter-api-key');
+      setApiKey(storedKey);
+    };
+
+    fetchApiKey();
+    window.addEventListener('apiKeyUpdated', fetchApiKey);
+
+    return () => {
+      window.removeEventListener('apiKeyUpdated', fetchApiKey);
+    };
+  }, []);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -179,7 +194,7 @@ export default function TestGeneratorPage() {
     examForm.reset({ answers: [] });
     
     try {
-      const result = await createTest(values);
+      const result = await createTest({...values, apiKey: apiKey || undefined});
       setTestResult(result);
       const questionCount = (result.mcqs?.length || 0) + (result.shortQuestions?.length || 0) + (result.longQuestions?.length || 0);
       if (questionCount > 0) {

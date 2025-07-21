@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview An AI agent for evaluating student essays.
@@ -12,6 +13,7 @@ import { z } from 'genkit';
 
 const EvaluateEssayInputSchema = z.object({
   essayText: z.string().describe("The full text of the student's essay."),
+  apiKey: z.string().optional(),
 });
 export type EvaluateEssayInput = z.infer<typeof EvaluateEssayInputSchema>;
 
@@ -70,7 +72,7 @@ const evaluateEssayFlow = ai.defineFlow(
     outputSchema: EvaluateEssayOutputSchema,
   },
   async (input) => {
-    const { output } = await prompt(input);
+    const { output } = await prompt(input, { apiKey: input.apiKey });
     return output!;
   }
 );

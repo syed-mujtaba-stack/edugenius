@@ -1,5 +1,6 @@
+
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { generateQAndA } from '@/ai/flows/generate-q-and-a';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,7 +24,22 @@ export default function QAndAPage() {
   const [topic, setTopic] = useState('');
   const [qaPairs, setQaPairs] = useState<QAPair[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [apiKey, setApiKey] = useState<string | null>(null);
   const { toast } = useToast();
+  
+  useEffect(() => {
+    const fetchApiKey = () => {
+      const storedKey = localStorage.getItem('user-openrouter-api-key');
+      setApiKey(storedKey);
+    };
+
+    fetchApiKey();
+    window.addEventListener('apiKeyUpdated', fetchApiKey);
+
+    return () => {
+      window.removeEventListener('apiKeyUpdated', fetchApiKey);
+    };
+  }, []);
 
   const parseQAResponse = (response: string): QAPair[] => {
     const lines = response.split('\n').filter(line => line.trim() !== '');
@@ -64,7 +80,7 @@ export default function QAndAPage() {
     setQaPairs([]);
 
     try {
-      const result = await generateQAndA({ topic });
+      const result = await generateQAndA({ topic, apiKey: apiKey || undefined });
       const parsed = parseQAResponse(result.questionsAndAnswers);
       setQaPairs(parsed);
        if(parsed.length === 0) {

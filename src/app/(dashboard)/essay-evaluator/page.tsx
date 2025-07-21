@@ -1,6 +1,6 @@
 
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { evaluateEssay, EvaluateEssayOutput } from '@/ai/flows/evaluate-essay';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,7 +19,23 @@ export default function EssayEvaluatorPage() {
   const [essayText, setEssayText] = useState('');
   const [evaluation, setEvaluation] = useState<EvaluateEssayOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [apiKey, setApiKey] = useState<string | null>(null);
   const { toast } = useToast();
+  
+  useEffect(() => {
+    const fetchApiKey = () => {
+      const storedKey = localStorage.getItem('user-openrouter-api-key');
+      setApiKey(storedKey);
+    };
+
+    fetchApiKey();
+    window.addEventListener('apiKeyUpdated', fetchApiKey);
+
+    return () => {
+      window.removeEventListener('apiKeyUpdated', fetchApiKey);
+    };
+  }, []);
+
 
   const handleEvaluate = async () => {
     if (!essayText.trim()) {
@@ -35,7 +51,7 @@ export default function EssayEvaluatorPage() {
     setEvaluation(null);
 
     try {
-      const result = await evaluateEssay({ essayText });
+      const result = await evaluateEssay({ essayText, apiKey: apiKey || undefined });
       setEvaluation(result);
     } catch (error) {
       console.error('Error evaluating essay:', error);

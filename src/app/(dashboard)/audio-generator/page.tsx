@@ -6,13 +6,29 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Music4, Download } from 'lucide-react';
+import { Loader2, Music4, Download, AlertTriangle } from 'lucide-react';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
 export default function AudioGeneratorPage() {
   const [text, setText] = useState('');
   const [audioDataUri, setAudioDataUri] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [apiKey, setApiKey] = useState<string | null>(null);
   const { toast } = useToast();
+
+   useEffect(() => {
+    const fetchApiKey = () => {
+      const storedKey = localStorage.getItem('user-gemini-api-key');
+      setApiKey(storedKey);
+    };
+
+    fetchApiKey();
+    window.addEventListener('apiKeyUpdated', fetchApiKey);
+
+    return () => {
+      window.removeEventListener('apiKeyUpdated', fetchApiKey);
+    };
+  }, []);
 
   const handleGenerateAudio = async () => {
     if (!text.trim()) {
@@ -22,12 +38,16 @@ export default function AudioGeneratorPage() {
     setIsLoading(true);
     setAudioDataUri(null);
     try {
-      // Note: The audio flow uses the globally configured API key.
-      const result = await generateAudioFromText(text);
+      const result = await generateAudioFromText({ text, apiKey: apiKey || undefined });
       setAudioDataUri(result.media);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error generating audio:', error);
-      toast({ title: 'Error', description: 'Failed to generate audio. Please try again.', variant: 'destructive' });
+      toast({ 
+        title: 'Error', 
+        description: error.message || 'Failed to generate audio. Please ensure you have set a valid Google Gemini API key in the settings.', 
+        variant: 'destructive',
+        duration: 7000
+      });
     } finally {
       setIsLoading(false);
     }
@@ -55,6 +75,13 @@ export default function AudioGeneratorPage() {
             <Button onClick={handleGenerateAudio} disabled={isLoading || !text}>
               {isLoading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating Audio...</> : 'Generate Audio'}
             </Button>
+             <Alert variant="destructive">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertTitle>Google Gemini API Key Required</AlertTitle>
+                <AlertDescription>
+                    This feature uses Google's advanced TTS model directly. Please make sure you have entered a valid Google Gemini API Key in the API Settings page.
+                </AlertDescription>
+            </Alert>
         </CardContent>
       </Card>
 

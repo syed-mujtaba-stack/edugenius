@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview Generates a personalized learning path for a student.
@@ -13,6 +14,7 @@ import { z } from 'genkit';
 const GenerateLearningPathInputSchema = z.object({
   goal: z.string().describe('The student\'s primary learning goal (e.g., "Pass Matric Physics Exam").'),
   weakTopics: z.array(z.string()).describe('A list of topics the student finds difficult.'),
+  apiKey: z.string().optional(),
 });
 export type GenerateLearningPathInput = z.infer<typeof GenerateLearningPathInputSchema>;
 
@@ -57,7 +59,7 @@ const generateLearningPathFlow = ai.defineFlow(
     outputSchema: GenerateLearningPathOutputSchema,
   },
   async (input) => {
-    const { output } = await prompt(input);
+    const { output } = await prompt(input, { apiKey: input.apiKey });
     return output!;
   }
 );

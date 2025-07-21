@@ -14,6 +14,7 @@ import { z } from 'genkit';
 const AskAiTutorInputSchema = z.object({
   topic: z.string().describe('The topic of the question.'),
   question: z.string().describe("The student's question."),
+  apiKey: z.string().optional(),
 });
 export type AskAiTutorInput = z.infer<typeof AskAiTutorInputSchema>;
 
@@ -46,7 +47,7 @@ const askAiTutorFlow = ai.defineFlow(
     outputSchema: AskAiTutorOutputSchema,
   },
   async (input) => {
-    const { output } = await prompt(input);
+    const { output } = await prompt(input, { apiKey: input.apiKey });
     return output!;
   }
 );

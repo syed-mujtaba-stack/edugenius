@@ -1,3 +1,4 @@
+
 // SummarizeChapter AI
 'use server';
 /**
@@ -13,6 +14,7 @@ import {z} from 'genkit';
 
 const SummarizeChapterInputSchema = z.object({
   chapterText: z.string().describe('The text content of the chapter to summarize.'),
+  apiKey: z.string().optional(),
 });
 export type SummarizeChapterInput = z.infer<typeof SummarizeChapterInputSchema>;
 
@@ -44,7 +46,7 @@ const summarizeChapterFlow = ai.defineFlow(
     outputSchema: SummarizeChapterOutputSchema,
   },
   async input => {
-    const {output} = await summarizeChapterPrompt(input);
+    const {output} = await summarizeChapterPrompt(input, { apiKey: input.apiKey });
     return {
       ...output!,
       progress: 'Generated a summary of the chapter.',

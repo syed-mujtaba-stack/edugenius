@@ -1,5 +1,6 @@
+
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { summarizeChapter, SummarizeChapterOutput } from '@/ai/flows/summarize-chapter';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,7 +13,22 @@ export default function SummarizePage() {
   const [chapterText, setChapterText] = useState('');
   const [summaryResult, setSummaryResult] = useState<SummarizeChapterOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [apiKey, setApiKey] = useState<string | null>(null);
   const { toast } = useToast();
+  
+  useEffect(() => {
+    const fetchApiKey = () => {
+      const storedKey = localStorage.getItem('user-openrouter-api-key');
+      setApiKey(storedKey);
+    };
+
+    fetchApiKey();
+    window.addEventListener('apiKeyUpdated', fetchApiKey);
+
+    return () => {
+      window.removeEventListener('apiKeyUpdated', fetchApiKey);
+    };
+  }, []);
 
   const handleSummarize = async () => {
     if (!chapterText.trim()) {
@@ -28,7 +44,7 @@ export default function SummarizePage() {
     setSummaryResult(null);
 
     try {
-      const result = await summarizeChapter({ chapterText });
+      const result = await summarizeChapter({ chapterText, apiKey: apiKey || undefined });
       setSummaryResult(result);
     } catch (error) {
       console.error('Error summarizing chapter:', error);

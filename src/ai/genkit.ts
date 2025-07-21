@@ -4,8 +4,10 @@ import {googleAI} from '@genkit-ai/googleai';
 
 export const ai = genkit({
   plugins: [
-    googleAI() // The API key is automatically sourced from the GEMINI_API_KEY environment variable.
+    googleAI({
+      apiKey: process.env.GEMINI_API_KEY,
+    }),
   ],
-  logLevel: "debug",
+  logLevel: 'debug',
   model: 'googleai/gemini-2.0-flash', // Set a default model for all generate calls
 });

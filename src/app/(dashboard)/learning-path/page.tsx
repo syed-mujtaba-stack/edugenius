@@ -1,5 +1,6 @@
+
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { generateLearningPath, GenerateLearningPathOutput } from '@/ai/flows/generate-learning-path';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,7 +15,22 @@ export default function LearningPathPage() {
   const [weakTopics, setWeakTopics] = useState('');
   const [learningPlan, setLearningPlan] = useState<GenerateLearningPathOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [apiKey, setApiKey] = useState<string | null>(null);
   const { toast } = useToast();
+  
+  useEffect(() => {
+    const fetchApiKey = () => {
+      const storedKey = localStorage.getItem('user-openrouter-api-key');
+      setApiKey(storedKey);
+    };
+
+    fetchApiKey();
+    window.addEventListener('apiKeyUpdated', fetchApiKey);
+
+    return () => {
+      window.removeEventListener('apiKeyUpdated', fetchApiKey);
+    };
+  }, []);
 
   const handleGeneratePlan = async () => {
     if (!goal.trim() || !weakTopics.trim()) {
@@ -33,6 +49,7 @@ export default function LearningPathPage() {
       const result = await generateLearningPath({
         goal,
         weakTopics: weakTopics.split(',').map(topic => topic.trim()),
+        apiKey: apiKey || undefined,
       });
       setLearningPlan(result);
     } catch (error) {

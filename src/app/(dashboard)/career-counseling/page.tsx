@@ -1,6 +1,6 @@
 
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { generateCareerAdvice, GenerateCareerAdviceOutput } from '@/ai/flows/generate-career-advice';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,7 +15,22 @@ export default function CareerCounselingPage() {
   const [currentEducation, setCurrentEducation] = useState('');
   const [advice, setAdvice] = useState<GenerateCareerAdviceOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [apiKey, setApiKey] = useState<string | null>(null);
   const { toast } = useToast();
+  
+  useEffect(() => {
+    const fetchApiKey = () => {
+      const storedKey = localStorage.getItem('user-openrouter-api-key');
+      setApiKey(storedKey);
+    };
+
+    fetchApiKey();
+    window.addEventListener('apiKeyUpdated', fetchApiKey);
+
+    return () => {
+      window.removeEventListener('apiKeyUpdated', fetchApiKey);
+    };
+  }, []);
 
   const handleGenerateAdvice = async () => {
     if (!interests.trim() || !strengths.trim() || !currentEducation.trim()) {
@@ -35,6 +50,7 @@ export default function CareerCounselingPage() {
         interests: interests.split(',').map(i => i.trim()),
         strengths: strengths.split(',').map(s => s.trim()),
         currentEducation,
+        apiKey: apiKey || undefined,
       });
       setAdvice(result);
     } catch (error) {
