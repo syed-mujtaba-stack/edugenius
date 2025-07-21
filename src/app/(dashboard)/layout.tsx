@@ -1,5 +1,4 @@
 
-
 'use client';
 import {
   BookText,
@@ -42,6 +41,9 @@ import { useEffect, useState, useRef } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { findBestMatch } from 'string-similarity';
+import { auth } from '@/lib/firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { Skeleton } from '@/components/ui/skeleton';
 
 // Extend the Window interface for webkitSpeechRecognition
 declare global {
@@ -61,6 +63,14 @@ export default function DashboardLayout({
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<any>(null);
   const { toast } = useToast();
+  const [user, loading, error] = useAuthState(auth);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/');
+    }
+  }, [user, loading, router]);
+
 
   const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, keywords: ['dashboard', 'home', 'main'] },
@@ -162,8 +172,17 @@ export default function DashboardLayout({
 
 
   const handleLogout = async () => {
+    await auth.signOut();
     router.push('/');
   };
+  
+  if (loading || !user) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Skeleton className="h-full w-full" />
+      </div>
+    );
+  }
 
   return (
     <SidebarProvider>

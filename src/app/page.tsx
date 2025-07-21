@@ -1,16 +1,45 @@
 
+'use client';
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { auth } from "@/lib/firebase";
+import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "firebase/auth";
 import { Logo } from "@/components/logo";
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: "EduGenius: AI-Powered Learning for Pakistani Students",
-  description: "Welcome to EduGenius. Unlock your learning potential with our AI-powered platform. Summarize chapters, generate Q&As, create personalized tests, get career advice, and more. Built for students in Pakistan.",
-};
-
+import { useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Home() {
+  const router = useRouter();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.push("/dashboard");
+      }
+    });
+    return () => unsubscribe();
+  }, [router]);
+
+  const handleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+      toast({
+        title: "Login Successful",
+        description: "Welcome to EduGenius!",
+      });
+      router.push("/dashboard");
+    } catch (error) {
+      console.error("Error during sign-in:", error);
+      toast({
+        title: "Login Failed",
+        description: "Could not sign you in with Google. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-background p-4">
       <main className="relative z-10 flex flex-col items-center justify-center text-center">
@@ -24,8 +53,8 @@ export default function Home() {
           Unlock Your Learning Potential with AI. Summarize chapters, generate Q&As, and create personalized tests in seconds.
         </p>
         <div className="mt-8 flex flex-col sm:flex-row gap-4 w-full max-w-xs sm:max-w-none sm:justify-center">
-           <Button asChild size="lg" className="font-bold text-lg flex-1 sm:flex-none sm:px-10">
-            <Link href="/dashboard">Get Started</Link>
+           <Button onClick={handleSignIn} size="lg" className="font-bold text-lg flex-1 sm:flex-none sm:px-10">
+            Sign in with Google
           </Button>
         </div>
       </main>
