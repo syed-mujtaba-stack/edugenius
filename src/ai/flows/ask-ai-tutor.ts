@@ -14,7 +14,6 @@ import { z } from 'genkit';
 const AskAiTutorInputSchema = z.object({
   topic: z.string().describe('The topic of the question.'),
   question: z.string().describe("The student's question."),
-  apiKey: z.string().optional().describe('Optional user-provided API key.'),
 });
 export type AskAiTutorInput = z.infer<typeof AskAiTutorInputSchema>;
 
@@ -47,8 +46,7 @@ const askAiTutorFlow = ai.defineFlow(
     outputSchema: AskAiTutorOutputSchema,
   },
   async (input) => {
-    // The second argument to a prompt/flow is the streaming callback, the third is for config
-    const { output } = await prompt(input, undefined, { apiKey: input.apiKey });
+    const { output } = await prompt(input);
     return output!;
   }
 );

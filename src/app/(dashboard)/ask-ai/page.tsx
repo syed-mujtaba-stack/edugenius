@@ -1,6 +1,6 @@
 
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { askAiTutor } from '@/ai/flows/ask-ai-tutor';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,22 +19,7 @@ export default function AskAiPage() {
   const [question, setQuestion] = useState('');
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey, setApiKey] = useState<string | null>(null);
   const { toast } = useToast();
-
-  useEffect(() => {
-    const fetchApiKey = () => {
-      const storedKey = localStorage.getItem('user-gemini-api-key');
-      setApiKey(storedKey);
-    };
-
-    fetchApiKey();
-    window.addEventListener('apiKeyUpdated', fetchApiKey);
-
-    return () => {
-      window.removeEventListener('apiKeyUpdated', fetchApiKey);
-    };
-  }, []);
 
   const handleAsk = async () => {
     if (!topic.trim() || !question.trim()) {
@@ -51,7 +36,8 @@ export default function AskAiPage() {
     setChatHistory(prev => [...prev, userMessage]);
 
     try {
-      const result = await askAiTutor({ topic, question, apiKey: apiKey || undefined });
+      // The flow now automatically uses the key configured on the server.
+      const result = await askAiTutor({ topic, question });
       const botMessage: ChatMessage = { role: 'bot', content: result.answer };
       setChatHistory(prev => [...prev, botMessage]);
       setQuestion(''); // Clear input after sending
@@ -59,7 +45,7 @@ export default function AskAiPage() {
       console.error('Error asking AI Tutor:', error);
       toast({
         title: 'Error',
-        description: 'Failed to get an answer. Please try again. If you are using a custom API key, please ensure it is valid.',
+        description: 'Failed to get an answer. Please make sure your GEMINI_API_KEY is set correctly and try again.',
         variant: 'destructive',
       });
        // remove the user message if the bot fails to respond
