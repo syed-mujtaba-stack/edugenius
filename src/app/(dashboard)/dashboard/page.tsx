@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { DashboardCharts } from '@/components/dashboard-charts';
+import { DashboardClient } from '@/components/dashboard-client';
 
 export const metadata: Metadata = {
     title: "Dashboard",
@@ -107,7 +107,7 @@ export default function DashboardPage() {
         </Card>
       </div>
       <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-        <DashboardCharts />
+        <DashboardClient />
       </div>
     </main>
   );

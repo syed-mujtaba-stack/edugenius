@@ -2,6 +2,22 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
+import { Roboto, Anton } from 'next/font/google';
+
+const roboto = Roboto({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-roboto',
+  weight: ['400', '500', '700'],
+});
+
+const anton = Anton({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-anton',
+  weight: '400',
+});
+
 
 export const metadata: Metadata = {
   title: {
@@ -54,13 +70,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet" />
-      </head>
+    <html lang="en" className={cn("dark", roboto.variable, anton.variable)}>
+      <head />
       <body className={cn("font-body antialiased", "min-h-screen bg-background")}>
         {children}
         <Toaster />
