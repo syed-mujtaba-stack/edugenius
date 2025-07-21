@@ -53,7 +53,6 @@ Welcome to EduGenius, a modern, AI-driven educational platform built with Next.j
 -   **AI Doubt Solver:** An AI-powered chatbot ("AI Tutor") is available to answer student questions on any topic, 24/7.
 -   **Community Discussions:** A dedicated page for students to engage in chapter-wise discussions and help each other.
 -   **Ask a Teacher:** A feature allowing students to pose questions directly to real teachers in selected subjects.
--   **(Future Vision):** AI moderation for safe chats and a notification system for replies.
 
 ### ✨ 10. Advanced Features
 -   **Voice Assistant ("MJ"):** A voice-powered assistant that helps users navigate the app using voice commands.
@@ -67,4 +66,29 @@ Welcome to EduGenius, a modern, AI-driven educational platform built with Next.j
 -   **Admin Dashboard:** A central control panel to view system analytics and manage users.
 -   **Teacher Dashboard:** A dedicated dashboard for teachers to monitor student progress, class activity, and manage lessons.
 -   **Virtual Classroom:** A space for teachers to manage their students and learning materials.
-# edugenius
+
+---
+
+## 🚀 Future Roadmap & Planned Features
+
+Here's a glimpse of the exciting AI-powered features we plan to introduce to make EduGenius even more powerful:
+
+### 👨‍🏫 1. Teacher's AI Lesson Plan Generator
+-   **Concept:** An exclusive tool for teachers to instantly generate comprehensive lesson plans. By providing a topic, duration, and learning objective, teachers will receive a structured plan complete with modules, activities, and assessment strategies.
+-   **Benefit:** This will save valuable time for educators and empower them with high-quality, structured content for their classes.
+
+### 🎬 2. AI Video Generator (Text-to-Video)
+-   **Concept:** A groundbreaking feature allowing users to create short video clips from simple text prompts. For example, typing "a 5-second video of the water cycle" will generate a relevant animation.
+-   **Benefit:** This will provide an incredibly powerful and quick way to create visual aids for difficult topics, making learning more engaging and effective.
+
+### 🎮 3. Real-Time Quiz with Friends (Multiplayer)
+-   **Concept:** A feature enabling students to challenge their friends to a real-time quiz competition. The AI will generate unique questions on the fly, and a live leaderboard will track scores.
+-   **Benefit:** This will gamify the learning process, making revision a fun, competitive, and social activity.
+
+### 🎙️ 4. AI Voice Conversation Tutor
+-   **Concept:** An upgrade to the AI Tutor, allowing students to have spoken conversations with the AI. The tutor will understand voice commands and respond verbally, simulating a real human interaction.
+-   **Benefit:** This will create a more immersive and interactive learning experience, helping students improve their communication and auditory learning skills.
+
+### 📰 5. Personalized Daily News Digest for Students
+-   **Concept:** An AI-curated daily news service. Based on a student's selected interests (like Science, Tech, or Arts), the AI will deliver a concise, easy-to-read summary of the day's most important news in those fields.
+-   **Benefit:** This will keep students informed and engaged with the real-world applications of their studies, broadening their knowledge base.
