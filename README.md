@@ -92,3 +92,4 @@ Here's a glimpse of the exciting AI-powered features we plan to introduce to mak
 ### 📰 5. Personalized Daily News Digest for Students
 -   **Concept:** An AI-curated daily news service. Based on a student's selected interests (like Science, Tech, or Arts), the AI will deliver a concise, easy-to-read summary of the day's most important news in those fields.
 -   **Benefit:** This will keep students informed and engaged with the real-world applications of their studies, broadening their knowledge base.
+# edu-genius
