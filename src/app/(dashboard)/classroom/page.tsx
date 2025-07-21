@@ -1,8 +1,9 @@
+
 'use client';
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { PlusCircle, Users, FileText, Bot } from 'lucide-react';
+import { PlusCircle, Users, FileText } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -14,9 +15,6 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { generateLessonPlan } from '@/ai/flows/generate-lesson-plan';
-import { useToast } from '@/hooks/use-toast';
 
 const students = [
   { name: 'Ali Raza', progress: 85 },
@@ -32,39 +30,6 @@ const lessons = [
 ];
 
 export default function ClassroomPage() {
-    const [isGenerating, setIsGenerating] = useState(false);
-    const { toast } = useToast();
-
-    const handleGenerateLesson = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const topic = formData.get('topic') as string;
-        const duration = formData.get('duration') as string;
-        const objective = formData.get('objective') as string;
-        
-        if (!topic || !duration || !objective) {
-            toast({ title: "Error", description: "Please fill all fields.", variant: "destructive" });
-            return;
-        }
-
-        setIsGenerating(true);
-        try {
-            const result = await generateLessonPlan({ topic, duration, objective });
-            // For now, just show a success toast with the generated title.
-            // In a real app, you'd add the lesson to your state/DB.
-            toast({
-                title: "Lesson Plan Generated!",
-                description: `Successfully created plan for: ${result.lessonTitle}`,
-            });
-        } catch (error) {
-            console.error(error);
-            toast({ title: "Error", description: "Failed to generate lesson plan.", variant: "destructive" });
-        } finally {
-            setIsGenerating(false);
-        }
-    }
-
-
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
       <div className="flex items-center justify-between">
@@ -79,31 +44,26 @@ export default function ClassroomPage() {
             <DialogHeader>
               <DialogTitle>Create a New Lesson</DialogTitle>
               <DialogDescription>
-                You can create a lesson manually or let our AI help you generate a complete lesson plan.
+                Fill in the details for your new lesson or assignment.
               </DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleGenerateLesson}>
-                <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="topic" className="text-right">Topic</Label>
-                    <Input id="topic" name="topic" placeholder="e.g., Photosynthesis" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="duration" className="text-right">Duration</Label>
-                    <Input id="duration" name="duration" placeholder="e.g., 45 minutes" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="objective" className="text-right">Objective</Label>
-                    <Textarea id="objective" name="objective" placeholder="What will students learn?" className="col-span-3" />
-                </div>
-                </div>
-                <DialogFooter>
-                <Button type="button" variant="outline">Create Manually</Button>
-                <Button type="submit" disabled={isGenerating}>
-                    <Bot className="mr-2 h-4 w-4" /> {isGenerating ? 'Generating...' : 'Generate with AI'}
-                </Button>
-                </DialogFooter>
-            </form>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="title" className="text-right">
+                  Title
+                </Label>
+                <Input id="title" placeholder="e.g., Chapter 5 Quiz" className="col-span-3" />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="type" className="text-right">
+                  Type
+                </Label>
+                <Input id="type" placeholder="e.g., Quiz, Assignment" className="col-span-3" />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit">Create Lesson</Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>

@@ -4,9 +4,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { auth, db } from '@/lib/firebase';
+import { auth } from '@/lib/firebase';
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -14,74 +13,21 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { Logo } from '@/components/logo';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-
-type Role = 'student' | 'teacher' | 'parent' | 'admin';
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<Role>('student');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-
-  const handleAdminLogin = () => {
-    if (email === 'abbasmujtaba125@gmail.com' && password === 'mujtaba110') {
-      // This is a simplified admin auth, in a real app, you'd use custom claims with Firebase Auth
-      signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-            toast({ title: 'Admin Login Successful', description: 'Welcome, Mujtaba Abbas!' });
-            router.push('/admin-dashboard');
-        }).catch((error) => {
-            // This might happen if the admin user doesn't exist in Firebase Auth
-             toast({ title: 'Admin Auth Failed', description: 'Could not sign in the admin user via Firebase Auth. Please ensure the user exists.', variant: 'destructive' });
-        });
-    } else {
-      toast({ title: 'Admin Login Failed', description: 'Invalid credentials for admin.', variant: 'destructive' });
-    }
-    setIsLoading(false);
-  };
-  
-  const handleRoleBasedLogin = async (uid: string, userEmail: string | null, targetRole: Role) => {
-    // Special check for the admin email to bypass role verification
-    if (userEmail === 'abbasmujtaba125@gmail.com') {
-        toast({ title: 'Login Successful', description: `Welcome, Admin! Viewing as ${targetRole}.` });
-        router.push('/dashboard');
-        return;
-    }
-
-    const userDocRef = doc(db, 'users', uid);
-    const userDoc = await getDoc(userDocRef);
-
-    if (userDoc.exists()) {
-        const userRole = userDoc.data()?.role;
-        if (userRole === targetRole) {
-            toast({ title: 'Login Successful', description: 'Welcome back!' });
-            router.push('/dashboard');
-        } else {
-             await auth.signOut(); // Sign out the user if roles don't match
-             toast({ title: 'Role Mismatch', description: `You are registered as a ${userRole}, not a ${targetRole}. Please select the correct role.`, variant: 'destructive' });
-        }
-    } else {
-        await auth.signOut();
-        toast({ title: 'Login Failed', description: 'User data not found. Please sign up first.', variant: 'destructive' });
-    }
-  }
-
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
-    if (role === 'admin') {
-      handleAdminLogin();
-      return;
-    }
-
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      await handleRoleBasedLogin(userCredential.user.uid, userCredential.user.email, role);
+      await signInWithEmailAndPassword(auth, email, password);
+      toast({ title: 'Login Successful', description: 'Welcome back!' });
+      router.push('/dashboard');
     } catch (error: any) {
       console.error('Error during email login:', error);
       toast({
@@ -96,16 +42,11 @@ export default function LoginPage() {
   
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
-    if (role === 'admin') {
-        toast({ title: 'Invalid Method', description: 'Admin must log in with email and password.', variant: 'destructive' });
-        setIsLoading(false);
-        return;
-    }
     const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(auth, provider);
-      // After Google sign in, we verify their role from Firestore.
-      await handleRoleBasedLogin(result.user.uid, result.user.email, role);
+      await signInWithPopup(auth, provider);
+      toast({ title: "Sign-in Successful", description: "Welcome to EduGenius!" });
+      router.push('/dashboard');
     } catch (error: any) {
       console.error("Error during sign-in:", error);
       let description = "Could not sign you in with Google. Please try again.";
@@ -136,20 +77,6 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleEmailLogin} className="space-y-4">
-            <div className="space-y-2">
-                <Label htmlFor="role">Login as</Label>
-                <Select onValueChange={(value: Role) => setRole(value)} defaultValue={role}>
-                    <SelectTrigger id="role">
-                        <SelectValue placeholder="Select a role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="student">Student</SelectItem>
-                        <SelectItem value="teacher">Teacher</SelectItem>
-                        <SelectItem value="parent">Parent</SelectItem>
-                        <SelectItem value="admin">Admin</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
