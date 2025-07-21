@@ -1,3 +1,4 @@
+
 'use client';
 import { useState } from 'react';
 import { evaluateEssay, EvaluateEssayOutput } from '@/ai/flows/evaluate-essay';
@@ -122,8 +123,8 @@ export default function EssayEvaluatorPage() {
                    <AccordionItem value="item-3">
                     <AccordionTrigger>A-Grade Sample Essay</AccordionTrigger>
                     <AccordionContent>
-                       <div className="prose prose-sm dark:prose-invert max-w-none p-2 border rounded-md bg-secondary/50">
-                         <p>{evaluation.sampleEssay}</p>
+                       <div className="prose prose-sm dark:prose-invert max-w-none p-4 border rounded-md bg-secondary/50 text-sm">
+                         <p className="whitespace-pre-wrap">{evaluation.sampleEssay}</p>
                        </div>
                     </AccordionContent>
                   </AccordionItem>

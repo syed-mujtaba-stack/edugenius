@@ -105,7 +105,7 @@ export default function DashboardLayout({
         setIsListening(false);
       };
     }
-  }, []);
+  }, [toast]);
   
   const speak = (text: string, callback?: () => void) => {
       if ('speechSynthesis' in window) {

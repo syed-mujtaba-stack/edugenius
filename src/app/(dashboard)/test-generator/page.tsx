@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
@@ -257,7 +258,7 @@ export default function TestGeneratorPage() {
 
   const renderPracticeMode = () => (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
+      <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
         <CardTitle>Generated Practice Test</CardTitle>
         <Button onClick={handleExportToPdf} variant="outline" size="sm">
             <FileDown className="mr-2 h-4 w-4" />
@@ -396,7 +397,7 @@ export default function TestGeneratorPage() {
                                         className="space-y-1"
                                     >
                                         {q.options.map((option, optIndex) => (
-                                            <FormItem className="flex items-center space-x-3" key={optIndex}>
+                                            <FormItem className="flex items-center space-x-3 space-y-0" key={optIndex}>
                                                 <FormControl>
                                                 <RadioGroupItem value={option} />
                                                 </FormControl>
@@ -438,7 +439,7 @@ export default function TestGeneratorPage() {
             <CardContent>
                 <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     <FormField
                         control={form.control}
                         name="curriculumLevel"
@@ -570,7 +571,7 @@ export default function TestGeneratorPage() {
                         )}
                     </div>
                     </div>
-                    <Button type="submit" disabled={isLoading}>
+                    <Button type="submit" disabled={isLoading} className="w-full sm:w-auto">
                     {isLoading ? (<><Loader2 className="mr-2 h-4 w-4 animate-spin" />Generating Test...</>) : ('Generate Test')}
                     </Button>
                 </form>

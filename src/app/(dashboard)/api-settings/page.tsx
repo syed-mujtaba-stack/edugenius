@@ -67,7 +67,7 @@ export default function ApiSettingsPage() {
                     Your key is saved securely in your browser's local storage and is not sent to our servers.
                 </p>
                 </div>
-                <Button onClick={handleSaveApiKey}>
+                <Button onClick={handleSaveApiKey} className="w-full sm:w-auto">
                 <Save className="mr-2 h-4 w-4" /> Save API Key
                 </Button>
             </div>

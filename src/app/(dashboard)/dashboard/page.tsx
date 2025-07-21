@@ -1,7 +1,9 @@
+
 import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DashboardClient } from '@/components/dashboard-client';
 
+// Note: Metadata is supported in Client Components and will be extracted to the server.
 export const metadata: Metadata = {
     title: "Dashboard",
     description: "Your personal dashboard. Track your progress, view your stats like tests taken, average scores, summaries created, and daily study streak.",
@@ -13,7 +15,7 @@ export default function DashboardPage() {
       <div className="flex items-center">
         <h1 className="font-headline text-3xl md:text-4xl">Dashboard</h1>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Tests Taken</CardTitle>

@@ -1,3 +1,4 @@
+
 'use client';
 import { useState } from 'react';
 import { generateCareerAdvice, GenerateCareerAdviceOutput } from '@/ai/flows/generate-career-advice';
@@ -135,16 +136,16 @@ export default function CareerCounselingPage() {
                   <div>
                     <h3 className="font-semibold text-lg mb-3 flex items-center gap-2"><Map /> Roadmap to Become a {advice.topCareerRoadmap.career}</h3>
                     <div className="relative pl-6">
-                        <div className="absolute left-0 top-0 h-full w-0.5 bg-primary/20"></div>
+                        <div className="absolute left-2.5 top-0 h-full w-0.5 bg-primary/20"></div>
                         {advice.topCareerRoadmap.roadmap.map((step, index) => (
                            <div key={index} className="relative mb-6">
-                               <div className="absolute -left-[34px] top-1 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold">
+                               <div className="absolute -left-[18px] top-1 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold text-xs">
                                 {step.step}
                                </div>
-                               <h4 className="font-bold text-md mb-1">{step.title}</h4>
-                               <p className="text-sm text-muted-foreground">{step.description}</p>
+                               <h4 className="font-bold text-md mb-1 ml-4">{step.title}</h4>
+                               <p className="text-sm text-muted-foreground ml-4">{step.description}</p>
                                {step.resources && step.resources.length > 0 && (
-                                   <div className="mt-2">
+                                   <div className="mt-2 ml-4">
                                        <h5 className="text-xs font-semibold">Recommended Resources:</h5>
                                        <ul className="list-disc list-inside text-xs text-muted-foreground">
                                             {step.resources.map((res, i) => <li key={i}>{res}</li>)}

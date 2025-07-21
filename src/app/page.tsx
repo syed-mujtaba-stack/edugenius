@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
@@ -22,8 +23,8 @@ export default function Home() {
         <p className="mt-4 max-w-2xl text-lg md:text-xl text-primary/80">
           Unlock Your Learning Potential with AI. Summarize chapters, generate Q&As, and create personalized tests in seconds.
         </p>
-        <div className="mt-8 flex flex-col sm:flex-row gap-4 w-full max-w-xs sm:max-w-none">
-           <Button asChild size="lg" className="font-bold text-lg flex-1">
+        <div className="mt-8 flex flex-col sm:flex-row gap-4 w-full max-w-xs sm:max-w-none sm:justify-center">
+           <Button asChild size="lg" className="font-bold text-lg flex-1 sm:flex-none sm:px-10">
             <Link href="/dashboard">Get Started</Link>
           </Button>
         </div>
