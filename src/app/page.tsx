@@ -30,11 +30,15 @@ export default function Home() {
         description: "Welcome to EduGenius!",
       });
       router.push("/dashboard");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error during sign-in:", error);
+      let description = "Could not sign you in with Google. Please try again.";
+      if (error && error.code === 'auth/internal-error') {
+        description = "An internal authentication error occurred. Please ensure Google Sign-in is enabled in your Firebase project's Authentication settings and that the domain is authorized.";
+      }
       toast({
         title: "Login Failed",
-        description: "Could not sign you in with Google. Please try again.",
+        description: description,
         variant: "destructive",
       });
     }
