@@ -12,12 +12,11 @@ Welcome to EduGenius, a modern, AI-driven educational platform built with Next.j
 -   **Intelligent Analysis:** The AI analyzes a student's learning goals and identifies their weak topics.
 -   **Custom Roadmap:** It recommends a tailored sequence of subjects, chapters, and tests to follow.
 -   **Adaptive Learning:** The system reinforces learning by suggesting repetitions for weaker areas.
--   **Daily Study Routine:** A built-in routine generator helps students build consistent study habits and track their progress with a daily streak.
+-   **Daily Study Routine:** A built-in routine generator helps students build consistent study habits and track their progress with a daily study streak.
 
-### 📹 2. AI Video & Audio Generator
--   **AI Text-to-Video (Experimental):** Generate short, high-quality videos from a simple text prompt using Google's Veo model.
+### 🎵 2. AI Audio Generator
 -   **Text-to-Speech:** Converts text-based notes or any pasted text into high-quality audio voice-overs.
--   **Downloadable Media:** Allows students to save generated videos and audio lessons for offline learning.
+-   **Downloadable Media:** Allows students to save generated audio lessons for offline learning.
 
 ### 💼 3. Career Counseling & Skill Mapping
 -   **AI-Powered Guidance:** The AI suggests suitable career paths (e.g., Science, Business, AI, Design) based on a student's interests and strengths.
