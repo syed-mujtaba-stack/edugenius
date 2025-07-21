@@ -76,59 +76,63 @@ export default function DashboardLayout({
       router.push('/login');
       return;
     }
-    
-    // Handle special admin case
-    if (user.email === 'abbasmujtaba125@gmail.com') {
-        setUserRole('admin');
-        setIsRoleLoading(false);
-        if (pathname !== '/admin-dashboard') {
-           // Redirect to admin dashboard if not already there.
-           // This is a simple check. A more robust solution would use custom claims.
-           // router.push('/admin-dashboard');
-        }
-        return;
-    }
-
 
     const fetchUserRole = async () => {
-      const userDocRef = doc(db, 'users', user.uid);
-      const userDoc = await getDoc(userDocRef);
-      if (userDoc.exists()) {
-        setUserRole(userDoc.data()?.role);
-      } else {
-        // User exists in Auth but not in Firestore. This is an inconsistent state.
-        // For now, we'll log them out and ask them to sign up again.
-        toast({ title: "Error", description: "User data not found. Please sign up again.", variant: "destructive" });
+       setIsRoleLoading(true);
+       try {
+        const userDocRef = doc(db, 'users', user.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          const role = userDoc.data()?.role;
+           // Special override for admin email
+          if (user.email === 'abbasmujtaba125@gmail.com' && role === 'admin') {
+             setUserRole('admin');
+          } else {
+             setUserRole(role);
+          }
+        } else {
+          // User exists in Auth but not in Firestore. This is an inconsistent state.
+          // For now, we'll log them out and ask them to sign up again.
+          toast({ title: "Error", description: "User data not found. Please sign up again.", variant: "destructive" });
+          await auth.signOut();
+          router.push('/signup');
+        }
+      } catch (e) {
+        console.error("Failed to fetch user role", e);
+        toast({ title: "Error", description: "Could not verify user role. Logging out.", variant: "destructive" });
         await auth.signOut();
-        router.push('/signup');
+      } finally {
+        setIsRoleLoading(false);
       }
-      setIsRoleLoading(false);
     };
 
     fetchUserRole();
-  }, [user, loading, router, pathname, toast]);
+  }, [user, loading, router, toast]);
 
 
   const allMenuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, keywords: ['dashboard', 'home', 'main'], roles: ['student', 'teacher', 'parent', 'admin'] },
-    { href: '/learning-path', label: 'Learning Path', icon: TrendingUp, keywords: ['learning path', 'study plan', 'path'], roles: ['student'] },
-    { href: '/courses', label: 'Video Courses', icon: Video, keywords: ['video courses', 'courses', 'lectures'], roles: ['student', 'teacher', 'parent'] },
-    { href: '/summarize', label: 'Chapter Summarizer', icon: BookText, keywords: ['summarizer', 'summary', 'chapter'], roles: ['student', 'teacher'] },
-    { href: '/q-and-a', label: 'Q&A Generator', icon: MessageSquarePlus, keywords: ['q&a', 'questions', 'answers'], roles: ['student', 'teacher'] },
-    { href: '/test-generator', label: 'Test Generator', icon: FileText, keywords: ['test generator', 'test', 'exam'], roles: ['student', 'teacher'] },
-    { href: '/essay-evaluator', label: 'Essay Evaluator', icon: FileSignature, keywords: ['essay evaluator', 'essay', 'writing'], roles: ['student', 'teacher'] },
-    { href: '/ask-ai', label: 'AI Tutor', icon: Bot, keywords: ['ai tutor', 'tutor', 'ask'], roles: ['student', 'teacher', 'parent'] },
-    { href: '/audio-generator', label: 'Audio Generator', icon: Music4, keywords: ['audio generator', 'audio', 'voice', 'sound'], roles: ['student', 'teacher'] },
-    { href: '/video-generator', label: 'Video Generator', icon: Clapperboard, keywords: ['video generator', 'video', 'clip'], roles: ['student', 'teacher'] },
-    { href: '/career-counseling', label: 'Career Counseling', icon: Briefcase, keywords: ['career', 'counseling', 'advice'], roles: ['student'] },
-    { href: '/community', label: 'Community', icon: Users, keywords: ['community', 'hub', 'discussion'], roles: ['student', 'teacher', 'parent'] },
-    { href: '/teacher-dashboard', label: 'Teacher Dashboard', icon: LayoutDashboard, keywords: ['teacher dashboard', 'teacher'], roles: ['teacher'] },
-    { href: '/classroom', label: 'My Classroom', icon: School, keywords: ['classroom', 'class'], roles: ['teacher'] },
-    { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark, keywords: ['bookmarks', 'saved'], roles: ['student', 'teacher'] },
+    { href: '/learning-path', label: 'Learning Path', icon: TrendingUp, keywords: ['learning path', 'study plan', 'path'], roles: ['student', 'teacher', 'admin'] },
+    { href: '/courses', label: 'Video Courses', icon: Video, keywords: ['video courses', 'courses', 'lectures'], roles: ['student', 'teacher', 'parent', 'admin'] },
+    { href: '/summarize', label: 'Chapter Summarizer', icon: BookText, keywords: ['summarizer', 'summary', 'chapter'], roles: ['student', 'teacher', 'admin'] },
+    { href: '/q-and-a', label: 'Q&A Generator', icon: MessageSquarePlus, keywords: ['q&a', 'questions', 'answers'], roles: ['student', 'teacher', 'admin'] },
+    { href: '/test-generator', label: 'Test Generator', icon: FileText, keywords: ['test generator', 'test', 'exam'], roles: ['student', 'teacher', 'admin'] },
+    { href: '/essay-evaluator', label: 'Essay Evaluator', icon: FileSignature, keywords: ['essay evaluator', 'essay', 'writing'], roles: ['student', 'teacher', 'admin'] },
+    { href: '/ask-ai', label: 'AI Tutor', icon: Bot, keywords: ['ai tutor', 'tutor', 'ask'], roles: ['student', 'teacher', 'parent', 'admin'] },
+    { href: '/audio-generator', label: 'Audio Generator', icon: Music4, keywords: ['audio generator', 'audio', 'voice', 'sound'], roles: ['student', 'teacher', 'admin'] },
+    { href: '/video-generator', label: 'Video Generator', icon: Clapperboard, keywords: ['video generator', 'video', 'clip'], roles: ['student', 'teacher', 'admin'] },
+    { href: '/career-counseling', label: 'Career Counseling', icon: Briefcase, keywords: ['career', 'counseling', 'advice'], roles: ['student', 'teacher', 'admin'] },
+    { href: '/community', label: 'Community', icon: Users, keywords: ['community', 'hub', 'discussion'], roles: ['student', 'teacher', 'parent', 'admin'] },
+    { href: '/teacher-dashboard', label: 'Teacher Dashboard', icon: LayoutDashboard, keywords: ['teacher dashboard', 'teacher'], roles: ['teacher', 'admin'] },
+    { href: '/classroom', label: 'My Classroom', icon: School, keywords: ['classroom', 'class'], roles: ['teacher', 'admin'] },
+    { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark, keywords: ['bookmarks', 'saved'], roles: ['student', 'teacher', 'admin'] },
     { href: '/admin-dashboard', label: 'Admin Dashboard', icon: Shield, keywords: ['admin dashboard', 'admin'], roles: ['admin'] },
   ];
   
-  const menuItems = allMenuItems.filter(item => userRole && item.roles.includes(userRole));
+  const menuItems = allMenuItems.filter(item => {
+      if (!userRole) return false;
+      return item.roles.includes(userRole);
+  });
 
 
   useEffect(() => {
@@ -219,8 +223,24 @@ export default function DashboardLayout({
   
   if (loading || isRoleLoading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Skeleton className="h-full w-full" />
+       <div className="flex h-screen w-full">
+        <div className="hidden md:flex h-full w-[16rem] flex-col gap-2 border-r p-2">
+            <div className="flex items-center justify-between p-2">
+                <Skeleton className="h-8 w-32" />
+                <Skeleton className="h-7 w-7" />
+            </div>
+            <div className="flex-grow space-y-2 p-2">
+                {[...Array(8)].map((_, i) => <Skeleton key={i} className="h-8 w-full" />)}
+            </div>
+            <div className="space-y-2 p-2">
+                <Skeleton className="h-8 w-full" />
+                <Skeleton className="h-8 w-full" />
+                <Skeleton className="h-8 w-full" />
+            </div>
+        </div>
+        <div className="flex-1 p-4">
+             <Skeleton className="h-full w-full" />
+        </div>
       </div>
     );
   }
@@ -319,3 +339,5 @@ export default function DashboardLayout({
     </SidebarProvider>
   );
 }
+
+    
