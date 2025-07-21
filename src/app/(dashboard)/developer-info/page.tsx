@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -7,7 +8,7 @@ import { ExternalLink, UserSquare, Code } from 'lucide-react';
 
 export const metadata: Metadata = {
     title: "About the Developers",
-    description: "Meet the talented developers behind EduGenius: Syed Mujtaba Abbas and Maham Zehra.",
+    description: "Meet the talented developers behind EduGenius: Syed Mujtaba Abbas and Syeda Noor Fatima.",
 };
 
 const developers = [
@@ -19,8 +20,8 @@ const developers = [
         portfolio: 'https://mujtaba-mj.vercel.app',
     },
     {
-        name: 'Maham Zehra',
-        image: 'https://portfolio-nine-ebon-36.vercel.app/my-passport-photo.jpg',
+        name: 'Syeda Noor Fatima',
+        image: 'https://portfolio-nine-ebon-36.vercel.app/_next/image?url=%2Fimages%2Fprofile.jpg&w=640&q=75',
         title: 'Full Stack Developer',
         bio: 'A passionate and creative front-end developer with a love for crafting beautiful and intuitive user interfaces. I contribute to making EduGenius a seamless experience for all students.',
         portfolio: 'https://portfolio-nine-ebon-36.vercel.app',
