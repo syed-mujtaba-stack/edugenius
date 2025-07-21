@@ -83,6 +83,7 @@ export default function DashboardLayout({
     { href: '/essay-evaluator', label: 'Essay Evaluator', icon: FileSignature, keywords: ['essay evaluator', 'essay', 'writing'] },
     { href: '/ask-ai', label: 'AI Tutor', icon: Bot, keywords: ['ai tutor', 'tutor', 'ask'] },
     { href: '/audio-generator', label: 'Audio Generator', icon: Music4, keywords: ['audio generator', 'audio', 'voice', 'sound'] },
+    { href: '/video-generator', label: 'Video Generator', icon: Clapperboard, keywords: ['video generator', 'video', 'clip'] },
     { href: '/career-counseling', label: 'Career Counseling', icon: Briefcase, keywords: ['career', 'counseling', 'advice'] },
     { href: '/community', label: 'Community', icon: Users, keywords: ['community', 'hub', 'discussion'] },
     { href: '/teacher-dashboard', label: 'Teacher Dashboard', icon: LayoutDashboard, keywords: ['teacher dashboard', 'teacher'] },
