@@ -21,6 +21,7 @@ import {
   FileSignature,
   Cog,
   Clapperboard,
+  Code,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -230,6 +231,18 @@ export default function DashboardLayout({
                   <Link href="/api-settings">
                     <Cog />
                     <span>API Settings</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === '/developer-info'}
+                  tooltip="Developer Info"
+                >
+                  <Link href="/developer-info">
+                    <Code />
+                    <span>Developer Info</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

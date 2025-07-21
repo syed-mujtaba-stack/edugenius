@@ -16,6 +16,18 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'mujtaba-mj.vercel.app',
+        port: '',
+        pathname: '/**',
+      },
+       {
+        protocol: 'https',
+        hostname: 'portfolio-nine-ebon-36.vercel.app',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };
