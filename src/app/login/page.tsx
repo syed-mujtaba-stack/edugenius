@@ -29,15 +29,28 @@ export default function LoginPage() {
   const handleAdminLogin = () => {
     if (email === 'abbasmujtaba125@gmail.com' && password === 'mujtaba110') {
       // This is a simplified admin auth, in a real app, you'd use custom claims with Firebase Auth
-      toast({ title: 'Admin Login Successful', description: 'Welcome, Mujtaba Abbas!' });
-      router.push('/admin-dashboard');
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+            toast({ title: 'Admin Login Successful', description: 'Welcome, Mujtaba Abbas!' });
+            router.push('/admin-dashboard');
+        }).catch((error) => {
+            // This might happen if the admin user doesn't exist in Firebase Auth
+             toast({ title: 'Admin Auth Failed', description: 'Could not sign in the admin user via Firebase Auth. Please ensure the user exists.', variant: 'destructive' });
+        });
     } else {
       toast({ title: 'Admin Login Failed', description: 'Invalid credentials for admin.', variant: 'destructive' });
     }
     setIsLoading(false);
   };
   
-  const handleRoleBasedLogin = async (uid: string, targetRole: Role) => {
+  const handleRoleBasedLogin = async (uid: string, userEmail: string | null, targetRole: Role) => {
+    // Special check for the admin email to bypass role verification
+    if (userEmail === 'abbasmujtaba125@gmail.com') {
+        toast({ title: 'Login Successful', description: `Welcome, Admin! Viewing as ${targetRole}.` });
+        router.push('/dashboard');
+        return;
+    }
+
     const userDocRef = doc(db, 'users', uid);
     const userDoc = await getDoc(userDocRef);
 
@@ -68,7 +81,7 @@ export default function LoginPage() {
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      await handleRoleBasedLogin(userCredential.user.uid, role);
+      await handleRoleBasedLogin(userCredential.user.uid, userCredential.user.email, role);
     } catch (error: any) {
       console.error('Error during email login:', error);
       toast({
@@ -92,7 +105,7 @@ export default function LoginPage() {
     try {
       const result = await signInWithPopup(auth, provider);
       // After Google sign in, we verify their role from Firestore.
-      await handleRoleBasedLogin(result.user.uid, role);
+      await handleRoleBasedLogin(result.user.uid, result.user.email, role);
     } catch (error: any) {
       console.error("Error during sign-in:", error);
       let description = "Could not sign you in with Google. Please try again.";
