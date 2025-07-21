@@ -3,6 +3,9 @@
 import { Bar, BarChart, CartesianGrid, XAxis, Pie, PieChart, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { useState, useEffect } from 'react';
+import { Skeleton } from './ui/skeleton';
+
 
 const chartData = [
     { day: "Monday", tests: 4, summaries: 2 },
@@ -38,6 +41,27 @@ const chartConfig = {
 
 
 export function DashboardCharts() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+     return (
+        <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 w-full">
+            <Card className="xl:col-span-2">
+                <CardHeader><Skeleton className="h-8 w-1/3" /></CardHeader>
+                <CardContent><Skeleton className="h-48 w-full" /></CardContent>
+            </Card>
+            <Card>
+                <CardHeader><Skeleton className="h-8 w-2/3" /></CardHeader>
+                <CardContent className="flex justify-center items-center"><Skeleton className="h-48 w-48 rounded-full" /></CardContent>
+            </Card>
+        </div>
+      )
+  }
+  
   return (
     <>
       <Card className="xl:col-span-2">
