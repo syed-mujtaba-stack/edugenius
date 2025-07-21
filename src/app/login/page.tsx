@@ -53,7 +53,7 @@ export default function LoginPage() {
     } catch (error: any) {
       console.error("Error during sign-in:", error);
       let description = "Could not sign you in with Google. Please try again.";
-      if (error && error.code === 'auth/internal-error') {
+      if (error?.code === 'auth/internal-error') {
         description = "An internal authentication error occurred. Please ensure Google Sign-in is enabled in your Firebase project's Authentication settings and that the domain is authorized.";
       }
       toast({
