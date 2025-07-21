@@ -95,7 +95,7 @@ export default function TestGeneratorPage() {
   
   useEffect(() => {
     const fetchApiKey = () => {
-      const storedKey = localStorage.getItem('user-openrouter-api-key');
+      const storedKey = localStorage.getItem('user-gemini-api-key');
       setApiKey(storedKey);
     };
 

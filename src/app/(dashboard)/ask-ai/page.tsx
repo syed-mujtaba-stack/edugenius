@@ -24,8 +24,7 @@ export default function AskAiPage() {
   
   useEffect(() => {
     const fetchApiKey = () => {
-      // OpenRouter uses a single key, which might be stored with this name
-      const storedKey = localStorage.getItem('user-openrouter-api-key');
+      const storedKey = localStorage.getItem('user-gemini-api-key');
       setApiKey(storedKey);
     };
 
@@ -61,7 +60,7 @@ export default function AskAiPage() {
       console.error('Error asking AI Tutor:', error);
       toast({
         title: 'Error',
-        description: error.message || 'Failed to get an answer. Please make sure your OpenRouter API KEY is set correctly and try again.',
+        description: error.message || 'Failed to get an answer. Please make sure your Gemini API KEY is set correctly and try again.',
         variant: 'destructive',
       });
        // remove the user message if the bot fails to respond
