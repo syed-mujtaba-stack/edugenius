@@ -3,14 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
-import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { Logo } from "@/components/logo";
 import { useEffect } from "react";
-import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
 
 export default function Home() {
   const router = useRouter();
-  const { toast } = useToast();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -21,28 +20,6 @@ export default function Home() {
     return () => unsubscribe();
   }, [router]);
 
-  const handleSignIn = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      await signInWithPopup(auth, provider);
-      toast({
-        title: "Login Successful",
-        description: "Welcome to EduGenius!",
-      });
-      router.push("/dashboard");
-    } catch (error: any) {
-      console.error("Error during sign-in:", error);
-      let description = "Could not sign you in with Google. Please try again.";
-      if (error && error.code === 'auth/internal-error') {
-        description = "An internal authentication error occurred. Please ensure Google Sign-in is enabled in your Firebase project's Authentication settings and that the domain is authorized.";
-      }
-      toast({
-        title: "Login Failed",
-        description: description,
-        variant: "destructive",
-      });
-    }
-  };
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-background p-4">
@@ -57,8 +34,11 @@ export default function Home() {
           Unlock Your Learning Potential with AI. Summarize chapters, generate Q&As, and create personalized tests in seconds.
         </p>
         <div className="mt-8 flex flex-col sm:flex-row gap-4 w-full max-w-xs sm:max-w-none sm:justify-center">
-           <Button onClick={handleSignIn} size="lg" className="font-bold text-lg flex-1 sm:flex-none sm:px-10">
-            Sign in with Google
+           <Button asChild size="lg" className="font-bold text-lg flex-1 sm:flex-none sm:px-10">
+              <Link href="/login">Login</Link>
+          </Button>
+           <Button asChild size="lg" variant="secondary" className="font-bold text-lg flex-1 sm:flex-none sm:px-10">
+             <Link href="/signup">Sign Up</Link>
           </Button>
         </div>
       </main>
