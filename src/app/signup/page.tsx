@@ -4,8 +4,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { auth } from '@/lib/firebase';
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth, db } from '@/lib/firebase';
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -13,21 +14,43 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { Logo } from '@/components/logo';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+type Role = 'student' | 'teacher' | 'parent';
 
 export default function SignupPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState<Role>('student');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+
+  const handleUserCreation = async (user: User, selectedRole: Role) => {
+    try {
+      // Store user role in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        email: user.email,
+        role: selectedRole,
+        createdAt: new Date(),
+      });
+      toast({ title: 'Account Created!', description: 'Welcome to EduGenius. You are now logged in.' });
+      router.push('/dashboard');
+    } catch (dbError) {
+        console.error("Error writing user to Firestore: ", dbError);
+        // This part is tricky. The user is created in Auth but not in DB.
+        // For a real app, you might want to delete the user from Auth or have a retry mechanism.
+        toast({ title: 'Database Error', description: 'Could not save user role. Please contact support.', variant: 'destructive' });
+    }
+  };
 
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      toast({ title: 'Account Created!', description: 'Welcome to EduGenius. You are now logged in.' });
-      router.push('/dashboard');
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await handleUserCreation(userCredential.user, role);
     } catch (error: any) {
       console.error('Error during email sign up:', error);
        toast({
@@ -46,12 +69,10 @@ export default function SignupPage() {
     setIsLoading(true);
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
-      toast({
-        title: "Sign-up Successful",
-        description: "Welcome to EduGenius!",
-      });
-      router.push("/dashboard");
+      const result = await signInWithPopup(auth, provider);
+      // For Google Sign-In, we also need to know the role.
+      // Since Google sign-up happens with one click, we'll use the role selected in the dropdown.
+      await handleUserCreation(result.user, role);
     } catch (error: any) {
       console.error("Error during sign-in:", error);
       let description = "Could not sign you up with Google. Please try again.";
@@ -81,6 +102,19 @@ export default function SignupPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleEmailSignUp} className="space-y-4">
+            <div className="space-y-2">
+                <Label htmlFor="role">Sign up as</Label>
+                <Select onValueChange={(value: Role) => setRole(value)} defaultValue={role}>
+                    <SelectTrigger id="role">
+                        <SelectValue placeholder="Select a role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="student">Student</SelectItem>
+                        <SelectItem value="teacher">Teacher</SelectItem>
+                        <SelectItem value="parent">Parent</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input

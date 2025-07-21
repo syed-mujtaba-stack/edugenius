@@ -39,11 +39,11 @@ import { Logo } from '@/components/logo';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState, useRef } from 'react';
-import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { findBestMatch } from 'string-similarity';
-import { auth } from '@/lib/firebase';
+import { auth, db } from '@/lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { doc, getDoc } from 'firebase/firestore';
 import { Skeleton } from '@/components/ui/skeleton';
 
 // Extend the Window interface for webkitSpeechRecognition
@@ -53,6 +53,8 @@ declare global {
     webkitSpeechRecognition: any;
   }
 }
+
+type UserRole = 'student' | 'teacher' | 'parent' | 'admin' | null;
 
 export default function DashboardLayout({
   children,
@@ -65,32 +67,69 @@ export default function DashboardLayout({
   const recognitionRef = useRef<any>(null);
   const { toast } = useToast();
   const [user, loading, error] = useAuthState(auth);
+  const [userRole, setUserRole] = useState<UserRole>(null);
+  const [isRoleLoading, setIsRoleLoading] = useState(true);
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/');
+    if (loading) return;
+    if (!user) {
+      router.push('/login');
+      return;
     }
-  }, [user, loading, router]);
+    
+    // Handle special admin case
+    if (user.email === 'abbasmujtaba125@gmail.com') {
+        setUserRole('admin');
+        setIsRoleLoading(false);
+        if (pathname !== '/admin-dashboard') {
+           // Redirect to admin dashboard if not already there.
+           // This is a simple check. A more robust solution would use custom claims.
+           // router.push('/admin-dashboard');
+        }
+        return;
+    }
 
 
-  const menuItems = [
-    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, keywords: ['dashboard', 'home', 'main'] },
-    { href: '/learning-path', label: 'Learning Path', icon: TrendingUp, keywords: ['learning path', 'study plan', 'path'] },
-    { href: '/courses', label: 'Video Courses', icon: Video, keywords: ['video courses', 'courses', 'lectures'] },
-    { href: '/summarize', label: 'Chapter Summarizer', icon: BookText, keywords: ['summarizer', 'summary', 'chapter'] },
-    { href: '/q-and-a', label: 'Q&A Generator', icon: MessageSquarePlus, keywords: ['q&a', 'questions', 'answers'] },
-    { href: '/test-generator', label: 'Test Generator', icon: FileText, keywords: ['test generator', 'test', 'exam'] },
-    { href: '/essay-evaluator', label: 'Essay Evaluator', icon: FileSignature, keywords: ['essay evaluator', 'essay', 'writing'] },
-    { href: '/ask-ai', label: 'AI Tutor', icon: Bot, keywords: ['ai tutor', 'tutor', 'ask'] },
-    { href: '/audio-generator', label: 'Audio Generator', icon: Music4, keywords: ['audio generator', 'audio', 'voice', 'sound'] },
-    { href: '/video-generator', label: 'Video Generator', icon: Clapperboard, keywords: ['video generator', 'video', 'clip'] },
-    { href: '/career-counseling', label: 'Career Counseling', icon: Briefcase, keywords: ['career', 'counseling', 'advice'] },
-    { href: '/community', label: 'Community', icon: Users, keywords: ['community', 'hub', 'discussion'] },
-    { href: '/teacher-dashboard', label: 'Teacher Dashboard', icon: LayoutDashboard, keywords: ['teacher dashboard', 'teacher'] },
-    { href: '/classroom', label: 'My Classroom', icon: School, keywords: ['classroom', 'class'] },
-    { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark, keywords: ['bookmarks', 'saved'] },
-    { href: '/admin-dashboard', label: 'Admin Dashboard', icon: Shield, keywords: ['admin dashboard', 'admin'] },
+    const fetchUserRole = async () => {
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        setUserRole(userDoc.data()?.role);
+      } else {
+        // User exists in Auth but not in Firestore. This is an inconsistent state.
+        // For now, we'll log them out and ask them to sign up again.
+        toast({ title: "Error", description: "User data not found. Please sign up again.", variant: "destructive" });
+        await auth.signOut();
+        router.push('/signup');
+      }
+      setIsRoleLoading(false);
+    };
+
+    fetchUserRole();
+  }, [user, loading, router, pathname, toast]);
+
+
+  const allMenuItems = [
+    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, keywords: ['dashboard', 'home', 'main'], roles: ['student', 'teacher', 'parent', 'admin'] },
+    { href: '/learning-path', label: 'Learning Path', icon: TrendingUp, keywords: ['learning path', 'study plan', 'path'], roles: ['student'] },
+    { href: '/courses', label: 'Video Courses', icon: Video, keywords: ['video courses', 'courses', 'lectures'], roles: ['student', 'teacher', 'parent'] },
+    { href: '/summarize', label: 'Chapter Summarizer', icon: BookText, keywords: ['summarizer', 'summary', 'chapter'], roles: ['student', 'teacher'] },
+    { href: '/q-and-a', label: 'Q&A Generator', icon: MessageSquarePlus, keywords: ['q&a', 'questions', 'answers'], roles: ['student', 'teacher'] },
+    { href: '/test-generator', label: 'Test Generator', icon: FileText, keywords: ['test generator', 'test', 'exam'], roles: ['student', 'teacher'] },
+    { href: '/essay-evaluator', label: 'Essay Evaluator', icon: FileSignature, keywords: ['essay evaluator', 'essay', 'writing'], roles: ['student', 'teacher'] },
+    { href: '/ask-ai', label: 'AI Tutor', icon: Bot, keywords: ['ai tutor', 'tutor', 'ask'], roles: ['student', 'teacher', 'parent'] },
+    { href: '/audio-generator', label: 'Audio Generator', icon: Music4, keywords: ['audio generator', 'audio', 'voice', 'sound'], roles: ['student', 'teacher'] },
+    { href: '/video-generator', label: 'Video Generator', icon: Clapperboard, keywords: ['video generator', 'video', 'clip'], roles: ['student', 'teacher'] },
+    { href: '/career-counseling', label: 'Career Counseling', icon: Briefcase, keywords: ['career', 'counseling', 'advice'], roles: ['student'] },
+    { href: '/community', label: 'Community', icon: Users, keywords: ['community', 'hub', 'discussion'], roles: ['student', 'teacher', 'parent'] },
+    { href: '/teacher-dashboard', label: 'Teacher Dashboard', icon: LayoutDashboard, keywords: ['teacher dashboard', 'teacher'], roles: ['teacher'] },
+    { href: '/classroom', label: 'My Classroom', icon: School, keywords: ['classroom', 'class'], roles: ['teacher'] },
+    { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark, keywords: ['bookmarks', 'saved'], roles: ['student', 'teacher'] },
+    { href: '/admin-dashboard', label: 'Admin Dashboard', icon: Shield, keywords: ['admin dashboard', 'admin'], roles: ['admin'] },
   ];
+  
+  const menuItems = allMenuItems.filter(item => userRole && item.roles.includes(userRole));
+
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -175,10 +214,10 @@ export default function DashboardLayout({
 
   const handleLogout = async () => {
     await auth.signOut();
-    router.push('/');
+    router.push('/login');
   };
   
-  if (loading || !user) {
+  if (loading || isRoleLoading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Skeleton className="h-full w-full" />
