@@ -7,9 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Code, Send, Loader2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { auth, db } from '@/lib/firebase';
+import { auth } from '@/lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -37,7 +36,6 @@ export default function DeveloperInfoPage() {
     const { toast } = useToast();
     const [name, setName] = useState('');
     const [message, setMessage] = useState('');
-    const [isSending, setIsSending] = useState(false);
 
     useEffect(() => {
         if(user) {
@@ -45,34 +43,26 @@ export default function DeveloperInfoPage() {
         }
     }, [user]);
 
-    const handleSendMessage = async (e: React.FormEvent) => {
+    const handleSendWhatsApp = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!user) {
-            toast({ title: "Authentication Error", description: "You must be logged in to send a message.", variant: "destructive" });
-            return;
-        }
-        if (!name.trim() || !message.trim()) {
-            toast({ title: "Missing Information", description: "Please fill in your name and a message.", variant: "destructive" });
+        if (!message.trim()) {
+            toast({ title: "Message is empty", description: "Please write a message before sending.", variant: "destructive" });
             return;
         }
 
-        setIsSending(true);
-        try {
-            await addDoc(collection(db, "messages"), {
-                name,
-                email: user.email,
-                message,
-                uid: user.uid,
-                createdAt: serverTimestamp(),
-            });
-            toast({ title: "Message Sent!", description: "Thank you for reaching out. We will get back to you soon." });
-            setMessage('');
-        } catch (error) {
-            console.error("Error sending message:", error);
-            toast({ title: "Error", description: "Could not send your message. Please try again.", variant: "destructive" });
-        } finally {
-            setIsSending(false);
-        }
+        // **IMPORTANT**: Replace this with your actual WhatsApp number including the country code.
+        const yourWhatsAppNumber = '+920000000000'; 
+        
+        const text = `*Message from EduGenius App*\n\n*Name:* ${name || 'N/A'}\n*Email:* ${user?.email || 'N/A'}\n\n*Message:*\n${message}`;
+        
+        const encodedText = encodeURIComponent(text);
+        
+        const url = `https://wa.me/${yourWhatsAppNumber.replace('+', '')}?text=${encodedText}`;
+        
+        window.open(url, '_blank');
+        
+        toast({ title: "Redirecting to WhatsApp", description: "Your message is ready to be sent." });
+        setMessage('');
     };
 
 
@@ -118,10 +108,10 @@ export default function DeveloperInfoPage() {
        <Card className="mt-8">
             <CardHeader>
                 <CardTitle>Contact Us</CardTitle>
-                <CardDescription>Have a question, feedback, or a feature request? We'd love to hear from you!</CardDescription>
+                <CardDescription>Have a question, feedback, or a feature request? Send us a message on WhatsApp!</CardDescription>
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSendMessage} className="space-y-4 max-w-lg">
+                <form onSubmit={handleSendWhatsApp} className="space-y-4 max-w-lg">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                          <div className="space-y-2">
                             <Label htmlFor="name">Your Name</Label>
@@ -131,7 +121,6 @@ export default function DeveloperInfoPage() {
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="Your full name"
                                 required
-                                disabled={isSending}
                             />
                         </div>
                         <div className="space-y-2">
@@ -155,19 +144,10 @@ export default function DeveloperInfoPage() {
                             placeholder="Type your message here..."
                             required
                             className="min-h-[120px]"
-                            disabled={isSending}
                          />
                     </div>
-                    <Button type="submit" disabled={isSending || loading}>
-                        {isSending ? (
-                            <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending...
-                            </>
-                        ) : (
-                            <>
-                                <Send className="mr-2 h-4 w-4" /> Send Message
-                            </>
-                        )}
+                    <Button type="submit" disabled={loading}>
+                        <Send className="mr-2 h-4 w-4" /> Send on WhatsApp
                     </Button>
                 </form>
             </CardContent>
