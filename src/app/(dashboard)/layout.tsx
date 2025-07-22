@@ -23,6 +23,7 @@ import {
   Clapperboard,
   Code,
   BookCopy,
+  User,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -35,6 +36,7 @@ import {
   SidebarProvider,
   SidebarInset,
   SidebarTrigger,
+  SidebarSeparator,
 } from '@/components/ui/sidebar';
 import { Logo } from '@/components/logo';
 import { usePathname, useRouter } from 'next/navigation';
@@ -45,6 +47,7 @@ import { findBestMatch } from 'string-similarity';
 import { auth } from '@/lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 // Extend the Window interface for webkitSpeechRecognition
 declare global {
@@ -65,6 +68,19 @@ export default function DashboardLayout({
   const recognitionRef = useRef<any>(null);
   const { toast } = useToast();
   const [user, loading, error] = useAuthState(auth);
+  // We need a local state for user to force re-renders on profile updates
+  const [currentUser, setCurrentUser] = useState(user);
+
+  useEffect(() => {
+    setCurrentUser(user);
+    const handleProfileUpdate = () => {
+        if (auth.currentUser) {
+            setCurrentUser({...auth.currentUser});
+        }
+    };
+    window.addEventListener('profileUpdated', handleProfileUpdate);
+    return () => window.removeEventListener('profileUpdated', handleProfileUpdate);
+  }, [user]);
 
   useEffect(() => {
     if (loading) return;
@@ -76,6 +92,7 @@ export default function DashboardLayout({
 
   const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, keywords: ['dashboard', 'home', 'main'] },
+    { href: '/profile', label: 'My Profile', icon: User, keywords: ['profile', 'account', 'my profile'] },
     { href: '/learning-path', label: 'Learning Path', icon: TrendingUp, keywords: ['learning path', 'study plan', 'path'] },
     { href: '/courses', label: 'Video Courses', icon: Video, keywords: ['video courses', 'courses', 'lectures'] },
     { href: '/summarize', label: 'Chapter Summarizer', icon: BookText, keywords: ['summarizer', 'summary', 'chapter'] },
@@ -180,7 +197,7 @@ export default function DashboardLayout({
     router.push('/login');
   };
   
-  if (loading || !user) {
+  if (loading || !currentUser) {
     return (
        <div className="flex h-screen w-full bg-background">
         <div className="hidden md:flex h-full w-[16rem] flex-col gap-2 border-r bg-card p-2">
@@ -260,7 +277,25 @@ export default function DashboardLayout({
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter>
+         <SidebarSeparator />
           <SidebarMenu>
+            <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === '/profile'}
+                  tooltip="My Profile"
+                >
+                  <Link href="/profile" className="justify-start">
+                     <Avatar className="h-7 w-7">
+                        <AvatarImage src={currentUser.photoURL || ''} alt={currentUser.displayName || ''} data-ai-hint="person avatar" />
+                        <AvatarFallback>
+                            {currentUser.displayName ? currentUser.displayName.charAt(0).toUpperCase() : (currentUser.email ? currentUser.email.charAt(0).toUpperCase() : 'U')}
+                        </AvatarFallback>
+                    </Avatar>
+                    <span className="truncate">{currentUser.displayName || currentUser.email}</span>
+                  </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
              <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild

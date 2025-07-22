@@ -51,7 +51,7 @@ export default function DeveloperInfoPage() {
         }
 
         // **IMPORTANT**: Replace this with your actual WhatsApp number including the country code.
-        const yourWhatsAppNumber = '+920000000000'; 
+        const yourWhatsAppNumber = '+923460630802'; 
         
         const text = `*Message from EduGenius App*\n\n*Name:* ${name || 'N/A'}\n*Email:* ${user?.email || 'N/A'}\n\n*Message:*\n${message}`;
         
