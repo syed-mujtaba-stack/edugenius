@@ -179,26 +179,26 @@ export default function DashboardLayout({
     router.push('/login');
   };
   
-  if (loading) {
+  if (loading || !user) {
     return (
-       <div className="flex h-screen w-full">
-        <div className="hidden md:flex h-full w-[16rem] flex-col gap-2 border-r p-2">
+       <div className="flex h-screen w-full bg-background">
+        <div className="hidden md:flex h-full w-[16rem] flex-col gap-2 border-r bg-card p-2">
             <div className="flex items-center justify-between p-2">
                 <Skeleton className="h-8 w-32" />
                 <Skeleton className="h-7 w-7" />
             </div>
             <div className="flex-grow space-y-2 p-2">
-                {[...Array(8)].map((_, i) => <Skeleton key={i} className="h-8 w-full" />)}
+                {[...Array(12)].map((_, i) => <Skeleton key={i} className="h-8 w-full" />)}
             </div>
-            <div className="space-y-2 p-2">
+            <div className="space-y-2 p-2 mt-auto">
                 <Skeleton className="h-8 w-full" />
                 <Skeleton className="h-8 w-full" />
                 <Skeleton className="h-8 w-full" />
             </div>
         </div>
-        <div className="flex-1 p-4">
-             <Skeleton className="h-full w-full" />
-        </div>
+        <main className="flex-1 p-4">
+             <Skeleton className="h-full w-full rounded-lg" />
+        </main>
       </div>
     );
   }
