@@ -22,6 +22,7 @@ import {
   Cog,
   Clapperboard,
   Code,
+  BookCopy,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -85,6 +86,7 @@ export default function DashboardLayout({
     { href: '/audio-generator', label: 'Audio Generator', icon: Music4, keywords: ['audio generator', 'audio', 'voice', 'sound'] },
     { href: '/career-counseling', label: 'Career Counseling', icon: Briefcase, keywords: ['career', 'counseling', 'advice'] },
     { href: '/community', label: 'Community', icon: Users, keywords: ['community', 'hub', 'discussion'] },
+    { href: '/lesson-planner', label: 'Lesson Planner', icon: BookCopy, keywords: ['lesson planner', 'teacher tool', 'plan'] },
     { href: '/teacher-dashboard', label: 'Teacher Dashboard', icon: LayoutDashboard, keywords: ['teacher dashboard', 'teacher'] },
     { href: '/classroom', label: 'My Classroom', icon: School, keywords: ['classroom', 'class'] },
     { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark, keywords: ['bookmarks', 'saved'] },
@@ -213,6 +215,7 @@ export default function DashboardLayout({
     { href: '/audio-generator', label: 'Audio Generator', icon: Music4 },
     { href: '/career-counseling', label: 'Career Counseling', icon: Briefcase },
     { href: '/community', label: 'Community', icon: Users },
+    { href: '/lesson-planner', label: 'Lesson Planner', icon: BookCopy },
     { href: '/teacher-dashboard', label: 'Teacher Dashboard', icon: LayoutDashboard },
     { href: '/classroom', label: 'My Classroom', icon: School },
     { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark },

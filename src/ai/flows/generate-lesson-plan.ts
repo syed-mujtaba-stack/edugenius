@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview AI-powered lesson plan generator.
@@ -14,6 +15,7 @@ const GenerateLessonPlanInputSchema = z.object({
   topic: z.string().describe('The main topic for the lesson plan.'),
   duration: z.string().describe('The total duration of the lesson (e.g., 45 minutes).'),
   objective: z.string().describe('The learning objective for this lesson.'),
+  apiKey: z.string().optional(),
 });
 export type GenerateLessonPlanInput = z.infer<typeof GenerateLessonPlanInputSchema>;
 
@@ -38,16 +40,16 @@ const prompt = ai.definePrompt({
   name: 'generateLessonPlanPrompt',
   input: { schema: GenerateLessonPlanInputSchema },
   output: { schema: GenerateLessonPlanOutputSchema },
-  prompt: `You are an expert instructional designer. Create a detailed lesson plan based on the following parameters:
+  prompt: `You are an expert instructional designer. Create a detailed lesson plan for a teacher based on the following parameters:
 
 Topic: {{topic}}
 Lesson Duration: {{duration}}
 Learning Objective: {{objective}}
 
-The lesson plan should be broken down into logical modules, each with a title, estimated duration, and a list of activities.
-Also, provide a suggestion for a final assessment to check for understanding.
+The lesson plan should be broken down into logical modules, each with a title, estimated duration, and a list of engaging activities suitable for a classroom.
+Also, provide a creative suggestion for a final assessment to check for student understanding.
 
-Output the lesson plan in the specified JSON format.`,
+Output the entire lesson plan in the specified JSON format.`,
 });
 
 const generateLessonPlanFlow = ai.defineFlow(
@@ -57,7 +59,7 @@ const generateLessonPlanFlow = ai.defineFlow(
     outputSchema: GenerateLessonPlanOutputSchema,
   },
   async (input) => {
-    const { output } = await prompt(input);
+    const { output } = await prompt(input, { apiKey: input.apiKey });
     return output!;
   }
 );
