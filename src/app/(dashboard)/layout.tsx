@@ -24,6 +24,7 @@ import {
   Code,
   BookCopy,
   User,
+  Gamepad2,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -108,6 +109,7 @@ export default function DashboardLayout({
     { href: '/teacher-dashboard', label: 'Teacher Dashboard', icon: LayoutDashboard, keywords: ['teacher dashboard', 'teacher'] },
     { href: '/classroom', label: 'My Classroom', icon: School, keywords: ['classroom', 'class'] },
     { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark, keywords: ['bookmarks', 'saved'] },
+    { href: '/playground', label: 'Playground', icon: Gamepad2, keywords: ['playground', 'games', 'quiz game'] },
     { href: '/admin-dashboard', label: 'Admin Dashboard', icon: Shield, keywords: ['admin dashboard', 'admin'] },
   ];
   
@@ -234,6 +236,7 @@ export default function DashboardLayout({
     { href: '/video-generator', label: 'Video Generator', icon: Clapperboard },
     { href: '/career-counseling', label: 'Career Counseling', icon: Briefcase },
     { href: '/community', label: 'Community', icon: Users },
+    { href: '/playground', label: 'Playground', icon: Gamepad2 },
     { href: '/lesson-planner', label: 'Lesson Planner', icon: BookCopy },
     { href: '/teacher-dashboard', label: 'Teacher Dashboard', icon: LayoutDashboard },
     { href: '/classroom', label: 'My Classroom', icon: School },
