@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Bot, FileText, Briefcase, TrendingUp } from "lucide-react";
+import { HomepageChatbot } from "@/components/homepage-chatbot";
 
 const features = [
   {
@@ -102,6 +103,8 @@ export default function Home() {
       <footer className="py-6 text-center text-sm text-primary/60 border-t">
         <p>© {new Date().getFullYear()} EduGenius. All rights reserved.</p>
       </footer>
+      
+      <HomepageChatbot />
     </div>
   );
 }
