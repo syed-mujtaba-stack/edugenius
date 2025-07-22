@@ -13,4 +13,5 @@ import '@/ai/flows/evaluate-essay.ts';
 import '@/ai/flows/generate-audio-from-text.ts';
 import '@/ai/flows/generate-lesson-plan.ts';
 import '@/ai/flows/answer-visitor-questions.ts';
+import '@/ai/flows/generate-video-from-prompt.ts';
 
