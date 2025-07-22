@@ -1,0 +1,21 @@
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Allow logged-in users to create messages
+    match /messages/{messageId} {
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.uid;
+      
+      // For simplicity, reading/updating/deleting is restricted. 
+      // Only server-side admin SDK should manage these.
+      allow read, update, delete: if false; 
+    }
+
+    // Default deny all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
