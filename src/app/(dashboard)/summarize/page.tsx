@@ -18,7 +18,7 @@ export default function SummarizePage() {
   
   useEffect(() => {
     const fetchApiKey = () => {
-      const storedKey = localStorage.getItem('user-openrouter-api-key');
+      const storedKey = localStorage.getItem('user-gemini-api-key');
       setApiKey(storedKey);
     };
 
@@ -100,7 +100,7 @@ export default function SummarizePage() {
               />
             </CardHeader>
             <CardContent>
-              <div className="prose prose-invert max-w-none">
+              <div className="prose dark:prose-invert max-w-none">
                 <p>{summaryResult.summary}</p>
               </div>
             </CardContent>

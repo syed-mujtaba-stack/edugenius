@@ -29,7 +29,7 @@ export default function QAndAPage() {
   
   useEffect(() => {
     const fetchApiKey = () => {
-      const storedKey = localStorage.getItem('user-openrouter-api-key');
+      const storedKey = localStorage.getItem('user-gemini-api-key');
       setApiKey(storedKey);
     };
 
@@ -45,22 +45,20 @@ export default function QAndAPage() {
     const lines = response.split('\n').filter(line => line.trim() !== '');
     const pairs: QAPair[] = [];
     for (let i = 0; i < lines.length; i++) {
-        if (lines[i].toLowerCase().startsWith('q:')) {
-            const question = lines[i].substring(2).trim();
+        // Match "Q:", "Q1:", "1. Q:", etc.
+        const qMatch = lines[i].match(/^(q\d*:|q:|(\d+\.)\s*q:)/i);
+        if (qMatch) {
+            const question = lines[i].substring(qMatch[0].length).trim();
             let answer = '';
-            if (i + 1 < lines.length && lines[i + 1].toLowerCase().startsWith('a:')) {
-                answer = lines[i + 1].substring(2).trim();
-                i++; // Increment to skip the answer line in the next iteration
+            // Match "A:", "A1:", "1. A:", etc. in the next line
+            if (i + 1 < lines.length) {
+                const aMatch = lines[i+1].match(/^(a\d*:|a:|(\d+\.)\s*a:)/i);
+                if(aMatch) {
+                    answer = lines[i + 1].substring(aMatch[0].length).trim();
+                    i++; // Increment to skip the answer line in the next iteration
+                }
             }
             pairs.push({ question, answer });
-        } else if (lines[i].match(/^\d+\.\s*Q:/i)) {
-             const question = lines[i].replace(/^\d+\.\s*Q:/i, '').trim();
-             let answer = '';
-             if (i + 1 < lines.length && lines[i + 1].match(/^\d+\.\s*A:/i)) {
-                 answer = lines[i+1].replace(/^\d+\.\s*A:/i, '').trim();
-                 i++;
-             }
-             pairs.push({ question, answer });
         }
     }
     return pairs;

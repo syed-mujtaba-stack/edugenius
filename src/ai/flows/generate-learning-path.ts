@@ -59,7 +59,7 @@ const generateLearningPathFlow = ai.defineFlow(
     outputSchema: GenerateLearningPathOutputSchema,
   },
   async (input) => {
-    const { output } = await prompt(input, { apiKey: input.apiKey });
+    const { output } = await prompt(input);
     return output!;
   }
 );

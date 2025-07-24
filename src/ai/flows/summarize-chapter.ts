@@ -46,7 +46,7 @@ const summarizeChapterFlow = ai.defineFlow(
     outputSchema: SummarizeChapterOutputSchema,
   },
   async input => {
-    const {output} = await summarizeChapterPrompt(input, { apiKey: input.apiKey });
+    const {output} = await summarizeChapterPrompt(input);
     return {
       ...output!,
       progress: 'Generated a summary of the chapter.',

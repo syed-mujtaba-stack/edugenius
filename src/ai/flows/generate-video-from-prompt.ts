@@ -10,6 +10,8 @@ import { ai } from '@/ai/genkit';
 import { googleAI } from '@genkit-ai/googleai';
 import { z } from 'zod';
 import { MediaPart } from 'genkit';
+import { Buffer } from 'buffer';
+
 
 const GenerateVideoInputSchema = z.object({
   prompt: z.string().describe('The text prompt to generate the video from.'),
@@ -30,14 +32,22 @@ async function downloadAndEncodeVideo(video: MediaPart, apiKey?: string): Promis
     }
     
     // The media URL from the operation does not contain the API key, so we add it.
-    const videoUrlWithKey = `${video.media!.url}&key=${finalApiKey}`;
+    if (!video.media?.url) {
+        throw new Error('Video media URL is missing.');
+    }
+    const videoUrlWithKey = `${video.media.url}&key=${finalApiKey}`;
     const videoResponse = await fetch(videoUrlWithKey);
 
     if (!videoResponse.ok || !videoResponse.body) {
         throw new Error(`Failed to download video: ${videoResponse.statusText}`);
     }
 
-    const videoBuffer = await videoResponse.buffer();
+    // node-fetch in v3 returns a stream, so we need to collect chunks
+    const chunks = [];
+    for await (const chunk of videoResponse.body) {
+        chunks.push(chunk);
+    }
+    const videoBuffer = Buffer.concat(chunks);
     return `data:video/mp4;base64,${videoBuffer.toString('base64')}`;
 }
 
@@ -83,6 +93,11 @@ const generateVideoFromPromptFlow = ai.defineFlow(
     // If not found, fall back to finding any part with a 'video/*' content type.
     if (!videoPart) {
       videoPart = operation.output?.message?.content.find((p) => !!p.media && p.media.contentType?.startsWith('video/'));
+    }
+
+    // As a final fallback, check for any media part if contentType is not populated
+    if (!videoPart) {
+        videoPart = operation.output?.message?.content.find((p) => !!p.media?.url);
     }
 
     if (!videoPart) {

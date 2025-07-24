@@ -1,4 +1,3 @@
-
 'use client';
 import { useState, useEffect } from 'react';
 import { generateAudioFromText } from '@/ai/flows/generate-audio-from-text';

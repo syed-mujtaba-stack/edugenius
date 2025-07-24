@@ -2,7 +2,6 @@
 'use client';
 import {
   BookText,
-  Home,
   LayoutDashboard,
   LogOut,
   MessageSquarePlus,
@@ -20,11 +19,11 @@ import {
   Mic,
   FileSignature,
   Cog,
-  Clapperboard,
   Code,
   BookCopy,
   User,
   Gamepad2,
+  BookPlus,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -38,6 +37,8 @@ import {
   SidebarInset,
   SidebarTrigger,
   SidebarSeparator,
+  SidebarGroup,
+  SidebarGroupLabel,
 } from '@/components/ui/sidebar';
 import { Logo } from '@/components/logo';
 import { usePathname, useRouter } from 'next/navigation';
@@ -45,10 +46,11 @@ import Link from 'next/link';
 import { useEffect, useState, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { findBestMatch } from 'string-similarity';
-import { auth } from '@/lib/firebase';
+import { auth, db } from '@/lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { generateAudioFromText } from '@/ai/flows/generate-audio-from-text';
 
 // Extend the Window interface for webkitSpeechRecognition
 declare global {
@@ -71,6 +73,21 @@ export default function DashboardLayout({
   const [user, loading, error] = useAuthState(auth);
   // We need a local state for user to force re-renders on profile updates
   const [currentUser, setCurrentUser] = useState(user);
+  const [apiKey, setApiKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchApiKey = () => {
+      const storedKey = localStorage.getItem('user-gemini-api-key');
+      setApiKey(storedKey);
+    };
+
+    fetchApiKey();
+    window.addEventListener('apiKeyUpdated', fetchApiKey);
+
+    return () => {
+      window.removeEventListener('apiKeyUpdated', fetchApiKey);
+    };
+  }, []);
 
   useEffect(() => {
     setCurrentUser(user);
@@ -85,13 +102,21 @@ export default function DashboardLayout({
 
   useEffect(() => {
     if (loading) return;
-    if (!user) {
+    if (error) {
+      console.error('Firebase Auth Error:', error);
+      toast({
+        title: "Authentication Error",
+        description: "Could not connect to authentication service. Please refresh the page.",
+        variant: "destructive"
+      });
+    }
+    if (!user && !loading) {
       router.push('/login');
     }
-  }, [user, loading, router]);
+  }, [user, loading, error, router, toast]);
 
 
-  const menuItems = [
+ const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, keywords: ['dashboard', 'home', 'main'] },
     { href: '/profile', label: 'My Profile', icon: User, keywords: ['profile', 'account', 'my profile'] },
     { href: '/learning-path', label: 'Learning Path', icon: TrendingUp, keywords: ['learning path', 'study plan', 'path'] },
@@ -102,7 +127,8 @@ export default function DashboardLayout({
     { href: '/essay-evaluator', label: 'Essay Evaluator', icon: FileSignature, keywords: ['essay evaluator', 'essay', 'writing'] },
     { href: '/ask-ai', label: 'AI Tutor', icon: Bot, keywords: ['ai tutor', 'tutor', 'ask'] },
     { href: '/audio-generator', label: 'Audio Generator', icon: Music4, keywords: ['audio generator', 'audio', 'voice', 'sound'] },
-    { href: '/video-generator', label: 'Video Generator', icon: Clapperboard, keywords: ['video generator', 'video', 'clip'] },
+    { href: '/book-generator', label: 'AI Book Generator', icon: BookPlus, keywords: ['book generator', 'book', 'write book'] },
+    { href: '/video-generator', label: 'Video Generator', icon: Video, keywords: ['video generator', 'video', 'create video'] },
     { href: '/career-counseling', label: 'Career Counseling', icon: Briefcase, keywords: ['career', 'counseling', 'advice'] },
     { href: '/community', label: 'Community', icon: Users, keywords: ['community', 'hub', 'discussion'] },
     { href: '/lesson-planner', label: 'Lesson Planner', icon: BookCopy, keywords: ['lesson planner', 'teacher tool', 'plan'] },
@@ -119,7 +145,7 @@ export default function DashboardLayout({
       recognitionRef.current = new SpeechRecognition();
       const recognition = recognitionRef.current;
       recognition.continuous = false;
-      recognition.lang = 'en-US';
+      recognition.lang = 'ur-PK';
       recognition.interimResults = false;
 
       recognition.onresult = (event: any) => {
@@ -128,7 +154,6 @@ export default function DashboardLayout({
       };
 
       recognition.onerror = (event: any) => {
-        // Use console.warn for non-critical errors like network issues to avoid error overlay
         console.warn('Speech recognition error:', event.error);
         toast({ title: "MJ Error", description: `Could not understand. Error: ${event.error}`, variant: "destructive" });
         setIsListening(false);
@@ -140,27 +165,42 @@ export default function DashboardLayout({
     }
   }, [toast]);
   
-  const speak = (text: string, callback?: () => void) => {
+  const speak = async (text: string, callback?: () => void) => {
       if ('speechSynthesis' in window) {
-          const utterance = new SpeechSynthesisUtterance(text);
-          utterance.onend = () => {
-              if (callback) callback();
-          };
-          window.speechSynthesis.speak(utterance);
+          try {
+              const { media } = await generateAudioFromText({ text, apiKey: apiKey || undefined });
+              const audio = new Audio(media);
+              audio.play();
+              audio.onended = () => {
+                 if (callback) callback();
+              };
+          } catch (error) {
+              console.error("Error generating speech:", error);
+              // Fallback to browser's default voice if AI fails
+              const utterance = new SpeechSynthesisUtterance(text);
+              utterance.lang = "ur-PK";
+              utterance.onend = () => {
+                  if (callback) callback();
+              };
+              window.speechSynthesis.speak(utterance);
+          }
       } else {
-          // Fallback if synthesis is not supported
           if (callback) callback();
       }
   }
 
   const handleVoiceCommand = (command: string) => {
-    const allLabelsAndKeywords = menuItems.flatMap(item => [item.label.toLowerCase(), ...item.keywords]);
-    const match = findBestMatch(command, allLabelsAndKeywords);
+    // Basic language detection
+    const isUrdu = /[ہ-ے]/.test(command);
     
-    if (match.bestMatch.rating > 0.4) { // Confidence threshold
-      const matchedItem = menuItems.find(item => item.label.toLowerCase() === match.bestMatch.target || item.keywords.includes(match.bestMatch.target));
+    const allLabelsAndKeywords = menuItems.flatMap(item => [item.label.toLowerCase(), ...item.keywords]);
+    const { bestMatch } = findBestMatch(command, allLabelsAndKeywords);
+    
+    if (bestMatch.rating > 0.4) { // Confidence threshold
+      const matchedItem = menuItems.find(item => item.label.toLowerCase() === bestMatch.target || item.keywords.includes(bestMatch.target));
       if (matchedItem) {
-          speak(`Ji, I'm opening ${matchedItem.label}.`, () => {
+          const responseText = isUrdu ? `جی، ${matchedItem.label} کھول رہا ہوں۔` : `Opening ${matchedItem.label}.`;
+          speak(responseText, () => {
               router.push(matchedItem.href);
           });
           return;
@@ -168,11 +208,13 @@ export default function DashboardLayout({
     }
 
     if (command.includes('logout') || command.includes('sign out')) {
-        speak("Logging you out. Goodbye!", handleLogout);
+        const responseText = isUrdu ? "لاگ آؤٹ کر رہا ہوں۔ خدا حافظ!" : "Logging you out. Goodbye!";
+        speak(responseText, handleLogout);
         return;
     }
 
-    speak("I'm sorry, I didn't understand that. Please try again.");
+    const responseText = isUrdu ? "معافی چاہتا ہوں، میں سمجھ نہیں سکا۔ براہِ مہربانی دوبارہ کوشش کریں۔" : "I'm sorry, I didn't understand that. Please try again.";
+    speak(responseText);
   };
 
   const toggleListening = () => {
@@ -187,7 +229,6 @@ export default function DashboardLayout({
         recognitionRef.current.start();
         setIsListening(true);
       } catch (e) {
-        // This can happen if recognition is already active.
         console.warn("Could not start speech recognition", e);
       }
     }
@@ -223,26 +264,53 @@ export default function DashboardLayout({
     );
   }
   
-  const allMenuItems = [
-    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/learning-path', label: 'Learning Path', icon: TrendingUp },
-    { href: '/courses', label: 'Video Courses', icon: Video },
+  const aiAgentItems = [
+    { href: '/ask-ai', label: 'AI Tutor', icon: Bot },
     { href: '/summarize', label: 'Chapter Summarizer', icon: BookText },
     { href: '/q-and-a', label: 'Q&A Generator', icon: MessageSquarePlus },
     { href: '/test-generator', label: 'Test Generator', icon: FileText },
     { href: '/essay-evaluator', label: 'Essay Evaluator', icon: FileSignature },
-    { href: '/ask-ai', label: 'AI Tutor', icon: Bot },
-    { href: '/audio-generator', label: 'Audio Generator', icon: Music4 },
-    { href: '/video-generator', label: 'Video Generator', icon: Clapperboard },
+    { href: '/learning-path', label: 'Learning Path', icon: TrendingUp },
     { href: '/career-counseling', label: 'Career Counseling', icon: Briefcase },
+    { href: '/book-generator', label: 'AI Book Generator', icon: BookPlus },
+  ];
+
+  const learningToolsItems = [
+    { href: '/courses', label: 'Video Courses', icon: Video },
+    { href: '/audio-generator', label: 'Audio Generator', icon: Music4 },
+    { href: '/video-generator', label: 'Video Generator', icon: Video },
     { href: '/community', label: 'Community', icon: Users },
     { href: '/playground', label: 'Playground', icon: Gamepad2 },
+    { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark },
+  ];
+
+  const teachersCornerItems = [
     { href: '/lesson-planner', label: 'Lesson Planner', icon: BookCopy },
     { href: '/teacher-dashboard', label: 'Teacher Dashboard', icon: LayoutDashboard },
     { href: '/classroom', label: 'My Classroom', icon: School },
-    { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark },
+  ];
+
+  const adminItems = [
     { href: '/admin-dashboard', label: 'Admin Dashboard', icon: Shield },
   ];
+
+  const renderMenuItems = (items: typeof aiAgentItems) => {
+    return items.map((item) => (
+         <SidebarMenuItem key={item.href}>
+            <SidebarMenuButton
+              asChild
+              isActive={pathname.startsWith(item.href)}
+              tooltip={item.label}
+            >
+              <Link href={item.href}>
+                <item.icon />
+                <span>{item.label}</span>
+              </Link>
+            </SidebarMenuButton>
+        </SidebarMenuItem>
+    ));
+  }
+
 
   return (
     <SidebarProvider>
@@ -257,27 +325,39 @@ export default function DashboardLayout({
                 <button className="p-1 rounded-full hover:bg-accent md:hidden">
                     <Bell className="h-5 w-5" />
                 </button>
-                <SidebarTrigger className='md:hidden' />
+                <SidebarTrigger className='hidden group-data-[collapsible=icon]:flex' />
              </div>
           </div>
         </SidebarHeader>
         <SidebarContent>
-          <SidebarMenu>
-            {allMenuItems.map((item) => (
-              <SidebarMenuItem key={item.href}>
-                <SidebarMenuButton
-                  asChild
-                  isActive={pathname.startsWith(item.href) && (item.href !== '/dashboard' || pathname === '/dashboard')}
-                  tooltip={item.label}
-                >
-                  <Link href={item.href}>
-                    <item.icon />
-                    <span>{item.label}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
+            <SidebarMenu>
+                <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={pathname === '/dashboard'} tooltip="Dashboard">
+                        <Link href="/dashboard"><LayoutDashboard /><span>Dashboard</span></Link>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+            </SidebarMenu>
+            
+            <SidebarGroup>
+                <SidebarGroupLabel>AI Agents</SidebarGroupLabel>
+                <SidebarMenu>{renderMenuItems(aiAgentItems)}</SidebarMenu>
+            </SidebarGroup>
+
+            <SidebarGroup>
+                <SidebarGroupLabel>Learning Tools</SidebarGroupLabel>
+                <SidebarMenu>{renderMenuItems(learningToolsItems)}</SidebarMenu>
+            </SidebarGroup>
+
+            <SidebarGroup>
+                <SidebarGroupLabel>Teacher's Corner</SidebarGroupLabel>
+                <SidebarMenu>{renderMenuItems(teachersCornerItems)}</SidebarMenu>
+            </SidebarGroup>
+
+            <SidebarGroup>
+                <SidebarGroupLabel>Admin</SidebarGroupLabel>
+                <SidebarMenu>{renderMenuItems(adminItems)}</SidebarMenu>
+            </SidebarGroup>
+
         </SidebarContent>
         <SidebarFooter>
          <SidebarSeparator />
@@ -327,12 +407,6 @@ export default function DashboardLayout({
                 <SidebarMenuButton onClick={toggleListening} tooltip="Voice Assistant" isActive={isListening}>
                   <Mic />
                   <span>{isListening ? 'Listening...' : 'Voice Assistant'}</span>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-                <SidebarMenuButton onClick={handleLogout} tooltip="Logout">
-                  <LogOut />
-                  <span>Logout</span>
                 </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>

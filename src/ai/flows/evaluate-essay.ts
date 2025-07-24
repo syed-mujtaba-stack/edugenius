@@ -72,7 +72,7 @@ const evaluateEssayFlow = ai.defineFlow(
     outputSchema: EvaluateEssayOutputSchema,
   },
   async (input) => {
-    const { output } = await prompt(input, { apiKey: input.apiKey });
+    const { output } = await prompt(input);
     return output!;
   }
 );

@@ -2,14 +2,14 @@
 'use client';
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { auth } from "@/lib/firebase";
-import { onAuthStateChanged } from "firebase/auth";
 import { Logo } from "@/components/logo";
 import { useEffect } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bot, FileText, Briefcase, TrendingUp, Music4, FileSignature, BookText, Users, School2, Heart } from "lucide-react";
+import { Bot, FileText, Briefcase, TrendingUp, Music4, FileSignature, BookText, Users, School2, Heart, ArrowRight, Star } from "lucide-react";
 import { HomepageChatbot } from "@/components/homepage-chatbot";
+import { Navbar } from "@/components/navbar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const features = [
   {
@@ -72,22 +72,60 @@ const whoIsItFor = [
     }
 ];
 
+const testimonials = [
+    {
+        name: "Aisha Khan",
+        role: "Intermediate Student",
+        quote: "The AI Test Generator is a game-changer! I can create practice tests for any topic, which has boosted my confidence for my board exams.",
+        avatar: "https://placehold.co/100x100.png",
+        dataAiHint: 'woman portrait',
+    },
+    {
+        name: "Mr. Ahmed Ali",
+        role: "Physics Teacher",
+        quote: "EduGenius has saved me hours of work. The Lesson Planner helps me create engaging classes, and the community hub is great for student interaction.",
+        avatar: "https://placehold.co/100x100.png",
+        dataAiHint: 'man portrait',
+    },
+    {
+        name: "Bilal Sheikh",
+        role: "Matric Student",
+        quote: "I was struggling with career choices, but the AI Career Counselor gave me a clear roadmap. I finally know what I want to pursue!",
+        avatar: "https://placehold.co/100x100.png",
+        dataAiHint: 'person portrait',
+    }
+];
+
+const blogPosts = [
+    {
+        title: "How AI is Changing the Future of Education in Pakistan",
+        excerpt: "Artificial Intelligence is no longer a futuristic concept; it's a present-day reality transforming industries, and education is no exception...",
+    },
+    {
+        title: "5 Proven Study Techniques to Ace Your Next Exam",
+        excerpt: "Exams can be stressful, but with the right strategies, you can boost your confidence and performance. Here are five proven techniques...",
+    },
+];
+
 
 export default function Home() {
   const router = useRouter();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        router.push("/dashboard");
-      }
-    });
-    return () => unsubscribe();
-  }, [router]);
+  // This logic should be on the page, not in the layout.
+  // The layout is for logged-in users, this page is for logged-out users.
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       router.push("/dashboard");
+  //     }
+  //   });
+  //   return () => unsubscribe();
+  // }, [router]);
 
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
+      <Navbar />
       <main className="flex-1">
         {/* Hero Section */}
         <section className="w-full py-20 md:py-32 lg:py-40 flex flex-col items-center justify-center text-center px-4">
@@ -102,7 +140,10 @@ export default function Home() {
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4 w-full max-w-xs sm:max-w-none sm:justify-center">
             <Button asChild size="lg" className="font-bold text-lg flex-1 sm:flex-none sm:px-10">
-                <Link href="/login">Get Started</Link>
+                <Link href="/signup">Get Started for Free</Link>
+            </Button>
+             <Button asChild size="lg" variant="outline" className="font-bold text-lg flex-1 sm:flex-none sm:px-10">
+                <Link href="#features">Explore Features</Link>
             </Button>
           </div>
         </section>
@@ -172,6 +213,51 @@ export default function Home() {
             </div>
         </section>
 
+        {/* Testimonials Section */}
+        <section className="w-full py-12 md:py-24">
+            <div className="container mx-auto px-4">
+                 <h2 className="text-3xl md:text-4xl font-headline text-center mb-12">What People Are Saying About Us</h2>
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                     {testimonials.map((testimonial, index) => (
+                        <Card key={index} className="flex flex-col items-center text-center p-6 bg-secondary">
+                             <Avatar className="w-20 h-20 mb-4 border-4 border-background">
+                                <AvatarImage src={testimonial.avatar} data-ai-hint={testimonial.dataAiHint} />
+                                <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <CardContent className="flex-grow">
+                                <p className="text-muted-foreground italic">"{testimonial.quote}"</p>
+                            </CardContent>
+                            <div className="mt-4">
+                                <h4 className="font-semibold">{testimonial.name}</h4>
+                                <p className="text-sm text-primary/80">{testimonial.role}</p>
+                            </div>
+                        </Card>
+                     ))}
+                 </div>
+            </div>
+        </section>
+
+        {/* From Our Blog Section */}
+        <section className="w-full py-12 md:py-24 bg-secondary">
+            <div className="container mx-auto px-4">
+                 <h2 className="text-3xl md:text-4xl font-headline text-center mb-4">From Our Blog</h2>
+                 <p className="text-center text-muted-foreground max-w-2xl mx-auto mb-12">Get the latest insights on AI in education, study tips, and career guidance.</p>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    {blogPosts.map((post, index) => (
+                        <Card key={index}>
+                            <CardHeader><CardTitle>{post.title}</CardTitle></CardHeader>
+                            <CardContent><p className="text-muted-foreground">{post.excerpt}</p></CardContent>
+                            <div className="p-6 pt-0">
+                                <Button asChild variant="link" className="p-0">
+                                    <Link href="/blogs">Read More <ArrowRight className="w-4 h-4 ml-2" /></Link>
+                                </Button>
+                            </div>
+                        </Card>
+                    ))}
+                 </div>
+            </div>
+        </section>
+
 
         {/* Call to Action Section */}
         <section className="w-full py-20 md:py-28 text-center px-4">
@@ -185,8 +271,14 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="py-6 text-center text-sm text-primary/60 border-t">
-        <p>© {new Date().getFullYear()} EduGenius. All rights reserved.</p>
+      <footer className="py-8 text-center text-sm text-primary/60 border-t">
+        <div className="container flex flex-col md:flex-row justify-between items-center gap-4">
+            <p>© {new Date().getFullYear()} EduGenius. All rights reserved.</p>
+            <div className="flex gap-4">
+                <Link href="/privacy-policy" className="hover:underline">Privacy Policy</Link>
+                <Link href="/docs" className="hover:underline">Documentation</Link>
+            </div>
+        </div>
       </footer>
       
       <HomepageChatbot />

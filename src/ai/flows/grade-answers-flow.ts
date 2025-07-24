@@ -18,6 +18,7 @@ const QuestionAnswerSchema = z.object({
 
 const GradeAnswersInputSchema = z.object({
   answers: z.array(QuestionAnswerSchema),
+  // No apiKey here, as grading should use the system's key for consistency.
 });
 export type GradeAnswersInput = z.infer<typeof GradeAnswersInputSchema>;
 
