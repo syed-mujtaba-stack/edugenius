@@ -1,8 +1,7 @@
-// types are inferred — no need to explicitly type baseConfig
+import type { NextConfig } from 'next';
 import withPWA from 'next-pwa';
 
-const baseConfig = {
-  distDir: 'build',
+const baseConfig: NextConfig = {
   reactStrictMode: true,
 
   compiler: {
@@ -34,16 +33,16 @@ const baseConfig = {
         port: '',
         pathname: '/**',
       },
-    ].map(p => ({ ...p })),
+    ],
   },
   experimental: {
     serverActions: {},
   },
 };
 
-export default withPWA({
+export default (withPWA({
   dest: 'public',
   disable: process.env.NODE_ENV === 'development',
   register: true,
   skipWaiting: true,
-})(baseConfig);
+}) as any)(baseConfig);
