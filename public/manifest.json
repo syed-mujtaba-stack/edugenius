@@ -1,0 +1,39 @@
+{
+    "name": "Edu Genius",
+    "short_name": "EduGenius",
+    "theme_color": "#007bff",
+    "background_color": "#f8f9fa",
+    "display": "standalone",
+    "orientation": "any",
+    "scope": "/",
+    "start_url": "/",
+    "icons": [
+      {
+        "src": "/icons/icon1-192.png?v=1",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "/icons/icon1-256.png?v=1",
+        "type": "image/png",
+        "sizes": "256x256"
+      },
+      {
+        "src": "/icons/icon1-512.png?v=1",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "screenshots": [
+      {
+        "src": "https://via.placeholder.com/640x480",
+        "sizes": "640x480",
+        "type": "image/png"
+      },
+      {
+        "src": "https://via.placeholder.com/1280x720",
+        "sizes": "1280x720",
+        "type": "image/png"
+      }
+    ]
+  }
