@@ -1,0 +1,229 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "dynamicRoutes": [],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/about",
+      "regex": "^/about(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/about(?:/)?$"
+    },
+    {
+      "page": "/admin-dashboard",
+      "regex": "^/admin\\-dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin\\-dashboard(?:/)?$"
+    },
+    {
+      "page": "/admin-dashboard/attendance",
+      "regex": "^/admin\\-dashboard/attendance(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin\\-dashboard/attendance(?:/)?$"
+    },
+    {
+      "page": "/api-settings",
+      "regex": "^/api\\-settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api\\-settings(?:/)?$"
+    },
+    {
+      "page": "/ask-ai",
+      "regex": "^/ask\\-ai(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/ask\\-ai(?:/)?$"
+    },
+    {
+      "page": "/attendance",
+      "regex": "^/attendance(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/attendance(?:/)?$"
+    },
+    {
+      "page": "/audio-generator",
+      "regex": "^/audio\\-generator(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/audio\\-generator(?:/)?$"
+    },
+    {
+      "page": "/blogs",
+      "regex": "^/blogs(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/blogs(?:/)?$"
+    },
+    {
+      "page": "/book-generator",
+      "regex": "^/book\\-generator(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/book\\-generator(?:/)?$"
+    },
+    {
+      "page": "/bookmarks",
+      "regex": "^/bookmarks(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/bookmarks(?:/)?$"
+    },
+    {
+      "page": "/career-counseling",
+      "regex": "^/career\\-counseling(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/career\\-counseling(?:/)?$"
+    },
+    {
+      "page": "/classroom",
+      "regex": "^/classroom(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/classroom(?:/)?$"
+    },
+    {
+      "page": "/community",
+      "regex": "^/community(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/community(?:/)?$"
+    },
+    {
+      "page": "/courses",
+      "regex": "^/courses(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/courses(?:/)?$"
+    },
+    {
+      "page": "/dashboard",
+      "regex": "^/dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/dashboard(?:/)?$"
+    },
+    {
+      "page": "/developer-info",
+      "regex": "^/developer\\-info(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/developer\\-info(?:/)?$"
+    },
+    {
+      "page": "/docs",
+      "regex": "^/docs(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/docs(?:/)?$"
+    },
+    {
+      "page": "/essay-evaluator",
+      "regex": "^/essay\\-evaluator(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/essay\\-evaluator(?:/)?$"
+    },
+    {
+      "page": "/learning-path",
+      "regex": "^/learning\\-path(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/learning\\-path(?:/)?$"
+    },
+    {
+      "page": "/lesson-planner",
+      "regex": "^/lesson\\-planner(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/lesson\\-planner(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    },
+    {
+      "page": "/playground",
+      "regex": "^/playground(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/playground(?:/)?$"
+    },
+    {
+      "page": "/privacy-policy",
+      "regex": "^/privacy\\-policy(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/privacy\\-policy(?:/)?$"
+    },
+    {
+      "page": "/profile",
+      "regex": "^/profile(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/profile(?:/)?$"
+    },
+    {
+      "page": "/q-and-a",
+      "regex": "^/q\\-and\\-a(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/q\\-and\\-a(?:/)?$"
+    },
+    {
+      "page": "/signup",
+      "regex": "^/signup(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/signup(?:/)?$"
+    },
+    {
+      "page": "/summarize",
+      "regex": "^/summarize(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/summarize(?:/)?$"
+    },
+    {
+      "page": "/teacher-dashboard",
+      "regex": "^/teacher\\-dashboard(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/teacher\\-dashboard(?:/)?$"
+    },
+    {
+      "page": "/test-generator",
+      "regex": "^/test\\-generator(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/test\\-generator(?:/)?$"
+    },
+    {
+      "page": "/video-generator",
+      "regex": "^/video\\-generator(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/video\\-generator(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "RSC",
+    "varyHeader": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch",
+    "prefetchHeader": "Next-Router-Prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "Next-Router-Segment-Prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments"
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  },
+  "rewrites": []
+}
