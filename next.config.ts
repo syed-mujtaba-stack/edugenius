@@ -3,7 +3,6 @@ import withPWA from 'next-pwa';
 const baseConfig = {
   distDir: 'build',
   reactStrictMode: true,
-  swcMinify: true,
   compiler: {
     removeConsole: process.env.NODE_ENV !== 'development',
   },
