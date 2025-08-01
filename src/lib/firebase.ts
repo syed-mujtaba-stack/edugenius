@@ -18,4 +18,9 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export { app, auth, db };
+const saveVideo = async (videoId: string, userId: string) => {
+  console.log(`Saving video ${videoId} to user ${userId}'s bookmarks`);
+  // TODO: Implement Firebase logic to save video to bookmarks
+};
+
+export { app, auth, db, saveVideo };
