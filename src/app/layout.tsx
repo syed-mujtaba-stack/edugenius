@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
+import HydrationWrapper from "@/components/HydrationWrapper";
 
 export const metadata: Metadata = {
   title: {
@@ -60,8 +61,10 @@ export default function RootLayout({
         <link rel="icon" href="/icons/icon1-192.png" />
       </head>
       <body className={cn("font-body antialiased", "min-h-screen bg-background")}>
-        {children}
-        <Toaster />
+        <HydrationWrapper>
+          {children}
+          <Toaster />
+        </HydrationWrapper>
       </body>
     </html>
   );

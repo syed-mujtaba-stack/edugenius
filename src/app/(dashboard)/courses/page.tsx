@@ -12,7 +12,8 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { findAndSummarizeVideos, FindAndSummarizeVideosOutput } from '@/ai/flows/find-and-summarize-videos';
+import { findAndSummarizeVideos } from '@/ai/flows/find-and-summarize-videos';
+import { saveVideo } from '@/lib/firebase';
 
 interface YouTubeVideo {
     id: string;
@@ -227,7 +228,18 @@ export default function CoursesPage() {
                                     {video.channelTitle}
                                 </Badge>
                                  <Button variant="link" size="sm" onClick={() => setSelectedVideo(video)}>
-                                    Watch Now
+                                     Watch Now
+                                </Button>
+                                <Button variant="outline" size="sm" onClick={() => {
+                                  const userId = localStorage.getItem('userId');
+                                  if (userId) {
+                                    saveVideo(video.id, userId);
+                                    toast({ title: 'Video saved to bookmarks!' });
+                                  } else {
+                                    toast({ title: 'User not logged in', description: 'Please log in to save videos.', variant: 'destructive' });
+                                  }
+                                }}>
+                                    Save
                                 </Button>
                             </CardFooter>
                         </Card>
