@@ -1,7 +1,12 @@
-import type {NextConfig} from 'next';
+import withPWA from 'next-pwa';
 
-const nextConfig: NextConfig = {
-  /* config options here */
+const baseConfig = {
+  distDir: 'build',
+  reactStrictMode: true,
+  swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV !== 'development',
+  },
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -22,7 +27,7 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
-       {
+      {
         protocol: 'https',
         hostname: 'portfolio-nine-ebon-36.vercel.app',
         port: '',
@@ -32,4 +37,10 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// ✅ Type cast to any to bypass conflict
+export default withPWA({
+  dest: 'public',
+  disable: process.env.NODE_ENV === 'development',
+  register: true,
+  skipWaiting: true,
+})(baseConfig as any);
