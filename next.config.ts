@@ -1,8 +1,10 @@
+// types are inferred — no need to explicitly type baseConfig
 import withPWA from 'next-pwa';
 
 const baseConfig = {
   distDir: 'build',
   reactStrictMode: true,
+
   compiler: {
     removeConsole: process.env.NODE_ENV !== 'development',
   },
@@ -15,31 +17,33 @@ const baseConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
+        protocol: "https",
         hostname: 'placehold.co',
         port: '',
         pathname: '/**',
       },
       {
-        protocol: 'https',
+        protocol: "https",
         hostname: 'mujtaba-mj.vercel.app',
         port: '',
         pathname: '/**',
       },
       {
-        protocol: 'https',
+        protocol: "https",
         hostname: 'portfolio-nine-ebon-36.vercel.app',
         port: '',
         pathname: '/**',
       },
-    ],
+    ].map(p => ({ ...p })),
+  },
+  experimental: {
+    serverActions: {},
   },
 };
 
-// ✅ Type cast to any to bypass conflict
 export default withPWA({
   dest: 'public',
   disable: process.env.NODE_ENV === 'development',
   register: true,
   skipWaiting: true,
-})(baseConfig as any);
+})(baseConfig);
