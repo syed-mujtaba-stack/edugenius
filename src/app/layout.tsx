@@ -2,22 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
-import { Roboto, Anton } from 'next/font/google';
-
-const roboto = Roboto({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-roboto',
-  weight: ['400', '500', '700'],
-});
-
-const anton = Anton({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-anton',
-  weight: '400',
-});
-
 
 export const metadata: Metadata = {
   title: {
@@ -29,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "EduGenius - Your AI-Powered Learning Co-Pilot",
     description: "Unlock your learning potential with AI-powered tools for Pakistani students.",
-    url: "https://edugenius.app", // Replace with your actual domain
+    url: "https://edu-genius-flame.app", // Replace with your actual domain
     siteName: "EduGenius",
     images: [
       {
@@ -46,7 +30,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'EduGenius - Your AI-Powered Learning Co-Pilot',
     description: 'Unlock your learning potential with AI-powered tools for Pakistani students.',
-     images: ['https://edugenius.app/og-image.png'], // Replace with your actual OG image URL
+     images: ['https://edu-genius-flame.vercel.app/og-image.png'], // Replace with your actual OG image URL
   },
   robots: {
     index: true,
@@ -70,8 +54,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("dark", roboto.variable, anton.variable)}>
-      <head />
+    <html lang="en" className={cn("dark")}>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/icons/icon1-192.png" />
+      </head>
       <body className={cn("font-body antialiased", "min-h-screen bg-background")}>
         {children}
         <Toaster />
