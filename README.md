@@ -1,3 +1,4 @@
+
 # EduGenius - Your AI-Powered Learning Co-Pilot
 
 Welcome to EduGenius, a modern, AI-driven educational platform built with Next.js and Firebase Studio. This application is designed to revolutionize the learning experience for students in Pakistan and beyond by providing personalized, intelligent, and interactive tools.
@@ -8,88 +9,134 @@ Welcome to EduGenius, a modern, AI-driven educational platform built with Next.j
 
 ## 🚀 Core Features
 
-### 🧠 1. Personalized AI Learning Paths
--   **Intelligent Analysis:** The AI analyzes a student's learning goals and identifies their weak topics.
--   **Custom Roadmap:** It recommends a tailored sequence of subjects, chapters, and tests to follow.
--   **Adaptive Learning:** The system reinforces learning by suggesting repetitions for weaker areas.
--   **Daily Study Routine:** A built-in routine generator helps students build consistent study habits and track their progress with a daily study streak.
+### 🧠 AI-Powered Learning Tools
+-   **Personalized Learning Paths:** The AI analyzes a student's learning goals, identifies their weak topics, and recommends a tailored sequence of subjects, chapters, and tests to follow. Includes a daily study streak tracker.
+-   **AI Tutor:** A 24/7 AI-powered chatbot ("AI Tutor") is available to answer student questions on any topic.
+-   **AI Test Generator & Proctoring:** Creates custom practice tests (MCQs, Short & Long Questions) with "Practice" and secure "Exam" modes. Features optional AI proctoring via webcam to detect cheating.
+-   **AI Essay Evaluator:** The AI evaluates essays based on Grammar, Structure, Creativity, and Logic, providing an instant score and actionable improvement tips.
+-   **AI Book Generator:** Provide a title and purpose, and the AI will co-author an entire book with multiple chapters for you.
+-   **Chapter Summarizer & Q&A Generator:** Instantly summarizes long textbook chapters and generates questions & answers from any topic.
+-   **AI Audio Generator (Text-to-Speech):** Converts text-based notes into high-quality, downloadable audio lessons.
+-   **AI Video Generator (Text-to-Video):** Creates short video clips from text prompts, providing a powerful way to visualize difficult concepts.
+-   **AI Career Counselor:** Suggests suitable career paths based on a student's interests and provides a clear, step-by-step roadmap.
+-   **AI Lesson Plan Generator:** An exclusive tool for teachers to instantly generate comprehensive lesson plans.
+-   **🆕 Self-Learning Module:** An intelligent system that allows users to add their own learning agents and tools. These agents work seamlessly within the platform, regardless of the programming language they're built in, providing a personalized learning experience.
 
-### 🎵 2. AI Audio Generator
--   **Text-to-Speech:** Converts text-based notes or any pasted text into high-quality audio voice-overs.
--   **Downloadable Media:** Allows students to save generated audio lessons for offline learning.
+### 📚 Learning & Community
+-   **AI Video Course Finder:** An intelligent agent that finds relevant YouTube courses on any topic and provides AI-generated summaries for each video.
+-   **Community Hub:** A dedicated page for students to engage in chapter-wise discussions, help each other, and pose questions to real teachers.
+-   **Quiz Playground:** A real-time multiplayer quiz game where students can challenge their friends, with the AI generating questions on the fly.
+-   **Download Center:** Users can download AI-generated notes, summaries, books, Q&A lists, and test results as `.txt` or `.pdf` files.
+-   **Bookmark Content:** Allows users to save important content for quick access later.
 
-### 💼 3. Career Counseling & Skill Mapping
--   **AI-Powered Guidance:** The AI suggests suitable career paths (e.g., Science, Business, AI, Design) based on a student's interests and strengths.
--   **Actionable Roadmap:** Provides a clear, step-by-step guide on how to pursue the recommended career, starting from the student's current education level (e.g., "How to become a Data Scientist after Matric Commerce").
-
-### 📝 4. AI Essay Evaluator
--   **Comprehensive Feedback:** The AI evaluates essays based on Grammar, Structure, Creativity, and Logic.
--   **Instant Scoring:** Provides an immediate score out of 100.
--   **Improvement Tips:** Offers actionable tips to help students enhance their writing skills.
--   **A-Grade Comparison:** Generates a sample A-grade essay on the same topic for reference.
-
-### ✍️ 5. Chapter Summarizer & Q&A Generator
--   **Quick Summaries:** Instantly summarizes long textbook chapters into concise, easy-to-understand points.
--   **Self-Testing:** Generates a list of questions and answers from any topic, helping students prepare for exams.
-
-### 🧪 6. AI Test Generator & Proctoring
--   **Custom Tests:** Creates customized practice tests (MCQs, Short & Long Questions) based on subject, topic, difficulty, and educational board.
--   **Practice & Exam Modes:** Offers a "Practice Mode" with answers and a secure "Exam Mode."
--   **AI Proctoring:** Utilizes the webcam (optional) to monitor students during exams.
--   **Cheating Detection:** The AI analyzes tab-switching activity and answer patterns to identify potential academic dishonesty.
-
-### 📁 7. Download Center
--   **Offline Access:** Users can download AI-generated notes, summaries, Q&A lists, and test results as `.txt` or `.pdf` files.
--   **Easy Export:** Seamlessly export materials for offline study and revision.
-
-### 🧑‍💻 8. Free Tech Courses
--   **Curated Content:** A dedicated section for high-quality, free courses from YouTube on:
-    -   Web Development (HTML, CSS, React, etc.)
-    -   AI & Data Science
-    -   Programming Languages (Python, Java, C++, etc.)
--   **Direct Access:** Students can watch courses directly on YouTube.
-
-### 💬 9. Community Hub & AI Tutor
--   **AI Doubt Solver:** An AI-powered chatbot ("AI Tutor") is available to answer student questions on any topic, 24/7.
--   **Community Discussions:** A dedicated page for students to engage in chapter-wise discussions and help each other.
--   **Ask a Teacher:** A feature allowing students to pose questions directly to real teachers in selected subjects.
-
-### ✨ 10. Advanced Features
+### ✨ Platform & User Experience
 -   **Voice Assistant ("MJ"):** A voice-powered assistant that helps users navigate the app using voice commands.
 -   **Custom API Key:** Users can add their own Gemini API key for unlimited access to AI features.
--   **Smart Search:** An efficient search and filter system to easily find courses.
--   **Bookmark Content:** Allows users to save important content for quick access later.
--   **Responsive Design:** A fully responsive, mobile-first layout ensures a seamless experience on all devices.
+-   **Smart Search:** An efficient search and filter system to easily find courses and content.
+-   **Responsive Design:** A fully responsive, mobile-first layout with a modern, collapsible sidebar.
 -   **Dark/Light Mode:** A modern, dark-themed UI for comfortable viewing.
+-   **User Profile Management:** Users can update their display name, profile picture, and reset their password.
 
-### 🔐 11. Admin & Teacher Panels
--   **Admin Dashboard:** A central control panel to view system analytics and manage users.
--   **Teacher Dashboard:** A dedicated dashboard for teachers to monitor student progress, class activity, and manage lessons.
+### 🔐 Admin & Teacher Panels
+-   **Admin Dashboard:** A secure control panel (username/password protected) to view system analytics and manage users.
+-   **Teacher Dashboard:** A dedicated dashboard for teachers to monitor student progress and manage lessons.
 -   **Virtual Classroom:** A space for teachers to manage their students and learning materials.
 
 ---
 
-## 🚀 Future Roadmap & Planned Features
+## 🚀 Future Features & Roadmap
 
-Here's a glimpse of the exciting AI-powered features we plan to introduce to make EduGenius even more powerful:
+We are constantly working to make EduGenius even better. Here's what we're building next:
 
-### 👨‍🏫 1. Teacher's AI Lesson Plan Generator
--   **Concept:** An exclusive tool for teachers to instantly generate comprehensive lesson plans. By providing a topic, duration, and learning objective, teachers will receive a structured plan complete with modules, activities, and assessment strategies.
--   **Benefit:** This will save valuable time for educators and empower them with high-quality, structured content for their classes.
+### 🤖 Enhanced AI Capabilities
+-   **Custom Agent Marketplace:** A dedicated marketplace where users can share, discover, and download custom learning agents created by the community.
+-   **Multi-Language Agent Support:** Full support for agents built in Python, JavaScript, Java, C++, and other popular programming languages.
+-   **Agent Performance Analytics:** Real-time analytics showing how well your custom agents are performing and helping other users.
+-   **AI Code Generator for Agents:** An AI tool that helps users create their own learning agents by generating code based on simple descriptions.
 
-### 🎬 2. AI Video Generator (Text-to-Video)
--   **Concept:** A groundbreaking feature allowing users to create short video clips from simple text prompts. For example, typing "a 5-second video of the water cycle" will generate a relevant animation.
--   **Benefit:** This will provide an incredibly powerful and quick way to create visual aids for difficult topics, making learning more engaging and effective.
+### 🔧 Advanced Learning Tools
+-   **AI Document Analysis:** Upload your PDFs or documents, and the AI will summarize them, generate Q&As, and create tests based on their content.
+-   **Smart Flashcard Generator:** AI creates interactive flashcards from any text or subject with spaced repetition algorithms.
+-   **AI Mind Map Creator:** Automatically generates visual mind maps from complex topics to help with understanding and memorization.
+-   **Virtual Lab Simulator:** Interactive simulations for science experiments that can be performed virtually.
 
-### 🎮 3. Real-Time Quiz with Friends (Multiplayer)
--   **Concept:** A feature enabling students to challenge their friends to a real-time quiz competition. The AI will generate unique questions on the fly, and a live leaderboard will track scores.
--   **Benefit:** This will gamify the learning process, making revision a fun, competitive, and social activity.
+### 🌐 Collaborative Features
+-   **Group Study Rooms:** Collaborate with friends in virtual rooms with shared whiteboards and AI-assisted study tools.
+-   **Peer-to-Peer Learning:** Connect with study partners based on similar learning goals and subjects.
+-   **Real-Time Code Collaboration:** For programming students, work together on coding projects with live code sharing.
+-   **Study Group Challenges:** Create and join study challenges with friends and classmates.
 
-### 🎙️ 4. AI Voice Conversation Tutor
--   **Concept:** An upgrade to the AI Tutor, allowing students to have spoken conversations with the AI. The tutor will understand voice commands and respond verbally, simulating a real human interaction.
--   **Benefit:** This will create a more immersive and interactive learning experience, helping students improve their communication and auditory learning skills.
+### 🎮 Gamification & Engagement
+-   **Learning Streaks & Rewards:** Advanced gamification system with badges, achievements, and daily challenges.
+-   **AI-Powered Study Competitions:** Platform-wide competitions where AI generates unique challenges for different skill levels.
+-   **Virtual Study Pet:** A digital companion that grows and evolves based on your learning progress.
+-   **Leaderboards:** Subject-wise and global leaderboards to motivate competitive learning.
 
-### 📰 5. Personalized Daily News Digest for Students
--   **Concept:** An AI-curated daily news service. Based on a student's selected interests (like Science, Tech, or Arts), the AI will deliver a concise, easy-to-read summary of the day's most important news in those fields.
--   **Benefit:** This will keep students informed and engaged with the real-world applications of their studies, broadening their knowledge base.
-# edu-genius
+### 🔊 Voice & Accessibility
+-   **AI Voice Conversation Tutor:** Have spoken conversations with the AI tutor for more interactive learning.
+-   **Multi-Language Support:** Support for Urdu, Punjabi, Sindhi, and other regional languages.
+-   **Accessibility Features:** Screen reader support, high contrast modes, and keyboard navigation.
+-   **Voice Note Taking:** Convert speech to text for quick note-taking during lectures.
+
+### 📊 Advanced Analytics
+-   **Learning Pattern Analysis:** AI analyzes your learning patterns and suggests optimal study times and methods.
+-   **Progress Prediction:** Predict exam performance based on current learning trends.
+-   **Weakness Identification:** Advanced AI that identifies knowledge gaps before they become problems.
+-   **Parent/Teacher Insights:** Detailed reports for parents and teachers on student progress.
+
+### 🌟 Innovative Features
+-   **AR/VR Learning Modules:** Augmented and Virtual Reality experiences for immersive learning.
+-   **AI Study Buddy Matching:** Get matched with AI-generated study partners based on your learning style.
+-   **Automated Study Schedule:** AI creates and manages your entire study schedule based on exams, deadlines, and personal preferences.
+-   **Smart Notification System:** Intelligent reminders that adapt to your study patterns and effectiveness.
+
+### 📱 Mobile & Offline Features
+-   **Progressive Web App (PWA):** Install EduGenius as a native app on any device.
+-   **Offline Mode:** Download content for studying without internet connection.
+-   **Mobile-First Features:** Special features designed specifically for mobile learning.
+-   **Cross-Device Sync:** Seamlessly continue learning across different devices.
+
+---
+
+## 🛠️ Technical Features
+
+### 🔒 Security & Privacy
+-   **End-to-End Encryption:** All user data and communications are encrypted.
+-   **GDPR Compliance:** Full compliance with international privacy standards.
+-   **Secure Agent Execution:** Sandboxed environment for running custom learning agents.
+-   **Data Ownership:** Users have full control over their data and learning materials.
+
+### ⚡ Performance & Scalability
+-   **Edge Computing:** Fast response times with global content delivery.
+-   **Auto-Scaling Infrastructure:** Handles millions of users without performance degradation.
+-   **Optimized AI Models:** Custom-trained models for education-specific tasks.
+-   **Real-Time Collaboration:** Low-latency real-time features for group learning.
+
+---
+
+## 🎯 Our Mission
+
+EduGenius aims to democratize education by making high-quality, AI-powered learning tools accessible to every student, regardless of their location or economic background. We're building the future of education, one feature at a time.
+
+---
+
+## 🚀 Getting Started
+
+1. Visit [EduGenius Platform](your-replit-url)
+2. Create your free account
+3. Start exploring AI-powered learning tools
+4. Create or import your own learning agents
+5. Join the community and start learning!
+
+---
+
+## 📞 Support & Community
+
+- **Discord Community:** Join our active community of learners and educators
+- **Documentation:** Comprehensive guides for all features
+- **24/7 AI Support:** Get help anytime with our AI assistant
+- **Developer API:** Build your own integrations and tools
+
+---
+
+*Built with ❤️ for students, by students. Made in Pakistan 🇵🇰*
