@@ -122,7 +122,7 @@ EduGenius aims to democratize education by making high-quality, AI-powered learn
 
 ## 🚀 Getting Started
 
-1. Visit [EduGenius Platform](your-replit-url)
+1. Visit [EduGenius Platform](https://mj-edugenius.vercel.app)
 2. Create your free account
 3. Start exploring AI-powered learning tools
 4. Create or import your own learning agents
