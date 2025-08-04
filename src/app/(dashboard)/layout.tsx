@@ -24,6 +24,7 @@ import {
   User,
   Gamepad2,
   BookPlus,
+  BookOpenCheck,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -282,6 +283,7 @@ export default function DashboardLayout({
     { href: '/community', label: 'Community', icon: Users },
     { href: '/playground', label: 'Playground', icon: Gamepad2 },
     { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark },
+    { href: '/self-learning', label: 'Self-Learning', icon: BookOpenCheck },
   ];
 
   const teachersCornerItems = [

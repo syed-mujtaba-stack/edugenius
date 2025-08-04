@@ -1,8 +1,8 @@
 {
     "name": "Edu Genius",
     "short_name": "EduGenius",
-    "theme_color": "#007bff",
-    "background_color": "#f8f9fa",
+    "theme_color": "#000000",
+    "background_color": "#000000",
     "display": "standalone",
     "orientation": "any",
     "scope": "/",

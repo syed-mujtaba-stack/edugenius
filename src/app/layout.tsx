@@ -55,7 +55,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("dark")}>
+    <html lang="en" className={cn("dark")} suppressHydrationWarning>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/icons/icon1-192.png" />

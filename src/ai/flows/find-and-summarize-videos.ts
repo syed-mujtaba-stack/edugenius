@@ -79,12 +79,12 @@ const findAndSummarizeVideosFlow = ai.defineFlow(
       youtubeData.items.map(async (item: any) => {
         const description = item.snippet.description;
         let summary = 'No summary available.';
-
-        if (description && description.trim().length > 50) { // Only summarize if description is meaningful
-            try {
-                const { output } = await summarizePrompt({ description }, { apiKey });
-                summary = output || 'Could not generate summary.';
-            } catch (e) {
+ console.log("Description value:", description);
+       if (typeof description === 'string' && description.length > 50) { // Only summarize if description is meaningful
+           try {
+               const { output } = await summarizePrompt({ description: description.trim() });
+               summary = output || 'Could not generate summary.';
+           } catch (e) {
                 console.warn(`Could not summarize description for video ${item.id.videoId}`, e);
                 summary = "AI summary failed for this video."
             }
