@@ -62,7 +62,7 @@ const generateAudioFromTextFlow = ai.defineFlow(
     outputSchema: GenerateAudioOutputSchema,
   },
   async ({ text, apiKey }) => {
-    const { media } = await ai.generate({
+    const response = await ai.generate({
       model: googleAI.model('gemini-2.5-flash-preview-tts'),
       config: {
         responseModalities: ['AUDIO'],
@@ -73,21 +73,33 @@ const generateAudioFromTextFlow = ai.defineFlow(
         },
       },
       prompt: text,
+      // @ts-ignore - The API expects options as a second argument
     }, { apiKey });
 
+    // Handle the response based on the actual structure
+    const media = response.media || (response as any).candidates?.[0]?.content?.media;
+    
     if (!media?.url) {
       throw new Error('No media was returned from the TTS model.');
     }
 
-    // The data URI is 'data:audio/pcm;base64,....'
-    // We need to extract the Base64 part and convert it to a WAV buffer
-    const pcmBase64 = media.url.substring(media.url.indexOf(',') + 1);
-    const audioBuffer = Buffer.from(pcmBase64, 'base64');
-    
-    const wavBase64 = await toWav(audioBuffer);
+    try {
+      // The data URI is 'data:audio/pcm;base64,....'
+      // We need to extract the Base64 part and convert it to a WAV buffer
+      const pcmBase64 = media.url.startsWith('data:') 
+        ? media.url.substring(media.url.indexOf(',') + 1)
+        : media.url; // In case it's already a base64 string without the data URI prefix
+      
+      const audioBuffer = Buffer.from(pcmBase64, 'base64');
+      const wavBase64 = await toWav(audioBuffer);
 
-    return {
-      media: `data:audio/wav;base64,${wavBase64}`,
-    };
+      return {
+        media: `data:audio/wav;base64,${wavBase64}`,
+      };
+    } catch (error: unknown) {
+      console.error('Error processing audio:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error during audio processing';
+      throw new Error(`Failed to process audio: ${errorMessage}`);
+    }
   }
 );

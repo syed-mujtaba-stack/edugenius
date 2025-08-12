@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 9003",
+    "dev": "next dev -p 9002",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
     "build": "next build",
@@ -41,6 +41,7 @@
     "@types/next-pwa": "^5.6.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "coffee-script": "^1.12.7",
     "date-fns": "^3.6.0",
     "dotenv": "^16.5.0",
     "embla-carousel-react": "^8.6.0",
@@ -68,7 +69,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^20.19.10",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/string-similarity": "^4.0.2",

@@ -13,6 +13,32 @@ const baseConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  webpack: (config, { isServer }) => {
+    // Handle Webpack 5 compatibility with vm2 and Handlebars
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      net: false,
+      tls: false,
+      child_process: false,
+      dns: 'mock',
+      dgram: 'empty',
+      zlib: 'empty',
+      http2: 'empty',
+      process: false,
+    };
+
+    // Ignore specific warnings
+    config.ignoreWarnings = [
+      { module: /node_modules\/handlebars/ },
+      { file: /node_modules\/vm2/ },
+    ];
+
+    // Add externals for vm2
+    config.externals = [...(config.externals || []), 'vm2'];
+
+    return config;
+  },
   images: {
     remotePatterns: [
       {
@@ -36,8 +62,11 @@ const baseConfig: NextConfig = {
     ],
   },
   experimental: {
-    serverActions: {},
-  },
+    serverActions: {
+      // Configure server actions options
+      bodySizeLimit: '2mb',
+    },
+  } as const,
 };
 
 export default (withPWA({
