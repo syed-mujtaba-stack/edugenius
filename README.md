@@ -1,25 +1,40 @@
 <div align="center">
   <img src="public/icons/icon1-72.png" alt="EduGenius Logo" width="120">
-  <h1 style="font-size: 3em; margin-bottom: 0;">EduGenius</h1>
-  <p style="font-size: 1.2em; margin-top: 0;">Your AI-Powered Learning Co-Pilot</p>
-  <p>
-    A modern, AI-driven educational platform built with Next.js and Firebase to revolutionize the learning experience.
+  <h1 style="font-size: 3em; margin-bottom: 0; background: linear-gradient(45deg, #4F46E5, #7C3AED); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">EduGenius</h1>
+  <p style="font-size: 1.2em; margin-top: 0.5em; color: #4B5563;">🚀 Your AI-Powered Learning Co-Pilot</p>
+  
+  <p style="max-width: 800px; margin: 1.5em auto; line-height: 1.6; color: #374151;">
+    A next-generation educational platform that leverages cutting-edge AI to provide personalized learning experiences, 
+    interactive study tools, and comprehensive educational resources for students and educators worldwide.
   </p>
 
   <!-- Badges -->
-  <p>
-    <a href="https://github.com/syed-mujtaba-stack/edugenius/blob/main/LICENSE.md"><img src="https://img.shields.io/github/license/syed-mujtaba-stack/edugenius?style=for-the-badge" alt="License"></a>
-    <a href="https://github.com/syed-mujtaba-stack/edugenius/issues"><img src="https://img.shields.io/github/issues/syed-mujtaba-stack/edugenius?style=for-the-badge" alt="Issues"></a>
-    <a href="https://github.com/syed-mujtaba-stack/edugenius/stargazers"><img src="https://img.shields.io/github/stars/syed-mujtaba-stack/edugenius?style=for-the-badge" alt="Stars"></a>
-  </p>
+  <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 1.5em 0;">
+    <a href="https://github.com/syed-mujtaba-stack/edugenius/blob/main/LICENSE.md">
+      <img src="https://img.shields.io/github/license/syed-mujtaba-stack/edugenius?style=for-the-badge&color=4F46E5" alt="License">
+    </a>
+    <a href="https://github.com/syed-mujtaba-stack/edugenius/issues">
+      <img src="https://img.shields.io/github/issues/syed-mujtaba-stack/edugenius?style=for-the-badge&color=7C3AED" alt="Issues">
+    </a>
+    <a href="https://github.com/syed-mujtaba-stack/edugenius/stargazers">
+      <img src="https://img.shields.io/github/stars/syed-mujtaba-stack/edugenius?style=for-the-badge&color=10B981" alt="Stars">
+    </a>
+    <a href="https://nextjs.org/">
+      <img src="https://img.shields.io/badge/Next.js-13.4+-000000?style=for-the-badge&logo=nextdotjs" alt="Next.js">
+    </a>
+  </div>
   
-  <p>
-    <a href="https://mj-edugenius.vercel.app/"><strong>🚀 View Live Demo</strong></a>
-    &nbsp;&nbsp;·&nbsp;&nbsp;
-    <a href="https://github.com/syed-mujtaba-stack/edugenius/issues"><strong>Report a Bug</strong></a>
-    &nbsp;&nbsp;·&nbsp;&nbsp;
-    <a href="https://github.com/syed-mujtaba-stack/edugenius/issues"><strong>Request a Feature</strong></a>
-  </p>
+  <div style="margin: 2em 0; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+    <a href="https://mj-edugenius.vercel.app/" style="padding: 10px 20px; background: linear-gradient(45deg, #4F46E5, #7C3AED); color: white; border-radius: 8px; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+      <span>🚀</span> Live Demo
+    </a>
+    <a href="https://github.com/syed-mujtaba-stack/edugenius/issues/new?template=bug_report.md" style="padding: 10px 20px; background-color: #F3F4F6; color: #1F2937; border-radius: 8px; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+      <span>🐞</span> Report Bug
+    </a>
+    <a href="https://github.com/syed-mujtaba-stack/edugenius/issues/new?template=feature_request.md" style="padding: 10px 20px; background-color: #ECFDF5; color: #065F46; border-radius: 8px; text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+      <span>✨</span> Request Feature
+    </a>
+  </div>
 </div>
 
 ---
@@ -42,11 +57,58 @@
 ### 📜 About The Project
 <a id="-about-the-project"></a>
 
-EduGenius is an innovative educational platform designed to empower students in Pakistan and beyond. By leveraging the power of AI, it offers a suite of tools that make learning more personalized, efficient, and engaging.
+<div style="background-color: #F9FAFB; padding: 2rem; border-radius: 12px; margin: 1.5rem 0; border-left: 4px solid #4F46E5;">
+  <p style="font-size: 1.1rem; line-height: 1.8; color: #1F2937; margin-bottom: 1.5rem;">
+    EduGenius is a cutting-edge educational platform that revolutionizes learning through artificial intelligence. 
+    Designed with students and educators in mind, it provides intelligent tools that adapt to individual learning styles, 
+    making education more accessible, engaging, and effective for everyone.
+  </p>
+  
+  <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin: 1.5rem 0;">
+    <div style="flex: 1; min-width: 250px; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+      <h3 style="color: #4F46E5; margin-top: 0; display: flex; align-items: center; gap: 8px;">
+        <span>🎯</span> Mission
+      </h3>
+      <p style="margin: 0.75rem 0 0; color: #4B5563;">
+        To democratize education by making high-quality learning tools accessible to students worldwide, regardless of their location or background.
+      </p>
+    </div>
+    
+    <div style="flex: 1; min-width: 250px; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+      <h3 style="color: #7C3AED; margin-top: 0; display: flex; align-items: center; gap: 8px;">
+        <span>✨ Vision</span>
+      </h3>
+      <p style="margin: 0.75rem 0 0; color: #4B5563;">
+        To create an intelligent learning ecosystem that adapts to each student's needs, making education more personalized and effective than ever before.
+      </p>
+    </div>
+  </div>
+  
+  <div style="margin-top: 1.5rem; padding: 1rem; background: #EEF2FF; border-radius: 8px; display: flex; align-items: center; gap: 12px;">
+    <div style="font-size: 1.5rem;">👨‍💻</div>
+    <div>
+      <p style="margin: 0; font-weight: 600; color: #1F2937;">Syed Mujtaba Abbas</p>
+      <p style="margin: 0.25rem 0 0; color: #4B5563; font-size: 0.9rem;">
+        Full-Stack Developer & Education Enthusiast
+      </p>
+      <div style="margin-top: 0.5rem; display: flex; gap: 8px;">
+        <a href="https://github.com/syed-mujtaba-stack" style="color: #4F46E5; text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 4px;">
+          <span>GitHub</span>→
+        </a>
+        <a href="https://instagram.com/m.j_syed" style="color: #4F46E5; text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 4px; margin-left: 12px;">
+          <span>Instagram</span>→
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
 
-**Author & Developer:** Syed Mujtaba Abbas
-
-<p align="right">(<a href="#top">back to top</a>)</p>
+<p align="right" style="margin-top: 2rem;">
+  <a href="#top" style="display: inline-flex; align-items: center; gap: 4px; text-decoration: none; color: #4F46E5; font-weight: 500;">
+    <span>Back to top</span>
+    <span>↑</span>
+  </a>
+</p>
 
 ---
 
@@ -54,7 +116,7 @@ EduGenius is an innovative educational platform designed to empower students in 
 <a id="-screenshots"></a>
 
 <div align="center">
-  <img src="https://via.placeholder.com/800x400.png?text=EduGenius+Homepage" alt="Project Screenshot" style="width: 80%; margin-bottom: 10px;">
+  <img src="public/app.png" alt="Project Screenshot" style="width: 80%; margin-bottom: 10px;">
   <p><em>More screenshots coming soon!</em></p>
 </div>
 
