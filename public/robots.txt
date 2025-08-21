@@ -1,0 +1,15 @@
+# Allow all search engines to crawl the website
+User-agent: *
+Allow: /
+
+# Disallow crawling of admin and API routes
+Disallow: /admin/
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /_next/
+Disallow: /*.json$
+Disallow: /*?*
+
+# Sitemaps
+Sitemap: https://edugenius.pk/sitemap.xml
+Sitemap: https://edugenius.pk/server-sitemap.xml

@@ -1,7 +1,8 @@
-import { db } from '@/lib/firebase';
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
+export const runtime = 'nodejs';
+import { adminDb, adminAuth } from '@/lib/firebaseAdmin';
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from 'firebase-admin';
+
+const isProd = process.env.NODE_ENV === 'production';
 
 export async function POST(req: NextRequest) {
   const { name, description, language, endpoint } = await req.json();
@@ -12,10 +13,10 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const decodedToken = await auth().verifyIdToken(token);
+    const decodedToken = await adminAuth.verifyIdToken(token);
     const ownerId = decodedToken.uid;
 
-    const docRef = await addDoc(collection(db, 'learningAgents'), {
+    const docRef = await adminDb.collection('learningAgents').add({
       name,
       description,
       language,
@@ -24,9 +25,11 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ id: docRef.id });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error adding document: ', error);
-    return NextResponse.json({ error: 'Failed to create learning agent' }, { status: 500 });
+    const missingCreds = !process.env.FIREBASE_PROJECT_ID || !process.env.FIREBASE_CLIENT_EMAIL || !process.env.FIREBASE_PRIVATE_KEY;
+    const details = !isProd ? { message: String(error?.message || error), stack: error?.stack, hint: missingCreds ? 'Missing Firebase Admin credentials. Set FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY or configure GOOGLE_APPLICATION_CREDENTIALS / emulator.' : undefined } : undefined;
+    return NextResponse.json({ error: 'Failed to create learning agent', ...details }, { status: 500 });
   }
 }
 
@@ -38,16 +41,20 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const decodedToken = await auth().verifyIdToken(token);
+    const decodedToken = await adminAuth.verifyIdToken(token);
     const ownerId = decodedToken.uid;
 
-    const q = query(collection(db, 'learningAgents'), where('ownerId', '==', ownerId));
-    const querySnapshot = await getDocs(q);
-    const agents = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    const snapshot = await adminDb
+      .collection('learningAgents')
+      .where('ownerId', '==', ownerId)
+      .get();
+    const agents = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
 
     return NextResponse.json(agents);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error getting documents: ', error);
-    return NextResponse.json({ error: 'Failed to get learning agents' }, { status: 500 });
+    const missingCreds = !process.env.FIREBASE_PROJECT_ID || !process.env.FIREBASE_CLIENT_EMAIL || !process.env.FIREBASE_PRIVATE_KEY;
+    const details = !isProd ? { message: String(error?.message || error), stack: error?.stack, hint: missingCreds ? 'Missing Firebase Admin credentials. Set FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY or configure GOOGLE_APPLICATION_CREDENTIALS / emulator.' : undefined } : undefined;
+    return NextResponse.json({ error: 'Failed to get learning agents', ...details }, { status: 500 });
   }
 }

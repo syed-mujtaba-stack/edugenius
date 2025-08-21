@@ -250,11 +250,23 @@ export default function CoursesPage() {
 
     const memoizedVideos = useMemo(() => videos, [videos]);
 
+    const [playerHeight, setPlayerHeight] = useState(390);
+
+    useEffect(() => {
+        const onResize = () => setPlayerHeight(window.innerWidth < 640 ? 200 : 390);
+        onResize();
+        window.addEventListener('resize', onResize);
+        return () => window.removeEventListener('resize', onResize);
+    }, []);
+
     const opts = {
-        height: '390',
+        height: String(playerHeight),
         width: '100%',
         playerVars: {
-          autoplay: 1,
+          autoplay: 0,
+          playsinline: 1,
+          rel: 0,
+          modestbranding: 1,
         },
     };
 
@@ -269,7 +281,7 @@ export default function CoursesPage() {
                                 <Bot className="mr-2 h-4 w-4" /> Find with AI
                             </Button>
                         </DialogTrigger>
-                        <DialogContent>
+                        <DialogContent className="w-[95vw] sm:max-w-xl">
                             <DialogHeader>
                                 <DialogTitle className="flex items-center gap-2"><Bot /> AI Video Finder</DialogTitle>
                                 <DialogDescription>Tell the AI what you want to learn, and it will find relevant videos and summarize them for you.</DialogDescription>
@@ -321,7 +333,7 @@ export default function CoursesPage() {
                 </div>
             </div>
             
-            <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
                 {(isLoading || isAiLoading) ? (
                     Array.from({ length: 6 }).map((_, i) => (
                         <Card key={i}>
@@ -347,6 +359,7 @@ export default function CoursesPage() {
                                         alt={video.title}
                                         fill
                                         className="rounded-t-md object-cover"
+                                        sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
                                         unoptimized
                                     />
                                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -358,12 +371,12 @@ export default function CoursesPage() {
                                 <CardTitle className="text-base leading-tight line-clamp-2 mb-2">{video.title}</CardTitle>
                                 <p className="text-sm text-muted-foreground line-clamp-3">{video.summary}</p>
                             </CardContent>
-                             <CardFooter className="flex justify-between items-center">
-                                <Badge variant='secondary' className="flex items-center gap-1.5">
+                             <CardFooter className="flex flex-wrap items-center gap-2 justify-between">
+                                <Badge variant='secondary' className="flex items-center gap-1.5 max-w-[60%] overflow-hidden text-ellipsis whitespace-nowrap">
                                     <Youtube className="h-4 w-4 text-red-600"/> 
                                     {video.channelTitle}
                                 </Badge>
-                                 <Button variant="link" size="sm" onClick={() => setSelectedVideo(video)}>
+                                <Button variant="link" size="sm" onClick={() => setSelectedVideo(video)}>
                                      Watch Now
                                 </Button>
                                 <Button variant="outline" size="sm" onClick={() => {
@@ -387,7 +400,7 @@ export default function CoursesPage() {
             </div>
 
             <Dialog open={!!selectedVideo} onOpenChange={(isOpen) => !isOpen && setSelectedVideo(null)}>
-                <DialogContent className="max-w-3xl">
+                <DialogContent className="w-[95vw] sm:max-w-3xl">
                     <DialogHeader>
                         <DialogTitle>{selectedVideo?.title}</DialogTitle>
                         <DialogDescription>
@@ -395,7 +408,7 @@ export default function CoursesPage() {
                         </DialogDescription>
                     </DialogHeader>
                     {selectedVideo && <YouTube videoId={selectedVideo.id} opts={opts} className="rounded-lg overflow-hidden mt-4"/>}
-                    <div className="flex gap-2 mt-4">
+                    <div className="flex flex-wrap gap-2 mt-4">
                         <Button onClick={() => handleExtractKeyTakeaways(selectedVideo!)} disabled={isAiLoading}>
                             {isAiLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                             Key Takeaways
@@ -472,7 +485,7 @@ const QuizDialog = ({ quiz, open, onOpenChange }: { quiz: GenerateQuizOutput | n
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="w-[95vw] sm:max-w-2xl">
                 <DialogHeader>
                     <DialogTitle>Quiz Time!</DialogTitle>
                     <DialogDescription>
@@ -508,7 +521,7 @@ const NotesDialog = ({ open, onOpenChange, onSaveNote, notes, isLoading }: { ope
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="w-[95vw] sm:max-w-2xl">
                 <DialogHeader>
                     <DialogTitle>My Notes</DialogTitle>
                     <DialogDescription>
@@ -522,7 +535,7 @@ const NotesDialog = ({ open, onOpenChange, onSaveNote, notes, isLoading }: { ope
                         </div>
                     ))}
                 </div>
-                <form onSubmit={handleSubmit} className="flex gap-2 mt-4">
+                <form onSubmit={handleSubmit} className="flex flex-wrap gap-2 mt-4">
                     <Textarea
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
@@ -550,14 +563,14 @@ const QnaDialog = ({ open, onOpenChange, onAskQuestion, qna, isLoading }: { open
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="w-[95vw] sm:max-w-2xl">
                 <DialogHeader>
                     <DialogTitle>Q&A with AI</DialogTitle>
                     <DialogDescription>
                         Ask a question about the video and get an answer from the AI.
                     </DialogDescription>
                 </DialogHeader>
-                <form onSubmit={handleSubmit} className="flex gap-2 mt-4">
+                <form onSubmit={handleSubmit} className="flex flex-wrap gap-2 mt-4">
                     <Input
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}

@@ -10,6 +10,9 @@ import { Bot, FileText, Briefcase, TrendingUp, Music4, FileSignature, BookText, 
 import { HomepageChatbot } from "@/components/homepage-chatbot";
 import { Navbar } from "@/components/navbar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Typewriter from "@/components/Typewriter";
+import ThreeHeroBg from "@/components/ThreeHeroBg";
+import Script from "next/script";
 
 const features = [
   {
@@ -126,15 +129,57 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Navbar />
+      <Script id="ld-json-org" type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "EduGenius",
+          url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:9002",
+          logo: `${process.env.NEXT_PUBLIC_SITE_URL || ""}/app.png`,
+          sameAs: [
+            // add social URLs if available
+          ],
+        })}
+      </Script>
+      <Script id="ld-json-website" type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "EduGenius",
+          url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:9002",
+          potentialAction: {
+            "@type": "SearchAction",
+            target: `${process.env.NEXT_PUBLIC_SITE_URL || ""}/search?q={search_term_string}`,
+            "query-input": "required name=search_term_string",
+          },
+        })}
+      </Script>
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="w-full py-20 md:py-32 lg:py-40 flex flex-col items-center justify-center text-center px-4">
+        <section className="relative w-full py-20 md:py-32 lg:py-40 flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+          <ThreeHeroBg />
           <div className="mb-8">
             <Logo className="h-24 w-24 text-primary" />
           </div>
           <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold text-primary tracking-wider">
             EduGenius
           </h1>
+          <div className="mt-3 text-xl md:text-2xl font-semibold text-primary">
+            <Typewriter
+              words={[
+                "Personalized Learning Paths",
+                "AI Test Generator",
+                "24/7 AI Tutor",
+                "Career Counseling",
+                "Essay Evaluator",
+                "Chapter Summarizer",
+              ]}
+              typingSpeed={55}
+              deletingSpeed={40}
+              pauseBetweenWords={1100}
+              className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600"
+            />
+          </div>
           <p className="mt-4 max-w-2xl text-lg md:text-xl text-primary/80">
             Your AI-Powered Learning Co-Pilot. Summarize chapters, generate Q&As, and create personalized tests in seconds.
           </p>

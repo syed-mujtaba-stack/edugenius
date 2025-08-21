@@ -1,24 +1,27 @@
-
 import type { Metadata } from 'next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DashboardClient } from '@/components/dashboard-client';
 
-// Note: Metadata is supported in Client Components and will be extracted to the server.
+// Metadata for SEO
 export const metadata: Metadata = {
-    title: "Dashboard",
-    description: "Your personal dashboard. Track your progress, view your stats like tests taken, average scores, summaries created, and daily study streak.",
+  title: "Dashboard",
+  description:
+    "Your personal dashboard. Track your progress, view your stats like tests taken, average scores, summaries created, and daily study streak.",
 };
 
 export default function DashboardPage() {
   return (
-    <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+    <main className="flex flex-1 flex-col gap-4 p-4 sm:p-6 md:gap-6 md:p-8">
+      {/* Page Header */}
       <div className="flex items-center">
-        <h1 className="font-headline text-3xl md:text-4xl">Dashboard</h1>
+        <h1 className="font-headline text-2xl sm:text-3xl md:text-4xl">Dashboard</h1>
       </div>
+
+      {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tests Taken</CardTitle>
+            <CardTitle className="text-xs sm:text-sm font-medium">Tests Taken</CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -34,13 +37,14 @@ export default function DashboardPage() {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12</div>
+            <div className="text-xl sm:text-2xl font-bold">12</div>
             <p className="text-xs text-muted-foreground">+2 since last month</p>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Average Score</CardTitle>
+            <CardTitle className="text-xs sm:text-sm font-medium">Average Score</CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -59,13 +63,14 @@ export default function DashboardPage() {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">88%</div>
+            <div className="text-xl sm:text-2xl font-bold">88%</div>
             <p className="text-xs text-muted-foreground">+5% from last month</p>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Summaries Created</CardTitle>
+            <CardTitle className="text-xs sm:text-sm font-medium">Summaries Created</CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -81,13 +86,14 @@ export default function DashboardPage() {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+25</div>
+            <div className="text-xl sm:text-2xl font-bold">+25</div>
             <p className="text-xs text-muted-foreground">+10 since last week</p>
           </CardContent>
         </Card>
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Streak</CardTitle>
+            <CardTitle className="text-xs sm:text-sm font-medium">Active Streak</CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -103,12 +109,14 @@ export default function DashboardPage() {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">5 Days</div>
+            <div className="text-xl sm:text-2xl font-bold">5 Days</div>
             <p className="text-xs text-muted-foreground">Keep it up!</p>
           </CardContent>
         </Card>
       </div>
-      <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
+
+      {/* Charts / DashboardClient */}
+      <div className="grid gap-4 md:gap-6 lg:grid-cols-2 xl:grid-cols-3 w-full">
         <DashboardClient />
       </div>
     </main>

@@ -17,6 +17,12 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "types": [
+      "node",
+      "next",
+      "next/types/global",
+      "next/image-types/global"
+    ],
     "plugins": [
       {
         "name": "next"
