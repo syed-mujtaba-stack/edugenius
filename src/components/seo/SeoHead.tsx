@@ -13,7 +13,7 @@ interface SeoHeadProps {
 export const SeoHead = ({
   title,
   description,
-  keywords = "EduGenius, AI eLearning, Pakistan Education, Matric Studies, Inter Studies, AI Study Assistant, Online Learning Pakistan",
+  keywords = "EduGenius, AI eLearning, Pakistan Education, Matric Studies, Inter Studies, AI Study Assistant, Online Learning Pakistan, Online Learning Pakistan vercel",
   canonicalUrl,
   ogImageUrl = "/images/og-image.jpg",
   ogType = "website",

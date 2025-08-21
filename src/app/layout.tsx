@@ -3,6 +3,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import HydrationWrapper from "@/components/HydrationWrapper";
+import { GoogleTagManager, GoogleTagManagerNoScript } from "@/components/seo/GoogleTagManager";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:9002"),
@@ -68,16 +69,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("dark")} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <GoogleTagManager />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/icons/icon1-192.png" />
       </head>
-      <body className={cn("font-body antialiased", "min-h-screen bg-background")} suppressHydrationWarning>
+      <body className={cn("min-h-screen bg-background font-sans antialiased")}>
+        <GoogleTagManagerNoScript />
         <HydrationWrapper>
-          {children}
           <Toaster />
+          {children}
         </HydrationWrapper>
       </body>
     </html>
