@@ -1,5 +1,5 @@
 /** @type {import('next-sitemap').IConfig} */
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://edugenius.pk';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://mj-edugenius.vercel.app';
 
 module.exports = {
   siteUrl,

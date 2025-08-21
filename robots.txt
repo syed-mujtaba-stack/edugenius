@@ -15,4 +15,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://edugenius.app/sitemap.xml
+Sitemap: https://mj-edugenius.vercel.app/sitemap.xml

@@ -146,7 +146,7 @@ export default function Home() {
           "@context": "https://schema.org",
           "@type": "WebSite",
           name: "EduGenius",
-          url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:9002",
+          url: process.env.NEXT_PUBLIC_SITE_URL || "mj-edugenius.vercel.app",
           potentialAction: {
             "@type": "SearchAction",
             target: `${process.env.NEXT_PUBLIC_SITE_URL || ""}/search?q={search_term_string}`,
