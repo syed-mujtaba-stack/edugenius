@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import HydrationWrapper from "@/components/HydrationWrapper";
 import { GoogleTagManager, GoogleTagManagerNoScript } from "@/components/seo/GoogleTagManager";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:9002"),
@@ -37,13 +38,21 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico' },
-      { url: '/icon.png', type: 'image/png', sizes: '48x48' },
+      { url: '/icons/icon1-256.png' },
+      { url: '/icons/icon1-16.png', type: 'image/png', sizes: '16x16' },
+      { url: '/icons/icon1-32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/icons/icon1-48.png', type: 'image/png', sizes: '48x48' },
+      { url: '/icons/icon1-64.png', type: 'image/png', sizes: '64x64' },
+      { url: '/icons/icon1-96.png', type: 'image/png', sizes: '96x96' },
+      { url: '/icons/icon1-192.png', type: 'image/png', sizes: '192x192' },
+      { url: '/icons/icon1-512.png', type: 'image/png', sizes: '512x512' },
     ],
     apple: [
-      { url: '/apple-icon.png' },
+      { url: '/icons/icon1-180.png', sizes: '180x180', type: 'image/png' },
+      { url: '/icons/icon1-192.png', sizes: '192x192', type: 'image/png' },
     ],
   },
+  manifest: '/manifest.json',
   robots: {
     index: true,
     follow: true,
@@ -72,16 +81,28 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <GoogleTagManager />
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <GoogleTagManagerNoScript />
         <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" href="/icons/icon1-192.png" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="EduGenius" />
+        <link rel="apple-touch-icon" href="/icons/icon1-180.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon1-32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon1-16.png" />
       </head>
       <body className={cn("min-h-screen bg-background font-sans antialiased")}>
-        <GoogleTagManagerNoScript />
-        <HydrationWrapper>
-          <Toaster />
-          {children}
-        </HydrationWrapper>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <HydrationWrapper>
+            {children}
+            <Toaster />
+          </HydrationWrapper>
+        </ThemeProvider>
       </body>
     </html>
   );

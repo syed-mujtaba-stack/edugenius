@@ -1,11 +1,12 @@
 <div align="center">
-  <img src="public/icons/icon1-72.png" alt="EduGenius Logo" width="120">
+  <img src="/icons/icon1-192.png" alt="EduGenius Logo" width="120">
   <h1 style="font-size: 3em; margin-bottom: 0; background: linear-gradient(45deg, #4F46E5, #7C3AED); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">EduGenius</h1>
   <p style="font-size: 1.2em; margin-top: 0.5em; color: #4B5563;">🚀 Your AI-Powered Learning Co-Pilot</p>
   
   <p style="max-width: 800px; margin: 1.5em auto; line-height: 1.6; color: #374151;">
     A next-generation educational platform that leverages cutting-edge AI to provide personalized learning experiences, 
-    interactive study tools, and comprehensive educational resources for students and educators worldwide.
+    interactive study tools, and comprehensive educational resources for students and educators worldwide. 
+    Now featuring dark mode, PWA support, and enhanced accessibility.
   </p>
 
   <!-- Badges -->
@@ -20,7 +21,13 @@
       <img src="https://img.shields.io/github/stars/syed-mujtaba-stack/edugenius?style=for-the-badge&color=10B981" alt="Stars">
     </a>
     <a href="https://nextjs.org/">
-      <img src="https://img.shields.io/badge/Next.js-13.4+-000000?style=for-the-badge&logo=nextdotjs" alt="Next.js">
+      <img src="https://img.shields.io/badge/Next.js-14.0+-000000?style=for-the-badge&logo=nextdotjs" alt="Next.js">
+    </a>
+    <a href="https://tailwindcss.com/">
+      <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+    </a>
+    <a href="https://www.typescriptlang.org/">
+      <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
     </a>
   </div>
   
@@ -142,6 +149,14 @@ This project is built with a modern tech stack that ensures performance, scalabi
 
 ### ✨ Features
 <a id="-features"></a>
+
+- **🌓 Dark/Light Mode** - Beautiful dark and light themes with system preference detection
+- **📱 PWA Support** - Installable on any device for offline access
+- **🤖 AI-Powered Learning** - Smart study tools powered by advanced AI
+- **📊 Interactive Dashboards** - Track your learning progress in real-time
+- **🔍 Smart Search** - Find resources and content instantly
+- **📱 Responsive Design** - Works seamlessly on all devices
+- **⚡ Fast Performance** - Built with Next.js 14 for optimal speed
 
 <details>
   <summary><strong>🧠 Personalized Learning</strong></summary>

@@ -25,6 +25,8 @@ import {
   Gamepad2,
   BookPlus,
   BookOpenCheck,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -51,6 +53,8 @@ import { auth, db } from '@/lib/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { generateAudioFromText } from '@/ai/flows/generate-audio-from-text';
 
 // Extend the Window interface for webkitSpeechRecognition
@@ -243,29 +247,31 @@ export default function DashboardLayout({
   
   if (loading || !currentUser) {
     return (
-       <div className="flex h-screen w-full bg-background">
-        <div className="hidden md:flex h-full w-[16rem] flex-col gap-2 border-r bg-card p-2">
-            <div className="flex items-center justify-between p-2">
-                <Skeleton className="h-8 w-32" />
-                <Skeleton className="h-7 w-7" />
-            </div>
-            <div className="flex-grow space-y-2 p-2">
-                {[...Array(12)].map((_, i) => <Skeleton key={i} className="h-8 w-full" />)}
-            </div>
-            <div className="space-y-2 p-2 mt-auto">
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-full" />
-            </div>
+      <div className="flex h-screen overflow-hidden">
+        <div className="h-full w-[16rem] flex-col gap-2 border-r bg-card p-2 hidden md:flex">
+          <div className="flex items-center justify-between p-2">
+            <Skeleton className="h-8 w-32" />
+            <Skeleton className="h-7 w-7" />
+          </div>
+          <div className="flex-grow space-y-2 p-2">
+            {[...Array(12)].map((_, i) => (
+              <Skeleton key={i} className="h-8 w-full" />
+            ))}
+          </div>
+          <div className="space-y-2 p-2 mt-auto">
+            <Skeleton className="h-8 w-full" />
+            <Skeleton className="h-8 w-full" />
+            <Skeleton className="h-8 w-full" />
+          </div>
         </div>
         <main className="flex-1 p-4">
-             <Skeleton className="h-full w-full rounded-lg" />
+          <Skeleton className="h-full w-full rounded-lg" />
         </main>
       </div>
     );
   }
   
-  const aiAgentItems = [
+  const aiAgentItems: MenuItem[] = [
     { href: '/ask-ai', label: 'AI Tutor', icon: Bot },
     { href: '/summarize', label: 'Chapter Summarizer', icon: BookText },
     { href: '/q-and-a', label: 'Q&A Generator', icon: MessageSquarePlus },
@@ -276,7 +282,7 @@ export default function DashboardLayout({
     { href: '/book-generator', label: 'AI Book Generator', icon: BookPlus },
   ];
 
-  const learningToolsItems = [
+  const learningToolsItems: MenuItem[] = [
     { href: '/courses', label: 'Video Courses', icon: Video },
     { href: '/audio-generator', label: 'Audio Generator', icon: Music4 },
     { href: '/video-generator', label: 'Video Generator', icon: Video },
@@ -286,17 +292,24 @@ export default function DashboardLayout({
     { href: '/self-learning', label: 'Self-Learning', icon: BookOpenCheck },
   ];
 
-  const teachersCornerItems = [
+  const teachersCornerItems: MenuItem[] = [
     { href: '/lesson-planner', label: 'Lesson Planner', icon: BookCopy },
     { href: '/teacher-dashboard', label: 'Teacher Dashboard', icon: LayoutDashboard },
     { href: '/classroom', label: 'My Classroom', icon: School },
   ];
 
-  const adminItems = [
+  const adminItems: MenuItem[] = [
     { href: '/admin-dashboard', label: 'Admin Dashboard', icon: Shield },
   ];
 
-  const renderMenuItems = (items: typeof aiAgentItems) => {
+  type MenuItem = {
+    href: string;
+    label: string;
+    icon: any;
+    keywords?: string[];
+  };
+
+  const renderMenuItems = (items: MenuItem[]) => {
     return items.map((item) => (
          <SidebarMenuItem key={item.href}>
             <SidebarMenuButton
@@ -381,7 +394,21 @@ export default function DashboardLayout({
                   </Link>
                 </SidebarMenuButton>
             </SidebarMenuItem>
-             <SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild tooltip="Toggle theme">
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-6 w-6 items-center justify-center">
+                      <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                      <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                    </div>
+                    <span>Theme</span>
+                  </div>
+                  <ThemeToggle />
+                </div>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   isActive={pathname === '/api-settings'}
@@ -417,6 +444,7 @@ export default function DashboardLayout({
       <SidebarInset>
         <header className="sticky top-0 z-10 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 md:hidden">
             <div className="flex items-center gap-2">
+                <SidebarTrigger className="mr-2" />
                 <Logo className="w-6 h-6 text-primary" />
                 <span className="font-headline text-xl text-primary">EduGenius</span>
             </div>
