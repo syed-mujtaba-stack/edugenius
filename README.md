@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="/icons/icon1-192.png" alt="EduGenius Logo" width="120">
+  <img src="/icons/icon1-256.png" alt="EduGenius Logo" width="120">
   <h1 style="font-size: 3em; margin-bottom: 0; background: linear-gradient(45deg, #4F46E5, #7C3AED); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">EduGenius</h1>
   <p style="font-size: 1.2em; margin-top: 0.5em; color: #4B5563;">🚀 Your AI-Powered Learning Co-Pilot</p>
   
