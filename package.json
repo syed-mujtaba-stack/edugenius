@@ -19,7 +19,8 @@
     "lint:fix": "next lint --fix",
     "typecheck": "tsc --noEmit",
     "sitemap": "next-sitemap",
-    "analyze": "ANALYZE=true next build"
+    "analyze": "ANALYZE=true next build",
+    "configure-firebase": "node scripts/configure-firebase-sw.js"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.13.0",

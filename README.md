@@ -154,9 +154,23 @@ This project is built with a modern tech stack that ensures performance, scalabi
 - **📱 PWA Support** - Installable on any device for offline access
 - **🤖 AI-Powered Learning** - Smart study tools powered by advanced AI
 - **📊 Interactive Dashboards** - Track your learning progress in real-time
-- **🔍 Smart Search** - Find resources and content instantly
+- **🔍 Advanced Search System** - Multi-modal AI-enhanced search with Google Custom Search integration
 - **📱 Responsive Design** - Works seamlessly on all devices
 - **⚡ Fast Performance** - Built with Next.js 14 for optimal speed
+- **🔔 Real-Time Notifications** - Firebase Cloud Messaging for instant updates
+
+<details>
+  <summary><strong>🔍 Advanced Search Features</strong></summary>
+  <ul>
+    <li><strong>General Web Search:</strong> AI-enhanced results with smart categorization and relevance scoring.</li>
+    <li><strong>Image Search:</strong> High-quality image discovery with advanced filtering options.</li>
+    <li><strong>News Search:</strong> Real-time news from reliable sources with date filtering.</li>
+    <li><strong>Academic Search:</strong> Research papers with citation data and metadata.</li>
+    <li><strong>AI Q&A:</strong> Intelligent answers with confidence scores and source citations.</li>
+    <li><strong>Visual Search:</strong> Search by image with object detection and analysis.</li>
+    <li><strong>Multi-Modal Search:</strong> Combine text, image, and voice inputs.</li>
+  </ul>
+</details>
 
 <details>
   <summary><strong>🧠 Personalized Learning</strong></summary>
@@ -234,9 +248,20 @@ Ensure you have Node.js (v18 or later) and npm installed.
     Create a `.env.local` file and add your Firebase and Google AI API keys.
     ```env
     NEXT_PUBLIC_FIREBASE_API_KEY=YOUR_KEY_HERE
+    NEXT_PUBLIC_FIREBASE_VAPID_KEY=YOUR_VAPID_KEY_HERE
     # ... and so on for all required keys
     ```
-5.  **Run the development server**
+    See `ENV_SETUP.md` for complete configuration details.
+
+5.  **Configure Firebase notifications (optional)**
+    If you want to use the notification system:
+    ```sh
+    npm run configure-firebase
+    ```
+    This will automatically configure the Firebase service worker with your environment variables.
+    See `FIREBASE_SETUP.md` for detailed Firebase setup instructions.
+
+6.  **Run the development server**
     ```sh
     npm run dev
     ```

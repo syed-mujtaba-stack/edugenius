@@ -27,6 +27,7 @@ import {
   BookOpenCheck,
   Sun,
   Moon,
+  Search,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -56,6 +57,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { generateAudioFromText } from '@/ai/flows/generate-audio-from-text';
+import { NotificationDropdown } from '@/components/ui/notification-dropdown';
 
 // Extend the Window interface for webkitSpeechRecognition
 declare global {
@@ -124,6 +126,7 @@ export default function DashboardLayout({
  const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, keywords: ['dashboard', 'home', 'main'] },
     { href: '/profile', label: 'My Profile', icon: User, keywords: ['profile', 'account', 'my profile'] },
+    { href: '/search', label: 'AI Search', icon: Search, keywords: ['search', 'find', 'look for', 'ai search'] },
     { href: '/learning-path', label: 'Learning Path', icon: TrendingUp, keywords: ['learning path', 'study plan', 'path'] },
     { href: '/courses', label: 'Video Courses', icon: Video, keywords: ['video courses', 'courses', 'lectures'] },
     { href: '/summarize', label: 'Chapter Summarizer', icon: BookText, keywords: ['summarizer', 'summary', 'chapter'] },
@@ -283,6 +286,7 @@ export default function DashboardLayout({
   ];
 
   const learningToolsItems: MenuItem[] = [
+    { href: '/search', label: 'AI Search', icon: Search },
     { href: '/courses', label: 'Video Courses', icon: Video },
     { href: '/audio-generator', label: 'Audio Generator', icon: Music4 },
     { href: '/video-generator', label: 'Video Generator', icon: Video },
@@ -337,9 +341,7 @@ export default function DashboardLayout({
                 <span className="font-headline text-2xl text-primary group-data-[collapsible=icon]:hidden">EduGenius</span>
              </div>
              <div className='flex items-center gap-2'>
-                <button className="p-1 rounded-full hover:bg-accent md:hidden">
-                    <Bell className="h-5 w-5" />
-                </button>
+                <NotificationDropdown className="md:hidden" />
                 <SidebarTrigger className='hidden group-data-[collapsible=icon]:flex' />
              </div>
           </div>
@@ -408,7 +410,19 @@ export default function DashboardLayout({
                 </div>
               </SidebarMenuButton>
             </SidebarMenuItem>
-            <SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === '/notification-settings'}
+                  tooltip="Notification Settings"
+                >
+                  <Link href="/notification-settings">
+                    <Bell />
+                    <span>Notifications</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   isActive={pathname === '/api-settings'}
@@ -449,9 +463,7 @@ export default function DashboardLayout({
                 <span className="font-headline text-xl text-primary">EduGenius</span>
             </div>
              <div className='flex items-center gap-2'>
-                <button className="p-1 rounded-full hover:bg-accent">
-                    <Bell className="h-5 w-5" />
-                </button>
+                <NotificationDropdown />
                 <SidebarTrigger />
              </div>
         </header>

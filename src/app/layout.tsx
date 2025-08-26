@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import HydrationWrapper from "@/components/HydrationWrapper";
 import { GoogleTagManager, GoogleTagManagerNoScript } from "@/components/seo/GoogleTagManager";
 import { ThemeProvider } from "@/components/theme-provider";
+import { NotificationProvider } from "@/contexts/NotificationContext";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:9002"),
@@ -98,10 +99,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <HydrationWrapper>
-            {children}
-            <Toaster />
-          </HydrationWrapper>
+          <NotificationProvider>
+            <HydrationWrapper>
+              {children}
+              <Toaster />
+            </HydrationWrapper>
+          </NotificationProvider>
         </ThemeProvider>
       </body>
     </html>
