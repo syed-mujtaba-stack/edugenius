@@ -11,17 +11,17 @@ export const metadata: Metadata = {
 
 export default function DashboardPage() {
   return (
-    <main className="flex flex-1 flex-col gap-4 p-4 sm:p-6 md:gap-6 md:p-8">
+    <main className="flex flex-1 flex-col gap-3 sm:gap-4 md:gap-6">
       {/* Page Header */}
       <div className="flex items-center">
-        <h1 className="font-headline text-2xl sm:text-3xl md:text-4xl">Dashboard</h1>
+        <h1 className="font-headline text-xl sm:text-2xl md:text-3xl lg:text-4xl">Dashboard</h1>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs sm:text-sm font-medium">Tests Taken</CardTitle>
+            <CardTitle className="text-sm sm:text-base font-medium">Tests Taken</CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -44,7 +44,7 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs sm:text-sm font-medium">Average Score</CardTitle>
+            <CardTitle className="text-sm sm:text-base font-medium">Average Score</CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -70,7 +70,7 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs sm:text-sm font-medium">Summaries Created</CardTitle>
+            <CardTitle className="text-sm sm:text-base font-medium">Summaries Created</CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -93,7 +93,7 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs sm:text-sm font-medium">Active Streak</CardTitle>
+            <CardTitle className="text-sm sm:text-base font-medium">Active Streak</CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -116,7 +116,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Charts / DashboardClient */}
-      <div className="grid gap-4 md:gap-6 lg:grid-cols-2 xl:grid-cols-3 w-full">
+      <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 w-full">
         <DashboardClient />
       </div>
     </main>

@@ -64,6 +64,67 @@
   html, body {
     @apply overflow-x-hidden;
   }
+  
+  /* Mobile-specific optimizations */
+  @media (max-width: 640px) {
+    /* Improve touch targets */
+    button, 
+    [role="button"], 
+    input[type="button"], 
+    input[type="submit"], 
+    input[type="reset"] {
+      min-height: 44px;
+      min-width: 44px;
+      touch-action: manipulation;
+    }
+    
+    /* Better tap highlighting */
+    a, button, input, textarea, select {
+      -webkit-tap-highlight-color: rgba(79, 70, 229, 0.2);
+    }
+    
+    /* Smooth scrolling on mobile */
+    html {
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Prevent zoom on input focus */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="search"],
+    input[type="tel"],
+    input[type="url"],
+    textarea,
+    select {
+      font-size: 16px;
+    }
+    
+    /* Better mobile typography */
+    body {
+      line-height: 1.6;
+    }
+    
+    /* Responsive images */
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  
+  /* Tablet optimizations */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    /* Slightly larger touch targets for tablets */
+    button, 
+    [role="button"], 
+    input[type="button"], 
+    input[type="submit"], 
+    input[type="reset"] {
+      min-height: 40px;
+      min-width: 40px;
+    }
+  }
 }
 
 @layer utilities {
@@ -95,4 +156,45 @@
 
 .animate-shrink {
   animation: shrink 5000ms linear forwards;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .border {
+    border-width: 2px;
+  }
+}
+
+/* Focus management for keyboard navigation */
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* Better mobile scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
 }

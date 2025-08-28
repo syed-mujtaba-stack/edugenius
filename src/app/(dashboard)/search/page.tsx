@@ -252,50 +252,52 @@ export default function SearchPage() {
   };
 
   return (
-    <main className="flex flex-1 flex-col gap-4 p-4 sm:p-6 md:gap-6 md:p-8">
-      <div className="flex items-center gap-3">
-        <Search className="h-8 w-8 text-primary" />
-        <h1 className="font-headline text-2xl sm:text-3xl md:text-4xl">AI-Powered Search</h1>
+    <main className="flex flex-1 flex-col gap-3 sm:gap-4 p-3 sm:p-4 md:gap-6 md:p-6">
+      <div className="flex items-center gap-2 sm:gap-3">
+        <Search className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+        <h1 className="font-headline text-xl sm:text-2xl md:text-3xl lg:text-4xl">AI-Powered Search</h1>
       </div>
 
       {/* Search Input and Mode Selection */}
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5" />
+        <CardHeader className="pb-3 sm:pb-6">
+          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+            <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
             Smart Search
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-sm sm:text-base">
             Search the web with AI-enhanced results and educational focus
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-3 sm:space-y-4">
           {/* Search Mode Tabs */}
           <Tabs value={searchMode} onValueChange={(value) => setSearchMode(value as any)}>
-            <TabsList className="grid w-full grid-cols-6">
-              <TabsTrigger value="general" className="flex items-center gap-1 text-xs">
+            <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 h-auto">
+              <TabsTrigger value="general" className="flex flex-col sm:flex-row items-center gap-1 text-xs sm:text-sm px-2 py-2 sm:py-2.5">
                 <Globe className="h-3 w-3" />
-                General
+                <span className="hidden sm:inline">General</span>
+                <span className="sm:hidden">Web</span>
               </TabsTrigger>
-              <TabsTrigger value="images" className="flex items-center gap-1 text-xs">
+              <TabsTrigger value="images" className="flex flex-col sm:flex-row items-center gap-1 text-xs sm:text-sm px-2 py-2 sm:py-2.5">
                 <Image className="h-3 w-3" />
-                Images
+                <span>Images</span>
               </TabsTrigger>
-              <TabsTrigger value="news" className="flex items-center gap-1 text-xs">
+              <TabsTrigger value="news" className="flex flex-col sm:flex-row items-center gap-1 text-xs sm:text-sm px-2 py-2 sm:py-2.5">
                 <Newspaper className="h-3 w-3" />
-                News
+                <span>News</span>
               </TabsTrigger>
-              <TabsTrigger value="academic" className="flex items-center gap-1 text-xs">
+              <TabsTrigger value="academic" className="flex flex-col sm:flex-row items-center gap-1 text-xs sm:text-sm px-2 py-2 sm:py-2.5">
                 <GraduationCap className="h-3 w-3" />
-                Academic
+                <span className="hidden sm:inline">Academic</span>
+                <span className="sm:hidden">Papers</span>
               </TabsTrigger>
-              <TabsTrigger value="qa" className="flex items-center gap-1 text-xs">
+              <TabsTrigger value="qa" className="flex flex-col sm:flex-row items-center gap-1 text-xs sm:text-sm px-2 py-2 sm:py-2.5">
                 <MessageCircleQuestion className="h-3 w-3" />
-                Q&A
+                <span>Q&A</span>
               </TabsTrigger>
-              <TabsTrigger value="visual" className="flex items-center gap-1 text-xs">
+              <TabsTrigger value="visual" className="flex flex-col sm:flex-row items-center gap-1 text-xs sm:text-sm px-2 py-2 sm:py-2.5">
                 <Camera className="h-3 w-3" />
-                Visual
+                <span>Visual</span>
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -304,23 +306,27 @@ export default function SearchPage() {
           <div className="relative">
             {searchMode === 'visual' ? (
               <div className="space-y-3">
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                   <Input
                     placeholder="Enter image URL for visual search..."
                     value={visualSearchImage}
                     onChange={(e) => setVisualSearchImage(e.target.value)}
-                    className="flex-1"
+                    className="flex-1 h-11"
                   />
-                  <Button onClick={() => handleSearch()} disabled={isLoading || !visualSearchImage}>
+                  <Button 
+                    onClick={() => handleSearch()} 
+                    disabled={isLoading || !visualSearchImage}
+                    className="h-11 px-6 sm:px-8"
+                  >
                     {isLoading ? 'Searching...' : 'Search'}
                   </Button>
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   Paste an image URL to find similar images and identify objects in the image.
                 </p>
               </div>
             ) : (
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                 <div className="relative flex-1">
                   <Input
                     placeholder={getSearchPlaceholder()}
@@ -331,9 +337,9 @@ export default function SearchPage() {
                         handleSearch();
                       }
                     }}
-                    className="pr-10"
+                    className="pr-10 h-11"
                   />
-                  <Search className="absolute right-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Search className="absolute right-3 top-3 h-4 w-4 text-muted-foreground" />
                   
                   {/* Search Suggestions */}
                   {suggestions.length > 0 && (
@@ -341,7 +347,7 @@ export default function SearchPage() {
                       {suggestions.map((suggestion, index) => (
                         <div
                           key={index}
-                          className="px-3 py-2 hover:bg-accent cursor-pointer text-sm"
+                          className="px-3 py-2 hover:bg-accent cursor-pointer text-sm touch-manipulation"
                           onClick={() => {
                             setQuery(suggestion);
                             setSuggestions([]);
@@ -355,38 +361,42 @@ export default function SearchPage() {
                   )}
                 </div>
                 
-                <Button onClick={() => handleSearch()} disabled={isLoading || (!query.trim() && (searchMode as any) !== 'visual')}>
+                <Button 
+                  onClick={() => handleSearch()} 
+                  disabled={isLoading || (!query.trim() && (searchMode as any) !== 'visual')}
+                  className="h-11 px-6 sm:px-8"
+                >
                   {isLoading ? 'Searching...' : 'Search'}
                 </Button>
               </div>
             )}
             
-            <div className="flex justify-between items-center mt-2">
-              <p className="text-sm text-muted-foreground">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mt-3">
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {getSearchDescription()}
               </p>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setShowFilters(!showFilters)}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 h-9 min-h-[36px]"
               >
                 <Filter className="h-4 w-4" />
-                {showFilters ? 'Hide' : 'Show'} Filters
+                <span className="hidden sm:inline">{showFilters ? 'Hide' : 'Show'}</span> Filters
               </Button>
             </div>
           </div>
 
           {/* Advanced Filters */}
           {showFilters && (
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4 bg-muted rounded-lg">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4 p-3 sm:p-4 bg-muted rounded-lg">
               <div className="space-y-2">
-                <Label htmlFor="dateRange">Date Range</Label>
+                <Label htmlFor="dateRange" className="text-sm font-medium">Date Range</Label>
                 <Select
                   value={filters.dateRange || 'all'}
                   onValueChange={(value) => handleFilterChange('dateRange', value)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-10">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -400,12 +410,12 @@ export default function SearchPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="fileType">File Type</Label>
+                <Label htmlFor="fileType" className="text-sm font-medium">File Type</Label>
                 <Select
                   value={filters.fileType || 'any'}
                   onValueChange={(value) => handleFilterChange('fileType', value)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-10">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -418,12 +428,12 @@ export default function SearchPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="safeSearch">Safe Search</Label>
+                <Label htmlFor="safeSearch" className="text-sm font-medium">Safe Search</Label>
                 <Select
                   value={filters.safeSearch || 'moderate'}
                   onValueChange={(value) => handleFilterChange('safeSearch', value)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="h-10">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -435,16 +445,17 @@ export default function SearchPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="site">Site</Label>
+                <Label htmlFor="site" className="text-sm font-medium">Site</Label>
                 <Input
                   placeholder="e.g., wikipedia.org"
                   value={filters.site || ''}
                   onChange={(e) => handleFilterChange('site', e.target.value)}
+                  className="h-10"
                 />
               </div>
 
-              <div className="flex items-end">
-                <Button variant="outline" onClick={clearFilters} className="w-full">
+              <div className="flex items-end sm:col-span-1 xl:col-span-1">
+                <Button variant="outline" onClick={clearFilters} className="w-full h-10 min-h-[40px]">
                   Clear Filters
                 </Button>
               </div>

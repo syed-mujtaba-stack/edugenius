@@ -156,15 +156,15 @@ export default function Home() {
       </Script>
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative w-full py-20 md:py-32 lg:py-40 flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+        <section className="relative w-full py-16 sm:py-20 md:py-32 lg:py-40 flex flex-col items-center justify-center text-center px-4 sm:px-6 md:px-8 overflow-hidden">
           <ThreeHeroBg />
-          <div className="mb-8">
-            <Logo className="h-24 w-24 text-primary" />
+          <div className="mb-6 sm:mb-8">
+            <Logo className="h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 text-primary" />
           </div>
-          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold text-primary tracking-wider">
+          <h1 className="font-headline text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-primary tracking-wider">
             EduGenius
           </h1>
-          <div className="mt-3 text-xl md:text-2xl font-semibold text-primary">
+          <div className="mt-3 text-lg sm:text-xl md:text-2xl font-semibold text-primary px-2">
             <Typewriter
               words={[
                 "Personalized Learning Paths",
@@ -180,32 +180,34 @@ export default function Home() {
               className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600"
             />
           </div>
-          <p className="mt-4 max-w-2xl text-lg md:text-xl text-primary/80">
+          <p className="mt-4 max-w-2xl text-base sm:text-lg md:text-xl text-primary/80 px-4">
             Your AI-Powered Learning Co-Pilot. Summarize chapters, generate Q&As, and create personalized tests in seconds.
           </p>
-          <div className="mt-8 flex flex-col sm:flex-row gap-4 w-full max-w-xs sm:max-w-none sm:justify-center">
-            <Button asChild size="lg" className="font-bold text-lg flex-1 sm:flex-none sm:px-10">
+          <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 w-full max-w-sm sm:max-w-none px-4 sm:px-0 sm:justify-center">
+            <Button asChild size="lg" className="font-bold text-base sm:text-lg w-full sm:w-auto sm:px-8 md:px-10 h-12 sm:h-14">
                 <Link href="/signup">Get Started for Free</Link>
             </Button>
-             <Button asChild size="lg" variant="outline" className="font-bold text-lg flex-1 sm:flex-none sm:px-10">
+             <Button asChild size="lg" variant="outline" className="font-bold text-base sm:text-lg w-full sm:w-auto sm:px-8 md:px-10 h-12 sm:h-14">
                 <Link href="#features">Explore Features</Link>
             </Button>
           </div>
         </section>
 
         {/* Features Section */}
-        <section id="features" className="w-full py-12 md:py-24 bg-secondary">
-            <div className="container mx-auto px-4">
-                <h2 className="text-3xl md:text-4xl font-headline text-center mb-12">Features Built for Your Success</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <section id="features" className="w-full py-12 md:py-16 lg:py-24 bg-secondary">
+            <div className="container mx-auto px-4 sm:px-6">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-headline text-center mb-8 sm:mb-12">Features Built for Your Success</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
                     {features.map((feature, index) => (
-                        <Card key={index} className="text-center bg-background flex flex-col">
-                            <CardHeader className="items-center">
-                                {feature.icon}
-                                <CardTitle className="mt-4 text-xl">{feature.title}</CardTitle>
+                        <Card key={index} className="text-center bg-background flex flex-col p-4 sm:p-6 hover:shadow-lg transition-shadow">
+                            <CardHeader className="items-center pb-4">
+                                <div className="mb-3 sm:mb-4">
+                                    {feature.icon}
+                                </div>
+                                <CardTitle className="text-lg sm:text-xl font-bold">{feature.title}</CardTitle>
                             </CardHeader>
                             <CardContent className="flex-grow">
-                                <p className="text-muted-foreground">{feature.description}</p>
+                                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{feature.description}</p>
                             </CardContent>
                         </Card>
                     ))}

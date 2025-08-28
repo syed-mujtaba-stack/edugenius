@@ -84,10 +84,15 @@ export default function RootLayout({
         <GoogleTagManager />
         <GoogleTagManagerNoScript />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+        <meta name="theme-color" content="#4F46E5" />
+        <meta name="theme-color" content="#1F2937" media="(prefers-color-scheme: dark)" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="EduGenius" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="HandheldFriendly" content="true" />
         <link rel="apple-touch-icon" href="/icons/icon1-180.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon1-32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon1-16.png" />

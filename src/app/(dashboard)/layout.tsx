@@ -456,18 +456,19 @@ export default function DashboardLayout({
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <header className="sticky top-0 z-10 flex h-14 items-center justify-between gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 md:hidden">
+        <header className="sticky top-0 z-10 flex h-14 items-center justify-between gap-3 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-3 sm:h-16 sm:static sm:border-0 sm:bg-transparent sm:px-6 md:hidden">
             <div className="flex items-center gap-2">
-                <SidebarTrigger className="mr-2" />
+                <SidebarTrigger className="mr-1 h-9 w-9" />
                 <Logo className="w-6 h-6 text-primary" />
-                <span className="font-headline text-xl text-primary">EduGenius</span>
+                <span className="font-headline text-lg sm:text-xl text-primary truncate">EduGenius</span>
             </div>
-             <div className='flex items-center gap-2'>
+             <div className='flex items-center gap-1'>
                 <NotificationDropdown />
-                <SidebarTrigger />
              </div>
         </header>
-        {children}
+        <div className="p-3 sm:p-4 md:p-6">
+          {children}
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );
