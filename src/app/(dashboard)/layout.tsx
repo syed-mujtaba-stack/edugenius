@@ -58,6 +58,7 @@ import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { generateAudioFromText } from '@/ai/flows/generate-audio-from-text';
 import { NotificationDropdown } from '@/components/ui/notification-dropdown';
+import { RealtimeNotifications } from '@/components/realtime-notifications';
 
 // Extend the Window interface for webkitSpeechRecognition
 declare global {
@@ -129,6 +130,7 @@ export default function DashboardLayout({
     { href: '/search', label: 'AI Search', icon: Search, keywords: ['search', 'find', 'look for', 'ai search'] },
     { href: '/learning-path', label: 'Learning Path', icon: TrendingUp, keywords: ['learning path', 'study plan', 'path'] },
     { href: '/courses', label: 'Video Courses', icon: Video, keywords: ['video courses', 'courses', 'lectures'] },
+    { href: '/online-classes', label: 'Online Classes', icon: Video, keywords: ['online classes', 'live classes', 'classroom', 'video call'] },
     { href: '/summarize', label: 'Chapter Summarizer', icon: BookText, keywords: ['summarizer', 'summary', 'chapter'] },
     { href: '/q-and-a', label: 'Q&A Generator', icon: MessageSquarePlus, keywords: ['q&a', 'questions', 'answers'] },
     { href: '/test-generator', label: 'Test Generator', icon: FileText, keywords: ['test generator', 'test', 'exam'] },
@@ -288,6 +290,7 @@ export default function DashboardLayout({
   const learningToolsItems: MenuItem[] = [
     { href: '/search', label: 'AI Search', icon: Search },
     { href: '/courses', label: 'Video Courses', icon: Video },
+    { href: '/online-classes', label: 'Online Classes', icon: Video },
     { href: '/audio-generator', label: 'Audio Generator', icon: Music4 },
     { href: '/video-generator', label: 'Video Generator', icon: Video },
     { href: '/community', label: 'Community', icon: Users },
@@ -341,7 +344,7 @@ export default function DashboardLayout({
                 <span className="font-headline text-2xl text-primary group-data-[collapsible=icon]:hidden">EduGenius</span>
              </div>
              <div className='flex items-center gap-2'>
-                <NotificationDropdown className="md:hidden" />
+                <RealtimeNotifications userId={currentUser?.uid || 'anonymous'} className="md:hidden" />
                 <SidebarTrigger className='hidden group-data-[collapsible=icon]:flex' />
              </div>
           </div>
@@ -463,7 +466,7 @@ export default function DashboardLayout({
                 <span className="font-headline text-lg sm:text-xl text-primary truncate">EduGenius</span>
             </div>
              <div className='flex items-center gap-1'>
-                <NotificationDropdown />
+                <RealtimeNotifications userId={currentUser?.uid || 'anonymous'} />
              </div>
         </header>
         <div className="p-3 sm:p-4 md:p-6">

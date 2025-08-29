@@ -1,6 +1,6 @@
 
 'use client';
-import { Bar, BarChart, CartesianGrid, XAxis, Pie, PieChart, ResponsiveContainer } from 'recharts';
+import { Bar, BarChart, CartesianGrid, XAxis, Pie, PieChart } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { useState, useEffect } from 'react';
@@ -92,12 +92,10 @@ export function DashboardCharts() {
           </CardHeader>
           <CardContent>
               <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-                  <ResponsiveContainer width="100%" height={200}>
-                      <PieChart>
-                          <ChartTooltip content={<ChartTooltipContent nameKey="subject" />} />
-                          <Pie data={pieData} dataKey="value" nameKey="subject" />
-                      </PieChart>
-                  </ResponsiveContainer>
+                  <PieChart height={200}>
+                      <ChartTooltip content={<ChartTooltipContent nameKey="subject" />} />
+                      <Pie data={pieData} dataKey="value" nameKey="subject" />
+                  </PieChart>
               </ChartContainer>
           </CardContent>
       </Card>

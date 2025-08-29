@@ -25,6 +25,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
+import { useActivityTracker } from '@/hooks/useActivityTracker';
 import {
   Accordion,
   AccordionContent,
@@ -91,6 +92,7 @@ export default function TestGeneratorPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const testContentRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const { trackTestCompletion } = useActivityTracker();
   
   useEffect(() => {
     const fetchApiKey = () => {
@@ -240,8 +242,15 @@ export default function TestGeneratorPage() {
       }
       setGradingResult({ ...result, cheatingAnalysis });
 
-    } catch (error)
- {
+      // Track test completion with activity tracker
+      const formValues = form.getValues();
+      await trackTestCompletion(
+        formValues.subject,
+        result.score,
+        formValues.difficultyLevel
+      );
+
+    } catch (error) {
       console.error('Error grading test:', error);
       toast({
         title: 'Grading Failed',

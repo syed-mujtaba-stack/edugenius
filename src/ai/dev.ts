@@ -16,6 +16,7 @@ import '@/ai/flows/answer-visitor-questions.ts';
 import '@/ai/flows/generate-book.ts';
 import '@/ai/flows/generate-video-from-prompt.ts';
 import '@/ai/flows/find-and-summarize-videos.ts';
+import '@/ai/flows/performance-optimization.ts';
 
 
 

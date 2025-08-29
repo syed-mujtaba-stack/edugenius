@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import HydrationWrapper from "@/components/HydrationWrapper";
 import { GoogleTagManager, GoogleTagManagerNoScript } from "@/components/seo/GoogleTagManager";
+import { GoogleAnalytics } from "@/components/seo/GoogleAnalytics";
 import { ThemeProvider } from "@/components/theme-provider";
 import { NotificationProvider } from "@/contexts/NotificationContext";
 
@@ -83,6 +84,7 @@ export default function RootLayout({
       <head>
         <GoogleTagManager />
         <GoogleTagManagerNoScript />
+        <GoogleAnalytics />
         <link rel="manifest" href="/manifest.json" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
         <meta name="theme-color" content="#4F46E5" />

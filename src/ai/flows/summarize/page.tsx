@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { useActivityTracker } from '@/hooks/useActivityTracker';
 import { DownloadButton } from '@/components/download-button';
 import { Loader2 } from 'lucide-react';
 
@@ -15,6 +16,7 @@ export default function SummarizePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [apiKey, setApiKey] = useState<string | null>(null);
   const { toast } = useToast();
+  const { trackSummaryCreation } = useActivityTracker();
   
   useEffect(() => {
     const fetchApiKey = () => {
@@ -46,6 +48,10 @@ export default function SummarizePage() {
     try {
       const result = await summarizeChapter({ chapterText, apiKey: apiKey || undefined });
       setSummaryResult(result);
+      
+      // Track summary creation activity
+      await trackSummaryCreation('Study Notes', 'General Chapter');
+      
     } catch (error) {
       console.error('Error summarizing chapter:', error);
       toast({

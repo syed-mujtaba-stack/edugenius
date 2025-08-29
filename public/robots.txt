@@ -1,18 +1,18 @@
-# Allow all search engines to crawl the website
+# *
 User-agent: *
 Allow: /
+Disallow: /api/*
+Disallow: /admin/*
+Disallow: /dashboard/*
 
-# Disallow crawling of admin and API routes
-Disallow: /admin/
-Disallow: /api/
-Disallow: /dashboard/
-Disallow: /_next/
-Disallow: /*.json$
-Disallow: /*?*
+# Googlebot
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 10
 
-# Allow Google verification file
-Allow: /google6d18c2f658cfdb86.html
+# Host
+Host: http://localhost:9002
 
 # Sitemaps
-Sitemap: https://mj-edugenius.vercel.app/sitemap.xml
-Sitemap: https://mj-edugenius.vercel.app/server-sitemap.xml
+Sitemap: http://localhost:9002/sitemap.xml
+Sitemap: http://localhost:9002/server-sitemap.xml

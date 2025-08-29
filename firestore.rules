@@ -27,5 +27,20 @@ service cloud.firestore {
     match /userTokens/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
+
+    // User Statistics rules
+    match /userStats/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /userActivities/{activityId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+    }
+
+    match /studySessions/{sessionId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+    }
   }
 }

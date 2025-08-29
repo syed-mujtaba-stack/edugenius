@@ -66,6 +66,10 @@ const baseConfig: NextConfig = {
       // Configure server actions options
       bodySizeLimit: '2mb',
     },
+    // Disable Next.js dev tools to prevent React Server Components bundler errors
+    turbo: {
+      // Disable devtools that cause module resolution issues
+    },
   } as const,
 };
 
