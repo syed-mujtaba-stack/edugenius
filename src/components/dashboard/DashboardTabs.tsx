@@ -15,6 +15,7 @@ import { RealtimeDashboardStats } from '../realtime-dashboard-stats';
 import { RealtimeChat } from '../realtime-chat';
 import { PerformanceMonitor } from '../performance-monitor';
 import { BookOpen, Target, Trophy, BarChart3, Plus, CheckCircle, Clock } from 'lucide-react';
+import { LearningProgress } from '../progress/LearningProgress';
 // Using direct API call instead of import
 const generateLearningPath = async (params: {
   goal: string;
@@ -261,15 +262,18 @@ export function DashboardTabs() {
             </CardContent>
           </Card>
         </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-          <Card className="col-span-4">
-            <CardHeader>
-              <CardTitle>Overview</CardTitle>
-            </CardHeader>
-            <CardContent className="pl-2">
-              <RealtimeChat userId={user?.uid || ''} />
-            </CardContent>
-          </Card>
+        <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-7">
+          <div className="col-span-4 space-y-4">
+            <LearningProgress />
+            <Card>
+              <CardHeader>
+                <CardTitle>Chat with AI Tutor</CardTitle>
+              </CardHeader>
+              <CardContent className="pl-2">
+                <RealtimeChat userId={user?.uid || ''} />
+              </CardContent>
+            </Card>
+          </div>
           <Card className="col-span-3">
             <CardHeader>
               <CardTitle>Recent Activity</CardTitle>

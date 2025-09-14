@@ -4,6 +4,20 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 // Initialize the Google Generative AI client
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY || '');
 
+// Enable CORS
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 204,
+    headers: corsHeaders
+  });
+}
+
 export async function POST(request: Request) {
   try {
     const { learningStyle, difficulty, topics, timeCommitment } = await request.json();
@@ -55,13 +69,25 @@ export async function POST(request: Request) {
     const jsonMatch = text.match(/```json\n([\s\S]*?)\n```/);
     const learningPath = jsonMatch ? JSON.parse(jsonMatch[1]) : JSON.parse(text);
     
-    return NextResponse.json(learningPath);
+    return new NextResponse(JSON.stringify(learningPath), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        ...corsHeaders
+      }
+    });
     
   } catch (error) {
     console.error('Error generating learning path:', error);
-    return NextResponse.json(
-      { error: 'Failed to generate learning path' },
-      { status: 500 }
+    return new NextResponse(
+      JSON.stringify({ error: 'Failed to generate learning path' }),
+      { 
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders
+        }
+      }
     );
   }
 }

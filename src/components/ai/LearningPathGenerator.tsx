@@ -10,26 +10,80 @@ import { Progress } from '../ui/progress';
 import { Slider } from '../ui/slider';
 import { Book, CheckCircle, FileText, Video, Clock, Loader2 } from 'lucide-react';
 
-type LearningStyle = 'visual' | 'auditory' | 'reading' | 'kinesthetic';
+type LearningStyle = 'visual' | 'auditory' | 'reading' | 'kinesthetic' | 'mixed';
 type Difficulty = 'beginner' | 'intermediate' | 'advanced';
+type ResourceType = 'video' | 'article' | 'interactive' | 'project' | 'quiz' | 'book' | 'podcast' | 'workshop';
+type TimeCommitment = 'light' | 'moderate' | 'intensive' | 'self-paced';
+
+type LearningPreference = {
+  preferredTimeOfDay: 'morning' | 'afternoon' | 'evening' | 'any';
+  sessionLength: number; // in minutes
+  daysPerWeek: number;
+  preferredResources: ResourceType[];
+};
 
 type Resource = {
+  id: string;
   title: string;
-  type: 'video' | 'article' | 'exercise' | 'project';
+  type: ResourceType;
   url: string;
   duration: string;
+  completed: boolean;
+  description?: string;
+  thumbnailUrl?: string;
+  external?: boolean;
+  rating?: number;
+  difficulty?: Difficulty;
+  tags?: string[];
 };
 
 type Module = {
+  id: string;
   title: string;
   description: string;
   duration: string;
   resources: Resource[];
   exercises: string[];
+  prerequisites?: string[];
+  learningOutcomes: string[];
+  difficulty: Difficulty;
+  order: number;
+  completed: boolean;
+  progress: number;
+  thumbnailUrl?: string;
+  estimatedHours: number;
+  tags: string[];
+  lastAccessed?: Date;
 };
 
 type LearningPath = {
+  id: string;
+  title: string;
+  description: string;
   modules: Module[];
+  createdAt: Date;
+  updatedAt: Date;
+  totalDuration: string;
+  totalModules: number;
+  completedModules: number;
+  progress: number;
+  difficulty: Difficulty;
+  tags: string[];
+  isPublic: boolean;
+  authorId?: string;
+  version: string;
+  // Analytics
+  timeSpent: number; // in minutes
+  lastAccessed: Date;
+  // Social features
+  likes: number;
+  bookmarks: number;
+  // Prerequisites
+  prerequisites: {
+    skills: string[];
+    knowledge: string[];
+    tools: string[];
+  };
 };
 
 interface LearningPathGeneratorProps {
@@ -81,31 +135,51 @@ export function LearningPathGenerator({
     }, 300);
 
     try {
+      const requestBody = {
+        learningStyle,
+        difficulty,
+        topics: topics.split(',').map(t => t.trim()).filter(Boolean),
+        timeCommitment,
+        goal
+      };
+
+      console.log('Sending request to API with:', requestBody);
+      
       const response = await fetch('/api/ai/generate-learning-path', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           ...(apiKey && { 'Authorization': `Bearer ${apiKey}` })
         },
-        body: JSON.stringify({
-          learningStyle,
-          difficulty,
-          topics: topics.split(',').map(t => t.trim()).filter(Boolean),
-          timeCommitment,
-          goal
-        }),
+        body: JSON.stringify(requestBody),
+        credentials: 'include' // Important for cookies if using session-based auth
       });
 
+      console.log('API Response status:', response.status);
+      
       if (!response.ok) {
-        throw new Error('Failed to generate learning path');
+        const errorData = await response.json().catch(() => ({}));
+        console.error('API Error:', errorData);
+        throw new Error(errorData.error || 'Failed to generate learning path');
       }
 
       const data = await response.json();
+      console.log('API Response data:', data);
+      
+      if (!data || !data.modules) {
+        throw new Error('Invalid response format from API');
+      }
+
       setLearningPath(data);
       setProgress(100);
+      return data; // Return the data for parent component if needed
     } catch (error) {
       console.error('Error generating learning path:', error);
-      throw error; // Re-throw to allow parent component to handle the error
+      // Show a more user-friendly error message
+      if (error instanceof Error) {
+        throw new Error(`Failed to generate learning path: ${error.message}`);
+      }
+      throw new Error('An unknown error occurred while generating the learning path');
     } finally {
       setIsLoading(false);
       clearInterval(interval);

@@ -3,7 +3,10 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LearningPathGenerator } from '@/components/ai/LearningPathGenerator';
-import { Video, FileText, CheckCircle } from 'lucide-react';
+import { Video, FileText, CheckCircle, BookOpen, Award } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ModuleNotes } from '@/components/notes/ModuleNotes';
+import { ModuleQuiz } from '@/components/quizzes/ModuleQuiz';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/lib/firebase';
 import { Loader2 } from 'lucide-react';
@@ -32,6 +35,9 @@ export default function LearningPathPage() {
   const [weakTopics, setWeakTopics] = useState('');
   const [learningPlan, setLearningPlan] = useState<LearningPathOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedModule, setSelectedModule] = useState<number | null>(0);
+  const [activeTab, setActiveTab] = useState('resources');
+  const [quizCompleted, setQuizCompleted] = useState(false);
   const [apiKey, setApiKey] = useState<string | null>(null);
   const { toast } = useToast();
   
@@ -156,23 +162,141 @@ export default function LearningPathPage() {
   }
 
   return (
-    <div className="container mx-auto py-6 px-4">
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold tracking-tight">Personalized Learning Path</h1>
-        <p className="text-muted-foreground mt-2">
-          Get a customized learning plan tailored to your goals and learning style
-        </p>
-      </div>
+    <div className="container mx-auto py-8">
+      <h1 className="text-3xl font-bold mb-6">Your Learning Path</h1>
       
       <LearningPathGenerator 
         goal={goal}
         weakTopics={weakTopics}
+        apiKey={apiKey}
         learningPlan={learningPlan}
         isLoading={isLoading}
-        apiKey={apiKey}
         handleGeneratePlan={handleGeneratePlan}
         getIconForStep={getIconForStep}
       />
+      
+      {learningPlan && (
+        <div className="mt-8">
+          <h2 className="text-2xl font-semibold mb-4">Your Learning Modules</h2>
+          <div className="grid gap-6 md:grid-cols-4">
+            {/* Module List */}
+            <div className="space-y-2 md:col-span-1">
+              {learningPlan.modules.map((module, index) => (
+                <div 
+                  key={index}
+                  className={`p-4 rounded-lg cursor-pointer transition-colors ${
+                    selectedModule === index 
+                      ? 'bg-primary/10 border-l-4 border-primary' 
+                      : 'hover:bg-muted/50'
+                  }`}
+                  onClick={() => setSelectedModule(index)}
+                >
+                  <h3 className="font-medium">{module.title}</h3>
+                  <p className="text-sm text-muted-foreground">{module.description}</p>
+                </div>
+              ))}
+            </div>
+            
+            {/* Module Details */}
+            {selectedModule !== null && (
+              <div className="md:col-span-3 space-y-4">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <TabsList className="grid w-full grid-cols-3 max-w-md">
+                    <TabsTrigger value="resources">Resources</TabsTrigger>
+                    <TabsTrigger value="notes">Notes</TabsTrigger>
+                    <TabsTrigger value="quiz" className="relative">
+                      Quiz
+                      {quizCompleted && (
+                        <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-green-500"></span>
+                      )}
+                    </TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="resources" className="space-y-4">
+                    <Card>
+                      <CardHeader>
+                        <div className="flex items-center gap-2">
+                          <BookOpen className="h-5 w-5 text-primary" />
+                          <CardTitle>{learningPlan.modules[selectedModule].title}</CardTitle>
+                        </div>
+                        <CardDescription>
+                          {learningPlan.modules[selectedModule].description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-6">
+                        <div>
+                          <h4 className="font-medium mb-3">Learning Resources</h4>
+                          <div className="space-y-3">
+                            {learningPlan.modules[selectedModule].resources.map((resource, i) => (
+                              <div key={i} className="flex items-start p-3 rounded-lg hover:bg-muted/50">
+                                <div className="p-2 rounded-full bg-primary/10 mr-3 mt-1">
+                                  {getIconForStep(resource.type)}
+                                </div>
+                                <div>
+                                  <a 
+                                    href={resource.url} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="font-medium hover:underline flex items-center gap-1"
+                                  >
+                                    {resource.title}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70">
+                                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                      <polyline points="15 3 21 3 21 9"></polyline>
+                                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                                    </svg>
+                                  </a>
+                                  <p className="text-sm text-muted-foreground mt-1">
+                                    {resource.duration} • {resource.type.charAt(0).toUpperCase() + resource.type.slice(1)}
+                                  </p>
+                                  {resource.description && (
+                                    <p className="text-sm mt-2 text-muted-foreground">
+                                      {resource.description}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        
+                        {learningPlan.modules[selectedModule].exercises.length > 0 && (
+                          <div className="border-t pt-4">
+                            <h4 className="font-medium mb-3">Practice Exercises</h4>
+                            <ul className="space-y-2">
+                              {learningPlan.modules[selectedModule].exercises.map((exercise, i) => (
+                                <li key={i} className="flex items-start">
+                                  <CheckCircle className="h-5 w-5 mr-2 text-green-500 mt-0.5 flex-shrink-0" />
+                                  <span>{exercise}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                  
+                  <TabsContent value="notes">
+                    <ModuleNotes 
+                      moduleId={`module-${selectedModule}`}
+                      moduleTitle={learningPlan.modules[selectedModule].title}
+                    />
+                  </TabsContent>
+                  
+                  <TabsContent value="quiz">
+                    <ModuleQuiz 
+                      moduleId={`module-${selectedModule}`}
+                      moduleTitle={learningPlan.modules[selectedModule].title}
+                      onComplete={() => setQuizCompleted(true)}
+                    />
+                  </TabsContent>
+                </Tabs>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
