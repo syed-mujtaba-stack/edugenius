@@ -1,13 +1,11 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { DashboardClient } from '@/components/dashboard-client';
-import { RealtimeDashboardStats } from '@/components/realtime-dashboard-stats';
-import { RealtimeChat } from '@/components/realtime-chat';
-import { SupabaseSetupIndicator } from '@/components/supabase-setup-indicator';
-import { PerformanceMonitor } from '@/components/performance-monitor';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/lib/firebase';
+import { DashboardTabs } from '@/components/dashboard/DashboardTabs';
+import { SupabaseSetupIndicator } from '@/components/supabase-setup-indicator';
+import { RealtimeDashboardStats } from '@/components/realtime-dashboard-stats';
+import { Card } from '@/components/ui/card';
 
 export default function DashboardPage() {
   const [user, loading] = useAuthState(auth);
@@ -44,29 +42,18 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="flex flex-1 flex-col gap-3 sm:gap-4 md:gap-6">
-      {/* Page Header */}
-      <div className="flex items-center">
-        <h1 className="font-headline text-xl sm:text-2xl md:text-3xl lg:text-4xl">Dashboard</h1>
+    <main className="flex-1 p-4 md:p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold tracking-tight">Welcome back, {user.displayName || 'Learner'}!</h1>
+        <SupabaseSetupIndicator />
       </div>
-
-      {/* Supabase Setup Indicator */}
-      <SupabaseSetupIndicator />
-
-      {/* Realtime Dashboard Stats */}
-      <RealtimeDashboardStats userId={user.uid} />
-
-      {/* Charts / DashboardClient, Performance Monitor, and Realtime Chat */}
-      <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 w-full">
-        <div className="lg:col-span-2">
-          <DashboardClient />
-        </div>
-        <div className="lg:col-span-1">
-          <PerformanceMonitor showActions={true} />
-        </div>
-        <div className="lg:col-span-1">
-          <RealtimeChat userId={user.uid} />
-        </div>
+      
+      <div className="space-y-6">
+        <Card className="p-6">
+          <RealtimeDashboardStats userId={user.uid} />
+        </Card>
+        
+        <DashboardTabs />
       </div>
     </main>
   );

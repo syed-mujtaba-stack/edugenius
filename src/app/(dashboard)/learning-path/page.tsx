@@ -1,19 +1,36 @@
-
 'use client';
+
 import { useState, useEffect } from 'react';
-import { generateLearningPath, GenerateLearningPathOutput } from '@/ai/flows/generate-learning-path';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import { LearningPathGenerator } from '@/components/ai/LearningPathGenerator';
+import { Video, FileText, CheckCircle } from 'lucide-react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '@/lib/firebase';
+import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, TrendingUp, CheckCircle, Book, Video, FileText, Calendar, Flame } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { generateLearningPath } from '@/ai/flows/generate-learning-path';
+
+interface LearningPathOutput {
+  modules: Array<{
+    title: string;
+    description: string;
+    duration: string;
+    resources: Array<{
+      title: string;
+      type: 'video' | 'article' | 'exercise' | 'project';
+      url: string;
+      duration: string;
+      description?: string;
+    }>;
+    exercises: string[];
+  }>;
+}
 
 export default function LearningPathPage() {
+  const [user, loading] = useAuthState(auth);
   const [goal, setGoal] = useState('');
   const [weakTopics, setWeakTopics] = useState('');
-  const [learningPlan, setLearningPlan] = useState<GenerateLearningPathOutput | null>(null);
+  const [learningPlan, setLearningPlan] = useState<LearningPathOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [apiKey, setApiKey] = useState<string | null>(null);
   const { toast } = useToast();
@@ -48,10 +65,28 @@ export default function LearningPathPage() {
     try {
       const result = await generateLearningPath({
         goal,
-        weakTopics: weakTopics.split(',').map(topic => topic.trim()),
+        weakTopics: weakTopics.split(',').map(topic => topic.trim()).filter(Boolean),
         apiKey: apiKey || undefined,
       });
-      setLearningPlan(result);
+      
+      // Transform the result to match our LearningPathOutput type
+      const transformedPlan: LearningPathOutput = {
+        modules: (result.learningSteps || []).map((step: any, index: number) => ({
+          title: step.topic || `Step ${index + 1}`,
+          description: step.rationale || '',
+          duration: '1 day',
+          resources: [{
+            title: step.topic || 'Resource',
+            type: step.type === 'watch_video' ? 'video' : 'article',
+            url: step.resource || '#',
+            duration: '15 min',
+            description: step.rationale
+          }],
+          exercises: step.type === 'take_test' ? [step.topic] : []
+        }))
+      };
+      
+      setLearningPlan(transformedPlan);
     } catch (error) {
       console.error('Error generating learning path:', error);
       toast({
@@ -66,115 +101,78 @@ export default function LearningPathPage() {
   
   const getIconForStep = (type: string) => {
     switch (type) {
-        case 'study_chapter': return <Book className="h-5 w-5 text-primary" />;
-        case 'watch_video': return <Video className="h-5 w-5 text-primary" />;
-        case 'take_test': return <FileText className="h-5 w-5 text-primary" />;
-        default: return <CheckCircle className="h-5 w-5 text-primary" />;
+      case 'video':
+        return <Video className="h-4 w-4" />;
+      case 'article':
+        return <FileText className="h-4 w-4" />;
+      case 'exercise':
+      case 'project':
+        return <CheckCircle className="h-4 w-4" />;
+      default:
+        return <CheckCircle className="h-4 w-4" />;
     }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-4">
+        <h2 className="text-2xl font-bold mb-4">Sign In Required</h2>
+        <p className="text-muted-foreground mb-6">Please sign in to access your personalized learning path.</p>
+      </div>
+    );
+  }
+
+  if (!apiKey) {
+    return (
+      <div className="container mx-auto py-6 px-4">
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-yellow-700">
+                To generate personalized learning paths, please add your Gemini API key in the{' '}
+                <a href="/dashboard/settings" className="font-medium underline text-yellow-700 hover:text-yellow-600">
+                  settings
+                </a>
+                .
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-      <div className="flex items-center">
-        <h1 className="font-headline text-3xl md:text-4xl">Personalized Learning Path</h1>
+    <div className="container mx-auto py-6 px-4">
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl font-bold tracking-tight">Personalized Learning Path</h1>
+        <p className="text-muted-foreground mt-2">
+          Get a customized learning plan tailored to your goals and learning style
+        </p>
       </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1 space-y-6">
-            <Card>
-            <CardHeader>
-                <CardTitle>Create Your Plan</CardTitle>
-                <CardDescription>Tell the AI about your goals and weaknesses to generate a custom study plan.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                <div className="space-y-2">
-                    <label htmlFor="goal">Your Goal</label>
-                    <Input
-                        id="goal"
-                        placeholder="e.g., Ace my Final Physics Exam"
-                        value={goal}
-                        onChange={(e) => setGoal(e.target.value)}
-                        disabled={isLoading}
-                    />
-                </div>
-                <div className="space-y-2">
-                     <label htmlFor="weak-topics">Weak Topics</label>
-                    <Textarea
-                        id="weak-topics"
-                        placeholder="e.g., Thermodynamics, Optics, Quantum Mechanics"
-                        value={weakTopics}
-                        onChange={(e) => setWeakTopics(e.target.value)}
-                        disabled={isLoading}
-                    />
-                    <p className="text-xs text-muted-foreground">Separate topics with a comma.</p>
-                </div>
-                 <Button onClick={handleGeneratePlan} disabled={isLoading} className="w-full">
-                    {isLoading ? (
-                    <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Generating Plan...
-                    </>
-                    ) : (
-                    'Generate AI Learning Path'
-                    )}
-                </Button>
-            </CardContent>
-            </Card>
-            <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><Flame /> Your Streak</CardTitle>
-                </CardHeader>
-                <CardContent className="text-center">
-                    <p className="text-4xl font-bold">5 Days</p>
-                    <p className="text-muted-foreground">Keep up the great work!</p>
-                </CardContent>
-            </Card>
-        </div>
-
-        <div className="lg:col-span-2">
-            <Card className="min-h-[60vh]">
-                 <CardHeader>
-                    <CardTitle>Your AI-Generated Plan</CardTitle>
-                    <CardDescription>Follow these steps to achieve your learning goal.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    {learningPlan ? (
-                        <div className="space-y-6">
-                            <div>
-                               <h3 className="font-semibold mb-2 flex items-center gap-2"><TrendingUp /> Learning Steps</h3>
-                               <ul className="space-y-4">
-                                 {learningPlan.learningSteps.map((step, index) => (
-                                     <li key={index} className="flex items-start gap-4 p-3 border rounded-lg">
-                                        <div className="mt-1">{getIconForStep(step.type)}</div>
-                                        <div className="flex-grow">
-                                            <div className="flex justify-between items-center">
-                                                <p className="font-medium">{step.topic}</p>
-                                                <Badge variant="secondary" className="capitalize">{step.type.replace('_', ' ')}</Badge>
-                                            </div>
-                                            <p className="text-sm text-muted-foreground mt-1">{step.rationale}</p>
-                                            {step.resource && <p className="text-xs mt-2">Resource: <span className="font-semibold">{step.resource}</span></p>}
-                                        </div>
-                                     </li>
-                                 ))}
-                               </ul>
-                            </div>
-                             <div>
-                               <h3 className="font-semibold mb-2 flex items-center gap-2"><Calendar /> Daily Routine Suggestion</h3>
-                               <p className="text-sm text-muted-foreground whitespace-pre-wrap">{learningPlan.dailyRoutine}</p>
-                            </div>
-                        </div>
-                    ): (
-                         <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground p-8">
-                            <TrendingUp className="h-16 w-16 mb-4" />
-                            <p className="text-lg font-medium">Your plan will appear here.</p>
-                            <p>Fill in your details and let AI guide your learning journey!</p>
-                        </div>
-                    )}
-                </CardContent>
-            </Card>
-        </div>
-      </div>
-
-    </main>
+      
+      <LearningPathGenerator 
+        goal={goal}
+        weakTopics={weakTopics}
+        learningPlan={learningPlan}
+        isLoading={isLoading}
+        apiKey={apiKey}
+        handleGeneratePlan={handleGeneratePlan}
+        getIconForStep={getIconForStep}
+      />
+    </div>
   );
 }
