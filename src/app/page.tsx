@@ -3,16 +3,118 @@
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { Logo } from "@/components/logo";
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bot, FileText, Briefcase, TrendingUp, Music4, FileSignature, BookText, Users, School2, Heart, ArrowRight, Star } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Bot, FileText, Briefcase, TrendingUp, Music4, FileSignature, BookText, Users, School2, Heart, ArrowRight, Star, Check, Play, Zap, BarChart3, Award, Clock, UserCheck, BookOpen, Video, Mail, ChevronRight, CheckCircle2 } from "lucide-react";
 import { HomepageChatbot } from "@/components/homepage-chatbot";
 import { Navbar } from "@/components/navbar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Typewriter from "@/components/Typewriter";
 import ThreeHeroBg from "@/components/ThreeHeroBg";
 import Script from "next/script";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import React from "react";
+import { motion } from "framer-motion";
+// Animation variants
+import type { Variants } from 'framer-motion';
+
+const fadeIn: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { 
+      duration: 0.6,
+      ease: "easeOut"
+    } 
+  }
+};
+
+// Glass card component
+interface GlassCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
+  className?: string;
+}
+
+const GlassCard = ({ children, className = "", ...props }: GlassCardProps) => (
+  <div 
+    className={`backdrop-blur-md bg-white/10 border border-white/20 rounded-xl shadow-2xl shadow-primary/10 overflow-hidden ${className}`}
+    {...props}
+  >
+    {children}
+  </div>
+);
+
+// Floating animation
+const floating = {
+  initial: { y: 0 },
+  animate: { 
+    y: [-10, 10, -10],
+    transition: { 
+      duration: 6,
+      repeat: Infinity,
+      ease: "easeInOut"
+    }
+  }
+};
+
+// Stats counter component
+interface CounterProps {
+  end: number;
+  suffix?: string;
+  duration?: number;
+}
+
+const Counter = ({ end, suffix = "", duration = 2 }: CounterProps) => {
+  const [count, setCount] = useState(0);
+  const [inView, setInView] = useState(false);
+  const ref = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setInView(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!inView) return;
+    
+    const start = 0;
+    const increment = end / (duration * 60); // 60fps
+    let current = start;
+    
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= end) {
+        setCount(end);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(current));
+      }
+    }, 1000 / 60);
+    
+    return () => clearInterval(timer);
+  }, [inView, end, duration]);
+
+  return <span ref={ref} className="text-4xl font-bold text-primary">{count}{suffix}</span>;
+};
 
 const features = [
   {
@@ -158,9 +260,20 @@ export default function Home() {
         {/* Hero Section */}
         <section className="relative w-full py-16 sm:py-20 md:py-32 lg:py-40 flex flex-col items-center justify-center text-center px-4 sm:px-6 md:px-8 overflow-hidden">
           <ThreeHeroBg />
-          <div className="mb-6 sm:mb-8">
-            <Logo className="h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 text-primary" />
-          </div>
+          <motion.div 
+            className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background/50 to-secondary/10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          />
+          <motion.div 
+            className="mb-6 sm:mb-8 relative z-10"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <Logo className="h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 text-primary drop-shadow-lg" />
+          </motion.div>
           <h1 className="font-headline text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-primary tracking-wider">
             EduGenius
           </h1>
@@ -183,105 +296,269 @@ export default function Home() {
           <p className="mt-4 max-w-2xl text-base sm:text-lg md:text-xl text-primary/80 px-4">
             Your AI-Powered Learning Co-Pilot. Summarize chapters, generate Q&As, and create personalized tests in seconds.
           </p>
-          <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 w-full max-w-sm sm:max-w-none px-4 sm:px-0 sm:justify-center">
-            <Button asChild size="lg" className="font-bold text-base sm:text-lg w-full sm:w-auto sm:px-8 md:px-10 h-12 sm:h-14">
-                <Link href="/signup">Get Started for Free</Link>
+          <motion.div 
+            className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 w-full max-w-sm sm:max-w-none px-4 sm:px-0 sm:justify-center relative z-10"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
+            <GlassCard className="p-1">
+              <Button asChild size="lg" className="font-bold text-base sm:text-lg w-full sm:w-auto sm:px-8 md:px-10 h-12 sm:h-14 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70">
+                  <Link href="/signup">
+                    <Zap className="w-4 h-4 mr-2 fill-current" />
+                    Get Started for Free
+                  </Link>
+              </Button>
+            </GlassCard>
+            <Button 
+              asChild 
+              size="lg" 
+              variant="outline" 
+              className="font-bold text-base sm:text-lg w-full sm:w-auto sm:px-8 md:px-10 h-12 sm:h-14 bg-background/50 backdrop-blur-sm border-white/20 hover:bg-background/80"
+            >
+              <Link href="#features">
+                <BarChart3 className="w-4 h-4 mr-2" />
+                Explore Features
+              </Link>
             </Button>
-             <Button asChild size="lg" variant="outline" className="font-bold text-base sm:text-lg w-full sm:w-auto sm:px-8 md:px-10 h-12 sm:h-14">
-                <Link href="#features">Explore Features</Link>
-            </Button>
-          </div>
+          </motion.div>
         </section>
 
         {/* Features Section */}
-        <section id="features" className="w-full py-12 md:py-16 lg:py-24 bg-secondary">
-            <div className="container mx-auto px-4 sm:px-6">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-headline text-center mb-8 sm:mb-12">Features Built for Your Success</h2>
+        <section id="features" className="w-full py-12 md:py-16 lg:py-24 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-secondary/5" />
+          <div className="absolute -right-32 -top-32 w-64 h-64 bg-primary/10 rounded-full filter blur-3xl" />
+          <div className="absolute -left-32 -bottom-32 w-64 h-64 bg-secondary/10 rounded-full filter blur-3xl" />
+            
+            <div className="container mx-auto px-4 sm:px-6 relative z-10">
+                <motion.h2 
+                  className="text-2xl sm:text-3xl md:text-4xl font-headline text-center mb-8 sm:mb-12 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                >
+                  Features Built for Your Success
+                </motion.h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
                     {features.map((feature, index) => (
-                        <Card key={index} className="text-center bg-background flex flex-col p-4 sm:p-6 hover:shadow-lg transition-shadow">
-                            <CardHeader className="items-center pb-4">
-                                <div className="mb-3 sm:mb-4">
-                                    {feature.icon}
-                                </div>
-                                <CardTitle className="text-lg sm:text-xl font-bold">{feature.title}</CardTitle>
-                            </CardHeader>
-                            <CardContent className="flex-grow">
-                                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{feature.description}</p>
-                            </CardContent>
-                        </Card>
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.1 }}
+                        className="h-full"
+                      >
+                        <GlassCard className="h-full p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                          <CardHeader className="items-center pb-4">
+                            <div className="mb-3 sm:mb-4">
+                              {feature.icon}
+                            </div>
+                            <CardTitle className="text-lg sm:text-xl font-bold">{feature.title}</CardTitle>
+                          </CardHeader>
+                          <CardContent className="flex-grow">
+                            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{feature.description}</p>
+                          </CardContent>
+                        </GlassCard>
+                      </motion.div>
                     ))}
                 </div>
             </div>
         </section>
 
-         {/* How it works Section */}
-        <section className="w-full py-12 md:py-24">
-            <div className="container mx-auto px-4">
-                <h2 className="text-3xl md:text-4xl font-headline text-center mb-12">Get Started in 3 Easy Steps</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-4xl mx-auto">
-                    <div className="flex flex-col items-center">
-                         <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground font-bold text-2xl mb-4">1</div>
-                         <h3 className="text-xl font-semibold mb-2">Create Your Account</h3>
-                         <p className="text-muted-foreground">Sign up for free in seconds to get immediate access to all tools.</p>
-                    </div>
-                     <div className="flex flex-col items-center">
-                         <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground font-bold text-2xl mb-4">2</div>
-                         <h3 className="text-xl font-semibold mb-2">Explore AI Tools</h3>
-                         <p className="text-muted-foreground">Generate tests, summarize chapters, or get career advice from our AI.</p>
-                    </div>
-                     <div className="flex flex-col items-center">
-                         <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground font-bold text-2xl mb-4">3</div>
-                         <h3 className="text-xl font-semibold mb-2">Achieve Your Goals</h3>
-                         <p className="text-muted-foreground">Use the personalized feedback and plans to boost your learning.</p>
-                    </div>
+        {/* Stats Section */}
+        <section className="w-full py-8 sm:py-12 bg-primary/5">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 text-center">
+              <motion.div 
+                className="p-4 sm:p-6"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={fadeIn}
+              >
+                <div className="flex flex-col items-center">
+                  <Users className="w-8 h-8 sm:w-10 sm:h-10 text-primary mb-2 sm:mb-4" />
+                  <Counter end={10000} suffix="+" />
+                  <p className="mt-1 sm:mt-2 text-sm sm:text-base text-muted-foreground">Active Students</p>
                 </div>
+              </motion.div>
+              
+              <motion.div 
+                className="p-4 sm:p-6"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={fadeIn}
+                transition={{ delay: 0.1 }}
+              >
+                <div className="flex flex-col items-center">
+                  <BookOpen className="w-8 h-8 sm:w-10 sm:h-10 text-primary mb-2 sm:mb-4" />
+                  <Counter end={5000} suffix="+" />
+                  <p className="mt-1 sm:mt-2 text-sm sm:text-base text-muted-foreground">Lessons Completed</p>
+                </div>
+              </motion.div>
+              
+              <motion.div 
+                className="p-4 sm:p-6"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={fadeIn}
+                transition={{ delay: 0.2 }}
+              >
+                <div className="flex flex-col items-center">
+                  <Award className="w-8 h-8 sm:w-10 sm:h-10 text-primary mb-2 sm:mb-4" />
+                  <Counter end={95} suffix="%" />
+                  <p className="mt-1 sm:mt-2 text-sm sm:text-base text-muted-foreground">Success Rate</p>
+                </div>
+              </motion.div>
+              
+              <motion.div 
+                className="p-4 sm:p-6"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={fadeIn}
+                transition={{ delay: 0.3 }}
+              >
+                <div className="flex flex-col items-center">
+                  <Clock className="w-8 h-8 sm:w-10 sm:h-10 text-primary mb-2 sm:mb-4" />
+                  <Counter end={24} suffix="/7" />
+                  <p className="mt-1 sm:mt-2 text-sm sm:text-base text-muted-foreground">Support Available</p>
+                </div>
+              </motion.div>
             </div>
+          </div>
+        </section>
+
+        {/* How it works Section */}
+        <section className="w-full py-12 md:py-24 bg-background/50">
+          <div className="container mx-auto px-4">
+            <motion.h2 
+              className="text-2xl sm:text-3xl md:text-4xl font-headline text-center mb-8 sm:mb-12 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              Get Started in 3 Easy Steps
+            </motion.h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-5xl mx-auto">
+              <motion.div 
+                className="flex flex-col items-center p-6 bg-background/50 rounded-xl backdrop-blur-sm border border-border/20 shadow-sm hover:shadow-md transition-all"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                <div className="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-primary/10 text-primary font-bold text-xl sm:text-2xl mb-4">1</div>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 text-center">Create Your Account</h3>
+                <p className="text-sm sm:text-base text-muted-foreground text-center">Sign up for free in seconds to get immediate access to all tools.</p>
+              </motion.div>
+              
+              <motion.div 
+                className="flex flex-col items-center p-6 bg-background/50 rounded-xl backdrop-blur-sm border border-border/20 shadow-sm hover:shadow-md transition-all"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <div className="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-primary/10 text-primary font-bold text-xl sm:text-2xl mb-4">2</div>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 text-center">Explore AI Tools</h3>
+                <p className="text-sm sm:text-base text-muted-foreground text-center">Generate tests, summarize chapters, or get career advice from our AI.</p>
+              </motion.div>
+              
+              <motion.div 
+                className="flex flex-col items-center p-6 bg-background/50 rounded-xl backdrop-blur-sm border border-border/20 shadow-sm hover:shadow-md transition-all"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <div className="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-primary/10 text-primary font-bold text-xl sm:text-2xl mb-4">3</div>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 text-center">Achieve Your Goals</h3>
+                <p className="text-sm sm:text-base text-muted-foreground text-center">Use the personalized feedback and plans to boost your learning.</p>
+              </motion.div>
+            </div>
+          </div>
         </section>
 
 
         {/* Who is it for Section */}
         <section id="who-is-it-for" className="w-full py-12 md:py-24 bg-secondary">
-            <div className="container mx-auto px-4">
-                <h2 className="text-3xl md:text-4xl font-headline text-center mb-12">Built for Everyone in Education</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {whoIsItFor.map((card, index) => (
-                         <Card key={index} className="text-center bg-background">
-                            <CardHeader className="items-center">
-                                {card.icon}
-                                <CardTitle className="mt-4">{card.title}</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <p className="text-muted-foreground">{card.description}</p>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
+          <div className="container mx-auto px-4">
+            <motion.h2 
+              className="text-2xl sm:text-3xl md:text-4xl font-headline text-center mb-8 sm:mb-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              Built for Everyone in Education
+            </motion.h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {whoIsItFor.map((card, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <Card className="h-full text-center bg-background/80 backdrop-blur-sm border-border/20 hover:shadow-md transition-shadow">
+                    <CardHeader className="items-center p-6 pb-0">
+                      <div className="p-3 rounded-full bg-primary/10 text-primary mb-4">
+                        {React.cloneElement(card.icon, { className: "w-8 h-8 sm:w-10 sm:h-10" })}
+                      </div>
+                      <CardTitle className="text-xl sm:text-2xl">{card.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6 pt-2">
+                      <p className="text-sm sm:text-base text-muted-foreground">{card.description}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
             </div>
+          </div>
         </section>
 
         {/* Testimonials Section */}
-        <section className="w-full py-12 md:py-24">
-            <div className="container mx-auto px-4">
-                 <h2 className="text-3xl md:text-4xl font-headline text-center mb-12">What People Are Saying About Us</h2>
-                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                     {testimonials.map((testimonial, index) => (
-                        <Card key={index} className="flex flex-col items-center text-center p-6 bg-secondary">
-                             <Avatar className="w-20 h-20 mb-4 border-4 border-background">
-                                <AvatarImage src={testimonial.avatar} data-ai-hint={testimonial.dataAiHint} />
-                                <AvatarFallback>{testimonial.name.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <CardContent className="flex-grow">
-                                <p className="text-muted-foreground italic">"{testimonial.quote}"</p>
-                            </CardContent>
-                            <div className="mt-4">
-                                <h4 className="font-semibold">{testimonial.name}</h4>
-                                <p className="text-sm text-primary/80">{testimonial.role}</p>
-                            </div>
-                        </Card>
-                     ))}
-                 </div>
+        <section className="w-full py-12 md:py-24 bg-background/50">
+          <div className="container mx-auto px-4">
+            <motion.h2 
+              className="text-2xl sm:text-3xl md:text-4xl font-headline text-center mb-8 sm:mb-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              What People Are Saying
+            </motion.h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {testimonials.map((testimonial, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <Card className="h-full flex flex-col items-center text-center p-6 bg-background/80 backdrop-blur-sm border-border/20 hover:shadow-md transition-shadow">
+                    <Avatar className="w-16 h-16 sm:w-20 sm:h-20 mb-4 border-4 border-background">
+                      <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
+                      <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    </Avatar>
+                    <p className="text-sm sm:text-base text-muted-foreground italic mb-4">"{testimonial.quote}"</p>
+                    <div className="mt-auto">
+                      <h4 className="font-semibold text-sm sm:text-base">{testimonial.name}</h4>
+                      <p className="text-xs sm:text-sm text-muted-foreground">{testimonial.role}</p>
+                    </div>
+                  </Card>
+                </motion.div>
+              ))}
             </div>
+          </div>
         </section>
 
         {/* From Our Blog Section */}

@@ -25,6 +25,7 @@
   "dependencies": {
     "@genkit-ai/googleai": "^1.13.0",
     "@genkit-ai/next": "^1.13.0",
+    "@google/generative-ai": "^0.24.1",
     "@hookform/resolvers": "^3.9.0",
     "@langchain/community": "^0.3.19",
     "@opentelemetry/exporter-jaeger": "^2.0.1",
@@ -64,6 +65,7 @@
     "firebase-admin": "^12.7.0",
     "genkit": "^1.13.0",
     "jspdf": "^2.5.1",
+    "jspdf-autotable": "^5.0.2",
     "langchain": "^0.3.33",
     "lucide-react": "^0.475.0",
     "next": "^15.5.2",
@@ -78,6 +80,7 @@
     "react-dom": "^18.3.1",
     "react-firebase-hooks": "^5.1.1",
     "react-hook-form": "^7.52.1",
+    "react-intersection-observer": "^9.16.0",
     "react-markdown": "^10.1.0",
     "react-youtube": "^10.1.0",
     "recharts": "^2.15.1",

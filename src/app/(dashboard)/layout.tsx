@@ -297,6 +297,7 @@ export default function DashboardLayout({
     { href: '/playground', label: 'Playground', icon: Gamepad2 },
     { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark },
     { href: '/self-learning', label: 'Self-Learning', icon: BookOpenCheck },
+    { href: '/certificate-generator', label: 'Certificate Generator', icon: FileSignature },
   ];
 
   const teachersCornerItems: MenuItem[] = [
