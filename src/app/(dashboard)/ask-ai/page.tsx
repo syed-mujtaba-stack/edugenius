@@ -18,18 +18,36 @@ interface ChatMessage {
   timestamp: Date;
   isBookmarked?: boolean;
   feedback?: 'helpful' | 'not-helpful' | null;
+  suggestedQuestions?: string[];
+  reaction?: 'thumbsUp' | 'thumbsDown' | null;
 }
 
 export default function AskAiPage() {
   const [topic, setTopic] = useState('');
   const [question, setQuestion] = useState('');
-  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+  // Load chat history from localStorage on component mount
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('chatHistory');
+      return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+  });
+  
+  // Save chat history to localStorage whenever it changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+    }
+  }, [chatHistory]);
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'history' | 'saved'>('history');
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<ChatMessage[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [editContent, setEditContent] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -54,7 +72,28 @@ export default function AskAiPage() {
     };
   }, []);
 
-  const handleAsk = async () => {
+  const handleReaction = (messageId: string, reaction: 'thumbsUp' | 'thumbsDown') => {
+  setChatHistory(prev => 
+    prev.map(msg => 
+      msg.id === messageId 
+        ? { ...msg, reaction: msg.reaction === reaction ? null : reaction }
+        : msg
+    )
+  );
+};
+
+const handleSuggestedQuestion = (question: string) => {
+  setQuestion(question);
+  // Auto-focus the input after selecting a suggested question
+  setTimeout(() => {
+    const input = document.querySelector('textarea');
+    if (input) {
+      input.focus();
+    }
+  }, 100);
+};
+
+const handleAsk = async () => {
     if ((!topic.trim() || !question.trim()) && !editingMessageId) {
       toast({
         title: 'Error',
@@ -117,11 +156,29 @@ export default function AskAiPage() {
 
   const savedMessages = chatHistory.filter(msg => msg.isBookmarked);
   
-  const filteredMessages = searchQuery
-    ? chatHistory.filter(chat => 
-        chat.content.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    : chatHistory;
+  const filteredMessages = isSearching ? searchResults : chatHistory;
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    if (query.trim() === '') {
+      setIsSearching(false);
+      setSearchResults([]);
+      return;
+    }
+    
+    const results = chatHistory.filter(chat => 
+      chat.content.toLowerCase().includes(query.toLowerCase())
+    );
+    
+    setSearchResults(results);
+    setIsSearching(true);
+  };
+  
+  const clearSearch = () => {
+    setSearchQuery('');
+    setIsSearching(false);
+    setSearchResults([]);
+  };
 
   const handleEditMessage = (message: ChatMessage) => {
     setEditingMessageId(message.id);
@@ -301,12 +358,13 @@ export default function AskAiPage() {
                 placeholder="Search messages..."
                 className="pl-10 pr-4 py-2 w-full"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearch(e.target.value)}
               />
               {searchQuery && (
                 <button
-                  onClick={() => setSearchQuery('')}
+                  onClick={clearSearch}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  aria-label="Clear search"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -363,9 +421,33 @@ export default function AskAiPage() {
                       }}
                     >
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs opacity-70">
-                          {chat.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs opacity-70">
+                            {chat.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                          {chat.role === 'bot' && (
+                            <div className="flex gap-1">
+                              <button
+                                onClick={() => handleReaction(chat.id, 'thumbsUp')}
+                                className={`p-1 rounded-full ${chat.reaction === 'thumbsUp' ? 'text-blue-500' : 'text-gray-400 hover:text-blue-500'}`}
+                                title="Helpful"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+                                </svg>
+                              </button>
+                              <button
+                                onClick={() => handleReaction(chat.id, 'thumbsDown')}
+                                className={`p-1 rounded-full ${chat.reaction === 'thumbsDown' ? 'text-red-500' : 'text-gray-400 hover:text-red-500'}`}
+                                title="Not helpful"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M10 15v4a3 3 0 0 0 3 3l4-9V3H6.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path>
+                                </svg>
+                              </button>
+                            </div>
+                          )}
+                        </div>
                         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button 
                             onClick={() => navigator.clipboard.writeText(chat.content)}
