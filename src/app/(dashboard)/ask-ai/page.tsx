@@ -46,8 +46,6 @@ export default function AskAiPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'history' | 'saved'>('history');
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<ChatMessage[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [editContent, setEditContent] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -156,29 +154,11 @@ const handleAsk = async () => {
 
   const savedMessages = chatHistory.filter(msg => msg.isBookmarked);
   
-  const filteredMessages = isSearching ? searchResults : chatHistory;
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    if (query.trim() === '') {
-      setIsSearching(false);
-      setSearchResults([]);
-      return;
-    }
-    
-    const results = chatHistory.filter(chat => 
-      chat.content.toLowerCase().includes(query.toLowerCase())
-    );
-    
-    setSearchResults(results);
-    setIsSearching(true);
-  };
-  
-  const clearSearch = () => {
-    setSearchQuery('');
-    setIsSearching(false);
-    setSearchResults([]);
-  };
+  const filteredMessages = searchQuery
+    ? chatHistory.filter(chat => 
+        chat.content.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : chatHistory;
 
   const handleEditMessage = (message: ChatMessage) => {
     setEditingMessageId(message.id);
@@ -358,13 +338,12 @@ const handleAsk = async () => {
                 placeholder="Search messages..."
                 className="pl-10 pr-4 py-2 w-full"
                 value={searchQuery}
-                onChange={(e) => handleSearch(e.target.value)}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
               {searchQuery && (
                 <button
-                  onClick={clearSearch}
+                  onClick={() => setSearchQuery('')}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  aria-label="Clear search"
                 >
                   <X className="h-4 w-4" />
                 </button>
