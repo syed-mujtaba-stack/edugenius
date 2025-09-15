@@ -14,24 +14,99 @@ const staticBlogPosts = {
     _id: 'effective-study-techniques',
     title: 'Effective Study Techniques for Pakistani Students',
     slug: { current: 'effective-study-techniques-pakistani-students' },
-    excerpt: 'Discover proven study techniques tailored for Pakistani students, incorporating cultural context and educational system requirements.',
+    excerpt: 'Master proven study techniques tailored for the Pakistani education system, designed to help students excel in their academic journey.',
     publishedAt: '2024-09-05T00:00:00.000Z',
-    readTime: 8,
-    tags: ['Study Tips', 'Pakistan', 'Learning Techniques', 'Productivity'],
-    mainImage: '/blog/study-techniques.png',
-    stats: { likes: 124, comments: 23, shares: 45 },
+    readTime: 12,
+    tags: ['Study Tips', 'Pakistan', 'Learning Techniques', 'Productivity', 'Exam Preparation'],
+    mainImage: '/blog/study-techniques.jpg',
+    stats: { likes: 245, comments: 36, shares: 89 },
     author: {
       name: 'Dr. Ayesha Khan',
-      role: 'Education Specialist',
-      image: '/authors/ayesha-khan.jpg'
+      role: 'Education Specialist with 15+ years experience',
+      image: '/images/team/ayesha-khan.jpg',
+      bio: 'PhD in Educational Psychology, former HEC consultant, and author of "Learning Strategies for Pakistani Students"'
     },
-    categories: [{ _id: 'cat-1', title: 'Study Tips', slug: { current: 'study-tips' } }],
+    categories: [
+      { _id: 'cat-1', title: 'Study Tips', slug: { current: 'study-tips' } },
+      { _id: 'cat-2', title: 'Academic Success', slug: { current: 'academic-success' } }
+    ],
     body: [
       {
         _type: 'block',
         _key: '1',
+        style: 'h2',
+        children: [{ _type: 'span', text: 'Introduction to Effective Study Techniques' }]
+      },
+      {
+        _type: 'block',
+        _key: '2',
         children: [
-          { _type: 'span', text: 'Pakistan\'s education system presents unique challenges and opportunities for effective learning. In this comprehensive guide, we explore study techniques specifically adapted for Pakistani students, considering the matric and intermediate curriculum, examination patterns, and cultural learning preferences.' }
+          { _type: 'span', text: 'In Pakistan\'s competitive academic environment, having effective study techniques is crucial for success. This comprehensive guide explores research-backed strategies tailored specifically for Pakistani students, taking into account our unique educational system and cultural context.' }
+        ]
+      },
+      {
+        _type: 'block',
+        _key: '3',
+        style: 'h3',
+        children: [{ _type: 'span', text: '1. The SQ3R Method for Textbook Learning' }]
+      },
+      {
+        _type: 'block',
+        _key: '4',
+        children: [
+          { _type: 'span', text: 'The SQ3R method (Survey, Question, Read, Recite, Review) is particularly effective for the content-heavy curriculum in Pakistani schools and colleges. This technique helps in better retention and understanding of textbook material, which is essential for board exams and entry tests.' }
+        ]
+      },
+      {
+        _type: 'block',
+        _key: '5',
+        style: 'h3',
+        children: [{ _type: 'span', text: '2. Time Management for Pakistani Students' }]
+      },
+      {
+        _type: 'block',
+        _key: '6',
+        children: [
+          { _type: 'span', text: 'With the demanding schedule of Pakistani schools and coaching centers, effective time management is key. The Pomodoro Technique, modified for local study patterns, can significantly improve focus and productivity during study sessions.' }
+        ]
+      },
+      {
+        _type: 'block',
+        _key: '7',
+        style: 'h3',
+        children: [{ _type: 'span', text: '3. Active Recall for Board Exams' }]
+      },
+      {
+        _type: 'block',
+        _key: '8',
+        children: [
+          { _type: 'span', text: 'Active recall is particularly effective for the rote-learning components of Pakistani board exams. This section provides specific techniques to implement active recall for subjects like Islamiat, Pakistan Studies, and Science.' }
+        ]
+      },
+      {
+        _type: 'block',
+        _key: '9',
+        style: 'h3',
+        children: [{ _type: 'span', text: '4. Managing Study Stress in Pakistani Context' }]
+      },
+      {
+        _type: 'block',
+        _key: '10',
+        children: [
+          { _type: 'span', text: 'Academic pressure in Pakistan can be overwhelming. This section offers culturally-appropriate stress management techniques, including mindfulness practices that align with Islamic teachings and local cultural values.' }
+        ]
+      },
+      {
+        _type: 'block',
+        _key: '11',
+        style: 'h2',
+        children: [{ _type: 'span', text: 'Conclusion' }]
+      },
+      {
+        _type: 'block',
+        _key: '12',
+        children: [
+          { _type: 'span', text: 'By implementing these tailored study techniques, Pakistani students can optimize their learning process, perform better in exams, and develop lifelong learning skills. Remember that consistency is key, and these methods should be adapted to your individual learning style and schedule.' }
         ]
       }
     ]

@@ -1,19 +1,11 @@
 'use client';
 
+import React from 'react';
 import Link from 'next/link';
 import { Search, Clock, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-type Course = {
-  id: string;
-  title: string;
-  description: string;
-  duration: string;
-  students: string;
-  level: string;
-  icon: React.ReactNode;
-  category: string;
-};
+import type { Course } from '@/lib/courses';
 
 interface CourseGridProps {
   courses: Course[];
@@ -55,11 +47,11 @@ export function CourseGrid({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {courses.map((course) => (
-        <Link href={`/tutorials/${course.id}`} key={course.id}>
+        <Link href={`/courses/${course.id}`} key={course.id} className="group">
           <div className="group bg-card border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 h-full flex flex-col">
             <div className="relative h-48 bg-gradient-to-r from-primary/10 to-secondary/10 flex items-center justify-center">
               <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                {course.icon}
+                {course.icon && React.createElement(course.icon, { className: 'w-6 h-6' })}
               </div>
             </div>
             <div className="p-6 flex-1 flex flex-col">

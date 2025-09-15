@@ -310,6 +310,30 @@ EduGenius is built with a modern technology stack to ensure performance, scalabi
 
 ## 🚀 Key Features
 
+### 🎓 Course Management System
+- **Dynamic Course Pages**: Each course has its own dedicated page with detailed information
+- **Category Filtering**: Filter courses by category (Development, Data Science, Security, etc.)
+- **Search Functionality**: Find courses by title, description, or keywords
+- **Responsive Grid Layout**: Beautifully displays courses on all device sizes
+- **Interactive UI**: Hover effects and smooth transitions for better user experience
+- **Course Details**: Each course includes:
+  - Detailed description
+  - Learning outcomes
+  - Duration and difficulty level
+  - Student enrollment count
+  - Related courses
+
+### 🛠 Technical Implementation
+- **Next.js 13+ App Router**: For optimized routing and performance
+- **TypeScript**: Type-safe codebase for better developer experience
+- **Lucide Icons**: Modern, consistent iconography
+- **Tailwind CSS**: Utility-first CSS framework for responsive design
+- **Server Components**: Optimized performance with React Server Components
+- **Dynamic Routes**: Automatic page generation for each course
+- **Client-side Interactivity**: Smooth UI interactions with React hooks
+
+## 🎓 Course Management System
+
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
   <!-- Feature Card 1 -->
   <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #E5E7EB; transition: transform 0.2s, box-shadow 0.2s;">
