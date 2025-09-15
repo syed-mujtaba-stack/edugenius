@@ -28,6 +28,7 @@ import {
   Sun,
   Moon,
   Search,
+  GraduationCap,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -288,6 +289,7 @@ export default function DashboardLayout({
   ];
 
   const learningToolsItems: MenuItem[] = [
+    { href: '/tutorials', label: 'Tutorials', icon: GraduationCap },
     { href: '/search', label: 'AI Search', icon: Search },
     { href: '/courses', label: 'Video Courses', icon: Video },
     { href: '/online-classes', label: 'Online Classes', icon: Video },
@@ -355,6 +357,11 @@ export default function DashboardLayout({
                 <SidebarMenuItem>
                     <SidebarMenuButton asChild isActive={pathname === '/dashboard'} tooltip="Dashboard">
                         <Link href="/dashboard"><LayoutDashboard /><span>Dashboard</span></Link>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={pathname.startsWith('/tutorials')} tooltip="Tutorials">
+                        <Link href="/tutorials"><GraduationCap className="h-4 w-4" /><span>Tutorials</span></Link>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>
@@ -442,12 +449,16 @@ export default function DashboardLayout({
                 <SidebarMenuButton
                   asChild
                   isActive={pathname === '/developer-info'}
-                  tooltip="Developer Info"
                 >
-                  <Link href="/developer-info">
-                    <Code />
-                    <span>Developer Info</span>
-                  </Link>
+                  <SidebarMenu>
+                    <SidebarMenuButton asChild>
+                      <Link href="/dashboard">
+                        <LayoutDashboard className="h-4 w-4" />
+                        <span>Dashboard</span>
+                      </Link>
+                    </SidebarMenuButton>
+                    
+                  </SidebarMenu>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             <SidebarMenuItem>
