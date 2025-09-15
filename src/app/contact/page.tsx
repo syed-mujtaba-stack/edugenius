@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { Navbar } from '@/components/navbar';
 import { ContactForm } from './contact-form';
 
 export const metadata: Metadata = {
@@ -8,7 +9,9 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="container mx-auto px-4 py-12 max-w-4xl">
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      <main className="flex-1 container mx-auto px-4 py-12 max-w-4xl">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
           Contact Us
@@ -25,6 +28,7 @@ export default function ContactPage() {
       <div className="mt-12 text-center text-muted-foreground text-sm">
         <p>Or reach us directly at: <a href="mailto:abbasmujtaba125@gmail.com" className="text-primary hover:underline">abbasmujtaba125@gmail.com</a></p>
       </div>
+      </main>
     </div>
   );
 }
