@@ -8,6 +8,7 @@ import { Check, Users, BookOpen, Lightbulb, Target, Heart, Award, Star, Zap, Boo
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 const coreValues = [
   { 
@@ -148,9 +149,17 @@ export default function AboutPage() {
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/20" />
-                <div className="absolute inset-0 flex items-center justify-center p-8">
-                  <div className="text-center space-y-4">
-                    <Target className="h-12 w-12 text-primary mx-auto" />
+                <div className="absolute inset-0 flex flex-col items-center justify-center p-6 space-y-6">
+                  <div className="relative w-full h-48">
+                    <img 
+                      src="/images/about.png" 
+                      alt="EduGenius Goal" 
+                      className="w-full h-full object-contain"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="text-center space-y-4 bg-background/80 p-6 rounded-lg backdrop-blur-sm">
+                    <Target className="h-10 w-10 text-primary mx-auto" />
                     <h3 className="text-xl font-semibold">Our Goal</h3>
                     <p className="text-muted-foreground">
                       To empower 1 million Pakistani students with AI-powered learning tools by 2025.
@@ -253,10 +262,24 @@ export default function AboutPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
               {[
-                { name: "Dr. Sarah Khan", role: "Chief Education Officer", image: "/images/team/sarah.jpg" },
-                { name: "Ali Raza", role: "Head of AI Research", image: "/images/team/ali.jpg" },
-                { name: "Ayesha Malik", role: "Lead Product Designer", image: "/images/team/ayesha.jpg" },
-                { name: "Omar Farooq", role: "CTO & Co-founder", image: "/images/team/omar.jpg" }
+                { 
+                  name: "Syed Mujtaba Abbas", 
+                  role: "CTO & Co-founder", 
+                  image: "/images/team/mujtaba.jpg",
+                  description: "Leading the technical vision and development of EduGenius platform."
+                },
+                { 
+                  name: "Syeda Noor ul Ain Fatima", 
+                  role: "Chief Education Officer", 
+                  image: "/images/team/noor.jpg",
+                  description: "Overseeing educational content and learning methodologies."
+                },
+                { 
+                  name: "Syeda Qurat ul Ain", 
+                  role: "Lead Product Designer", 
+                  image: "/images/team/qurat.jpg",
+                  description: "Designing intuitive and engaging user experiences."
+                }
               ].map((member, index) => (
                 <motion.div
                   key={member.name}
@@ -267,17 +290,29 @@ export default function AboutPage() {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
                   <div className="relative overflow-hidden rounded-xl aspect-square mb-4 bg-muted">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6 z-10">
                       <div className="text-left text-white">
                         <p className="font-medium">{member.name}</p>
                         <p className="text-sm text-white/80">{member.role}</p>
+                        <p className="text-xs text-white/70 mt-1">{member.description}</p>
                       </div>
                     </div>
-                    <div className="w-full h-full bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
-                      <User className="w-12 h-12 text-primary/50" />
-                    </div>
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover transition-all duration-300 group-hover:scale-105"
+                      priority={index < 3}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.onerror = null;
+                        target.src = '/images/placeholder-avatar.jpg';
+                      }}
+                    />
                   </div>
-                  <h3 className="font-semibold text-lg">{member.name}</h3>
+                  <h3 className="font-semibold text-lg mt-2">{member.name}</h3>
+                  <p className="text-sm text-muted-foreground">{member.role}</p>
                   <p className="text-sm text-muted-foreground">{member.role}</p>
                 </motion.div>
               ))}
