@@ -161,50 +161,24 @@
     </div>
   </div>
 </div>
-    <div style="flex: 1; min-width: 250px; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-      <h3 style="color: #4F46E5; margin-top: 0; display: flex; align-items: center; gap: 8px;">
-        <span>🎯</span> Mission
-      </h3>
-      <p style="margin: 0.75rem 0 0; color: #4B5563;">
-        To democratize education by making high-quality learning tools accessible to students worldwide, regardless of their location or background.
-      </p>
-    </div>
-    
-    <div style="flex: 1; min-width: 250px; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-      <h3 style="color: #7C3AED; margin-top: 0; display: flex; align-items: center; gap: 8px;">
-        <span>✨ Vision</span>
-      </h3>
-      <p style="margin: 0.75rem 0 0; color: #4B5563;">
-        To create an intelligent learning ecosystem that adapts to each student's needs, making education more personalized and effective than ever before.
-      </p>
-    </div>
-  </div>
-  
-  <div style="margin-top: 1.5rem; padding: 1rem; background: #EEF2FF; border-radius: 8px; display: flex; align-items: center; gap: 12px;">
-    <div style="font-size: 1.5rem;">👨‍💻</div>
-    <div>
-      <p style="margin: 0; font-weight: 600; color: #1F2937;">Syed Mujtaba Abbas</p>
-      <p style="margin: 0.25rem 0 0; color: #4B5563; font-size: 0.9rem;">
-        Full-Stack Developer & Education Enthusiast
-      </p>
-      <div style="margin-top: 0.5rem; display: flex; gap: 8px;">
-        <a href="https://github.com/syed-mujtaba-stack" style="color: #4F46E5; text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 4px;">
-          <span>GitHub</span>→
-        </a>
-        <a href="https://instagram.com/m.j_syed" style="color: #4F46E5; text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 4px; margin-left: 12px;">
-          <span>Instagram</span>→
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
 
-<p align="right" style="margin-top: 2rem;">
-  <a href="#top" style="display: inline-flex; align-items: center; gap: 4px; text-decoration: none; color: #4F46E5; font-weight: 500;">
-    <span>Back to top</span>
-    <span>↑</span>
-  </a>
-</p>
+### 📋 Table of Contents
+1. [About The Project](#-about-the-project)
+2. [Screenshots](#-screenshots)
+3. [Built With](#-built-with)
+4. [Features](#-features)
+5. [Google Analytics & Tracking](#-google-analytics--tracking)
+6. [Admin Dashboard](#-admin-dashboard)
+7. [Performance Monitoring & Analytics](#-performance-monitoring)
+8. [Real-Time Collaboration & Learning](#-collaboration)
+9. [AI Features & Tools](#-ai-features--tools)
+10. [Roadmap](#-roadmap)
+11. [Getting Started](#-getting-started)
+12. [Deployment](#-deployment)
+13. [Contributing](#-contributing)
+14. [License](#-license)
+15. [Contact](#-contact)
+16. [Acknowledgements](#-acknowledgements)
 
 ---
 
@@ -215,7 +189,7 @@
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
   <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);">
-    <img src="/public/images/screenshots/dashboard-preview.png" alt="Dashboard Preview" style="width: 100%; height: auto; display: block;">
+    <img src="/public/app-screen/dashboard-preview.png" alt="Dashboard Preview" style="width: 100%; height: auto; display: block;">
     <div style="padding: 1.25rem; background: white; border-top: 1px solid #E5E7EB;">
       <h4 style="margin: 0 0 0.5rem 0; color: #1F2937; font-weight: 600;">Interactive Dashboard</h4>
       <p style="margin: 0; color: #6B7280; font-size: 0.875rem;">Track your learning progress and access key features</p>
@@ -223,7 +197,7 @@
   </div>
   
   <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);">
-    <img src="/public/images/screenshots/ai-tutor-preview.png" alt="AI Tutor Preview" style="width: 100%; height: auto; display: block;">
+    <img src="/public/app-screen/ai-tutor-preview.png" alt="AI Tutor Preview" style="width: 100%; height: auto; display: block;">
     <div style="padding: 1.25rem; background: white; border-top: 1px solid #E5E7EB;">
       <h4 style="margin: 0 0 0.5rem 0; color: #1F2937; font-weight: 600;">AI-Powered Tutor</h4>
       <p style="margin: 0; color: #6B7280; font-size: 0.875rem;">Get instant help and explanations</p>
@@ -231,7 +205,7 @@
   </div>
   
   <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);">
-    <img src="/public/images/screenshots/analytics-preview.png" alt="Analytics Preview" style="width: 100%; height: auto; display: block;">
+    <img src="/public/app-screen/analytics-preview.png" alt="Analytics Preview" style="width: 100%; height: auto; display: block;">
     <div style="padding: 1.25rem; background: white; border-top: 1px solid #E5E7EB;">
       <h4 style="margin: 0 0 0.5rem 0; color: #1F2937; font-weight: 600;">Performance Analytics</h4>
       <p style="margin: 0; color: #6B7280; font-size: 0.875rem;">Track your progress with detailed insights</p>
@@ -308,7 +282,35 @@ EduGenius is built with a modern technology stack to ensure performance, scalabi
   </div>
 </div>
 
+## 🔄 Recent Updates
+
+### 🚀 Latest Improvements
+- **Enhanced AI Tutor**
+  - Added code syntax highlighting for multiple programming languages
+  - Implemented markdown table support in responses
+  - Added message persistence using localStorage
+  - Integrated message reactions (like/dislike) for feedback
+  - Improved message formatting and readability
+  - Added suggested follow-up questions
+  - Implemented message editing for user messages
+
+### 🛠 Technical Improvements
+- Optimized chat interface performance
+- Enhanced mobile responsiveness
+- Updated dependencies to latest versions
+- Improved error handling and user feedback
+- Added TypeScript type safety improvements
+
 ## 🚀 Key Features
+
+### 🤖 AI-Powered Learning Assistant
+- **Interactive Q&A**: Real-time responses with context-aware suggestions
+- **Code Support**: Syntax highlighting for multiple programming languages
+- **Markdown Support**: Rich text formatting including tables and lists
+- **Message Persistence**: Chat history saved using localStorage
+- **Feedback System**: Like/Dislike reactions for responses
+- **Smart Suggestions**: Contextual follow-up questions
+- **Message Editing**: Edit your previous messages for better clarity
 
 ### 🎓 Course Management System
 - **Dynamic Course Pages**: Each course has its own dedicated page with detailed information

@@ -29,7 +29,15 @@ export default function AskAiPage() {
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('chatHistory');
-      return saved ? JSON.parse(saved) : [];
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        // Convert string timestamps back to Date objects
+        return parsed.map((msg: any) => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp)
+        }));
+      }
+      return [];
     }
     return [];
   });
