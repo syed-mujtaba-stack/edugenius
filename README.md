@@ -1,35 +1,55 @@
 <div align="center">
-  <img src="/public/icons/icon1-256.png" alt="EduGenius Logo" width="120">
-  <h1 style="font-size: 3em; margin-bottom: 0; background: linear-gradient(45deg, #4F46E5, #7C3AED); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">EduGenius</h1>
-  <p style="font-size: 1.2em; margin-top: 0.5em; color: #4B5563;">🚀 Your AI-Powered Learning Co-Pilot</p>
+  <img src="/public/icons/icon1-256.png" alt="EduGenius Logo" width="140">
+  <h1 style="font-size: 3.5em; margin: 0.2em 0; background: linear-gradient(45deg, #4F46E5, #7C3AED); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px; line-height: 1.2;">EduGenius</h1>
+  <p style="font-size: 1.4em; margin: 0.5em 0 0; color: #4B5563; font-weight: 500;">🚀 Your AI-Powered Learning Co-Pilot</p>
   
-  <p style="max-width: 800px; margin: 1.5em auto; line-height: 1.6; color: #374151;">
-    A next-generation educational platform that leverages cutting-edge AI to provide personalized learning experiences,
-    interactive study tools, comprehensive educational content, and dynamic blogging for students and educators worldwide.
-    Now featuring advanced performance monitoring with PageSpeed Insights, real-time collaboration with GetStream,
-    enhanced Google Analytics with GTags, comprehensive admin dashboard, dark mode, PWA support, and enhanced accessibility.
+  <p style="max-width: 900px; margin: 1.8em auto; line-height: 1.8; color: #374151; font-size: 1.1em; background: linear-gradient(90deg, #F9FAFB, #F3F4F6, #F9FAFB); padding: 2em; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);">
+    EduGenius revolutionizes education by combining <strong>artificial intelligence</strong> with <strong>modern web technologies</strong> to deliver a personalized learning experience. Our platform adapts to each student's unique learning style, providing tailored educational content, interactive tools, and real-time feedback. Whether you're a student seeking academic excellence, an educator looking to enhance your teaching methods, or an institution aiming to modernize your educational approach, EduGenius offers a comprehensive solution.
   </p>
 
-  <!-- Badges -->
-  <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 1.5em 0;">
-    <a href="https://github.com/syed-mujtaba-stack/edugenius/blob/main/LICENSE.md">
-      <img src="https://img.shields.io/github/license/syed-mujtaba-stack/edugenius?style=for-the-badge&color=4F46E5" alt="License">
-    </a>
-    <a href="https://github.com/syed-mujtaba-stack/edugenius/issues">
-      <img src="https://img.shields.io/github/issues/syed-mujtaba-stack/edugenius?style=for-the-badge&color=7C3AED" alt="Issues">
-    </a>
-    <a href="https://github.com/syed-mujtaba-stack/edugenius/stargazers">
-      <img src="https://img.shields.io/github/stars/syed-mujtaba-stack/edugenius?style=for-the-badge&color=10B981" alt="Stars">
-    </a>
-    <a href="https://nextjs.org/">
-      <img src="https://img.shields.io/badge/Next.js-15.5+-000000?style=for-the-badge&logo=nextdotjs" alt="Next.js">
-    </a>
-    <a href="https://tailwindcss.com/">
-      <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
-    </a>
-    <a href="https://www.typescriptlang.org/">
-      <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
-    </a>
+  <!-- Stats & Badges -->
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin: 2rem 0;">
+    <div style="background: white; padding: 1rem 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); display: flex; align-items: center; gap: 0.75rem;">
+      <div style="width: 10px; height: 10px; background: #10B981; border-radius: 50%;"></div>
+      <span style="font-weight: 600; color: #1F2937;">Active Development</span>
+    </div>
+    
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+      <a href="https://github.com/syed-mujtaba-stack/edugenius/blob/main/LICENSE.md" style="text-decoration: none;">
+        <img src="https://img.shields.io/github/license/syed-mujtaba-stack/edugenius?style=for-the-badge&color=4F46E5&label=License" alt="License">
+      </a>
+      <a href="https://github.com/syed-mujtaba-stack/edugenius/issues" style="text-decoration: none;">
+        <img src="https://img.shields.io/github/issues-raw/syed-mujtaba-stack/edugenius?style=for-the-badge&color=7C3AED&label=Issues" alt="Issues">
+      </a>
+      <a href="https://github.com/syed-mujtaba-stack/edugenius/stargazers" style="text-decoration: none;">
+        <img src="https://img.shields.io/github/stars/syed-mujtaba-stack/edugenius?style=for-the-badge&color=10B981&label=Stars" alt="Stars">
+      </a>
+      <a href="https://github.com/syed-mujtaba-stack/edugenius/network/members" style="text-decoration: none;">
+        <img src="https://img.shields.io/github/forks/syed-mujtaba-stack/edugenius?style=for-the-badge&color=3B82F6&label=Forks" alt="Forks">
+      </a>
+    </div>
+  </div>
+  
+  <!-- Tech Stack -->
+  <div style="margin: 2rem 0; padding: 1.5rem; background: #F9FAFB; border-radius: 16px; max-width: 900px; margin-left: auto; margin-right: auto;">
+    <h3 style="margin-top: 0; color: #1F2937; text-align: center; margin-bottom: 1.5rem; font-size: 1.25rem;">✨ Built With Cutting-Edge Technologies</h3>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;">
+      <a href="https://nextjs.org/" style="text-decoration: none; transition: transform 0.2s;">
+        <img src="https://img.shields.io/badge/Next.js-15.5+-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" style="height: 32px;">
+      </a>
+      <a href="https://react.dev/" style="text-decoration: none; transition: transform 0.2s;">
+        <img src="https://img.shields.io/badge/React-18.2+-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React">
+      </a>
+      <a href="https://www.typescriptlang.org/" style="text-decoration: none; transition: transform 0.2s;">
+        <img src="https://img.shields.io/badge/TypeScript-4.9+-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
+      </a>
+      <a href="https://tailwindcss.com/" style="text-decoration: none; transition: transform 0.2s;">
+        <img src="https://img.shields.io/badge/Tailwind_CSS-3.3+-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
+      </a>
+      <a href="https://firebase.google.com/" style="text-decoration: none; transition: transform 0.2s;">
+        <img src="https://img.shields.io/badge/Firebase-10.5+-FFCA28?style=for-the-badge&logo=firebase&logoColor=white" alt="Firebase">
+      </a>
+    </div>
   </div>
   
   <div style="margin: 2em 0; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
@@ -67,17 +87,80 @@
 
 ---
 
-### 📜 About The Project
-<a id="-about-the-project"></a>
+## 🚀 About EduGenius
 
-<div style="background-color: #F9FAFB; padding: 2rem; border-radius: 12px; margin: 1.5rem 0; border-left: 4px solid #4F46E5;">
-  <p style="font-size: 1.1rem; line-height: 1.8; color: #1F2937; margin-bottom: 1.5rem;">
-    EduGenius is a cutting-edge educational platform that revolutionizes learning through artificial intelligence. 
-    Designed with students and educators in mind, it provides intelligent tools that adapt to individual learning styles, 
-    making education more accessible, engaging, and effective for everyone.
-  </p>
-  
-  <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin: 1.5rem 0;">
+<div style="background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%); border-radius: 16px; padding: 2.5rem; margin: 2rem 0; border: 1px solid #E5E7EB; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);">
+  <div style="max-width: 900px; margin: 0 auto;">
+    <h2 style="color: #1F2937; margin-top: 0; font-size: 1.75rem; font-weight: 700; line-height: 2.25rem; margin-bottom: 1.5rem;">
+      Revolutionizing Education with AI-Powered Learning
+    </h2>
+    
+    <p style="font-size: 1.125rem; line-height: 1.75; color: #4B5563; margin-bottom: 2rem;">
+      EduGenius is a next-generation educational platform that combines artificial intelligence with cutting-edge web technologies to deliver personalized learning experiences. Our mission is to make high-quality education accessible, engaging, and effective for learners worldwide by providing intelligent tools that adapt to individual learning styles and needs.
+    </p>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+      <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #E5E7EB;">
+        <div style="width: 48px; height: 48px; background: #EEF2FF; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+          <span style="font-size: 1.5rem;">🎯</span>
+        </div>
+        <h3 style="margin-top: 0; color: #1F2937; font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">Personalized Learning</h3>
+        <p style="color: #4B5563; margin: 0; line-height: 1.6;">AI-powered recommendations and adaptive learning paths tailored to each student's strengths and weaknesses.</p>
+      </div>
+      
+      <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #E5E7EB;">
+        <div style="width: 48px; height: 48px; background: #ECFDF5; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+          <span style="font-size: 1.5rem;">📊</span>
+        </div>
+        <h3 style="margin-top: 0; color: #1F2937; font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">Comprehensive Analytics</h3>
+        <p style="color: #4B5563; margin: 0; line-height: 1.6;">Track progress, identify knowledge gaps, and measure learning outcomes with detailed analytics.</p>
+      </div>
+      
+      <div style="background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #E5E7EB;">
+        <div style="width: 48px; height: 48px; background: #EFF6FF; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+          <span style="font-size: 1.5rem;">🤝</span>
+        </div>
+        <h3 style="margin-top: 0; color: #1F2937; font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">Collaborative Tools</h3>
+        <p style="color: #4B5563; margin: 0; line-height: 1.6;">Interactive features that enable seamless collaboration between students and educators.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+### 🎯 Why Choose EduGenius?
+
+<div style="background: white; border-radius: 16px; padding: 2rem; margin: 2rem 0; border: 1px solid #E5E7EB; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    };">
+    <div>
+      <h3 style="color: #1F2937; margin-top: 0; font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span style="color: #4F46E5;">✅</span> For Students
+      </h3>
+      <ul style="padding-left: 1.5rem; margin: 0; color: #4B5563;">
+        <li>Personalized learning paths based on your goals</li>
+        <li>Interactive exercises and quizzes with instant feedback</li>
+        <li>AI-powered study assistant available 24/7</li>
+        <li>Track progress and identify areas for improvement</li>
+        <li>Access to a vast library of educational resources</li>
+      </ul>
+    </div>
+    
+    <div>
+      <h3 style="color: #1F2937; margin-top: 0; font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span style="color: #10B981;">✅</span> For Educators
+      </h3>
+      <ul style="padding-left: 1.5rem; margin: 0; color: #4B5563;">
+        <li>Create and manage courses with ease</li>
+        <li>Monitor student progress in real-time</li>
+        <li>Automated grading and assessment tools</li>
+        <li>Engage students with interactive content</li>
+        <li>Access to comprehensive analytics and reports</li>
+      </ul>
+    </div>
+  </div>
+</div>
     <div style="flex: 1; min-width: 250px; background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
       <h3 style="color: #4F46E5; margin-top: 0; display: flex; align-items: center; gap: 8px;">
         <span>🎯</span> Mission
@@ -128,140 +211,160 @@
 ### 📸 Screenshots
 <a id="-screenshots"></a>
 
-<div align="center">
-  <img src="public/app.png" alt="Project Screenshot" style="width: 80%; margin-bottom: 10px;">
-  <p><em>More screenshots coming soon!</em></p>
+## 🖼️ Screenshots & Demos
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+  <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);">
+    <img src="/public/images/screenshots/dashboard-preview.png" alt="Dashboard Preview" style="width: 100%; height: auto; display: block;">
+    <div style="padding: 1.25rem; background: white; border-top: 1px solid #E5E7EB;">
+      <h4 style="margin: 0 0 0.5rem 0; color: #1F2937; font-weight: 600;">Interactive Dashboard</h4>
+      <p style="margin: 0; color: #6B7280; font-size: 0.875rem;">Track your learning progress and access key features</p>
+    </div>
+  </div>
+  
+  <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);">
+    <img src="/public/images/screenshots/ai-tutor-preview.png" alt="AI Tutor Preview" style="width: 100%; height: auto; display: block;">
+    <div style="padding: 1.25rem; background: white; border-top: 1px solid #E5E7EB;">
+      <h4 style="margin: 0 0 0.5rem 0; color: #1F2937; font-weight: 600;">AI-Powered Tutor</h4>
+      <p style="margin: 0; color: #6B7280; font-size: 0.875rem;">Get instant help and explanations</p>
+    </div>
+  </div>
+  
+  <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);">
+    <img src="/public/images/screenshots/analytics-preview.png" alt="Analytics Preview" style="width: 100%; height: auto; display: block;">
+    <div style="padding: 1.25rem; background: white; border-top: 1px solid #E5E7EB;">
+      <h4 style="margin: 0 0 0.5rem 0; color: #1F2937; font-weight: 600;">Performance Analytics</h4>
+      <p style="margin: 0; color: #6B7280; font-size: 0.875rem;">Track your progress with detailed insights</p>
+    </div>
+  </div>
 </div>
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+### 🎥 Video Demo
 
----
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin: 2rem 0; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
+  <iframe 
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+    src="https://www.youtube.com/embed/your-video-id"
+    title="EduGenius Platform Demo"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+  </iframe>
+</div>
 
-### 🛠️ Built With
-<a id="-built-with"></a>
+## 🛠️ Tech Stack
 
-This project is built with a modern tech stack that ensures performance, scalability, and a great user experience.
+EduGenius is built with a modern technology stack to ensure performance, scalability, and an excellent developer experience.
 
-*   **[Next.js](https://nextjs.org/)** - React framework for production
-*   **[React](https://reactjs.org/)** - Frontend library for building user interfaces
-*   **[Firebase](https://firebase.google.com/)** - Backend-as-a-Service for authentication and notifications
-*   **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
-*   **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
-*   **[Google AI (Gemini)](https://ai.google.dev/)** - Advanced AI capabilities
-*   **[Google Analytics GTags](https://developers.google.com/analytics/devguides/collection/gtagjs)** - Enhanced analytics with educational platform tracking
-*   **[PageSpeed Insights API](https://developers.google.com/speed/docs/insights/v5/get-started)** - Performance monitoring and optimization
-*   **[GetStream](https://getstream.io/)** - Video calling and real-time communication
-*   **[Recharts](https://recharts.org/)** - Charts and data visualization
-*   **[JWT](https://jwt.io/)** - Secure token-based authentication
+### Core Technologies
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+  <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border-radius: 8px; border: 1px solid #E5E7EB;">
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original-wordmark.svg" alt="Next.js" style="width: 24px; height: 24px;" />
+    <span style="font-weight: 500; color: #1F2937;">Next.js 15.5+</span>
+  </div>
+  
+  <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border-radius: 8px; border: 1px solid #E5E7EB;">
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" style="width: 24px; height: 24px;" />
+    <span style="font-weight: 500; color: #1F2937;">React 18+</span>
+  </div>
+  
+  <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border-radius: 8px; border: 1px solid #E5E7EB;">
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript" style="width: 24px; height: 24px;" />
+    <span style="font-weight: 500; color: #1F2937;">TypeScript</span>
+  </div>
+  
+  <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border-radius: 8px; border: 1px solid #E5E7EB;">
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-plain.svg" alt="Tailwind CSS" style="width: 24px; height: 24px;" />
+    <span style="font-weight: 500; color: #1F2937;">Tailwind CSS</span>
+  </div>
+  
+  <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border-radius: 8px; border: 1px solid #E5E7EB;">
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain-wordmark.svg" alt="Firebase" style="width: 24px; height: 24px;" />
+    <span style="font-weight: 500; color: #1F2937;">Firebase</span>
+  </div>
+</div>
 
----
+### Key Libraries & Tools
 
-### ✨ Features
-<a id="-features"></a>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+  <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border-radius: 8px; border: 1px solid #E5E7EB;">
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg" alt="Redux" style="width: 24px; height: 24px;" />
+    <span style="font-weight: 500; color: #1F2937;">Redux Toolkit</span>
+  </div>
+  
+  <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border-radius: 8px; border: 1px solid #E5E7EB;">
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jest/jest-plain.svg" alt="Jest" style="width: 24px; height: 24px;" />
+    <span style="font-weight: 500; color: #1F2937;">Jest</span>
+  </div>
+  
+  <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border-radius: 8px; border: 1px solid #E5E7EB;">
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker" style="width: 24px; height: 24px;" />
+    <span style="font-weight: 500; color: #1F2937;">Docker</span>
+  </div>
+  
+  <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #F9FAFB; border-radius: 8px; border: 1px solid #E5E7EB;">
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub Actions" style="width: 24px; height: 24px;" />
+    <span style="font-weight: 500; color: #1F2937;">GitHub Actions</span>
+  </div>
+</div>
 
-- **🌓 Dark/Light Mode** - Beautiful dark and light themes with system preference detection
-- **📱 PWA Support** - Installable on any device for offline access
-- **🤖 AI-Powered Learning** - Smart study tools powered by advanced AI
-- **📊 Interactive Dashboards** - Track your learning progress in real-time
-- **🔍 Advanced Search System** - Multi-modal AI-enhanced search with Google Custom Search integration
-- **📱 Responsive Design** - Works seamlessly on all devices
-- **⚡ Fast Performance** - Built with Next.js 15 for optimal speed
-- **🔔 Real-Time Notifications** - Firebase Cloud Messaging for instant updates
-- **📈 Performance Analytics** - Advanced PageSpeed Insights integration with AI-powered optimization
-- **🎥 Video Calling & Collaboration** - GetStream integration for online classrooms and study groups
-- **📝 Dynamic Blog System** - Comprehensive educational content with SEO optimization
+## 🚀 Key Features
 
-<details>
-  <summary><strong>📈 Advanced Performance Monitoring</strong></summary>
-  <ul>
-    <li><strong>Real-Time Performance Tracking:</strong> Live Core Web Vitals monitoring with auto-refresh dashboard.</li>
-    <li><strong>Competitive Analysis:</strong> Side-by-side performance comparison with competitor platforms.</li>
-    <li><strong>Historical Performance Data:</strong> Automated monitoring every 5 minutes with trend visualization.</li>
-    <li><strong>Performance Budgets:</strong> Customizable thresholds with real-time violation alerts.</li>
-    <li><strong>AI-Powered Optimization:</strong> Google Gemini 2.0 Flash provides educational platform-specific recommendations.</li>
-    <li><strong>Advanced Analytics Dashboard:</strong> Performance command center with comprehensive insights.</li>
-    <li><strong>Export & Reporting:</strong> Download performance data for detailed analysis.</li>
-  </ul>
-</details>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+  <!-- Feature Card 1 -->
+  <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #E5E7EB; transition: transform 0.2s, box-shadow 0.2s;">
+    <h3 style="margin-top: 0; color: #1F2937; display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #EEF2FF; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #4F46E5;">📚</span>
+      Comprehensive Learning
+    </h3>
+    <p style="color: #4B5563; line-height: 1.6;">Structured courses with progress tracking, course materials, and interactive content designed for effective learning.</p>
+  </div>
 
-<details>
-  <summary><strong>🎥 Real-Time Learning & Collaboration</strong></summary>
-  <ul>
-    <li><strong>Online Classrooms:</strong> GetStream-powered video calling with screen sharing and recording.</li>
-    <li><strong>Interactive Whiteboards:</strong> Real-time collaboration tools for group study sessions.</li>
-    <li><strong>Live Chat & Messaging:</strong> Instant communication during study sessions.</li>
-    <li><strong>Participant Management:</strong> Role-based permissions for different class types.</li>
-    <li><strong>Study Groups:</strong> Create and join collaborative learning environments.</li>
-    <li><strong>Performance Analytics:</strong> Track engagement and participation in real-time.</li>
-  </ul>
-</details>
+  <!-- Feature Card 2 -->
+  <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #E5E7EB; transition: transform 0.2s, box-shadow 0.2s;">
+    <h3 style="margin-top: 0; color: #1F2937; display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #F0FDF4; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #10B981;">🤖</span>
+      AI-Powered Learning
+    </h3>
+    <p style="color: #4B5563; line-height: 1.6;">Smart recommendations, instant explanations, and personalized learning paths powered by advanced AI algorithms.</p>
+  </div>
 
-<details>
-  <summary><strong>🔍 Advanced Search Features</strong></summary>
-  <ul>
-    <li><strong>General Web Search:</strong> AI-enhanced results with smart categorization and relevance scoring.</li>
-    <li><strong>Image Search:</strong> High-quality image discovery with advanced filtering options.</li>
-    <li><strong>News Search:</strong> Real-time news from reliable sources with date filtering.</li>
-    <li><strong>Academic Search:</strong> Research papers with citation data and metadata.</li>
-    <li><strong>AI Q&A:</strong> Intelligent answers with confidence scores and source citations.</li>
-    <li><strong>Visual Search:</strong> Search by image with object detection and analysis.</li>
-    <li><strong>Multi-Modal Search:</strong> Combine text, image, and voice inputs.</li>
-  </ul>
-</details>
+  <!-- Feature Card 3 -->
+  <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #E5E7EB; transition: transform 0.2s, box-shadow 0.2s;">
+    <h3 style="margin-top: 0; color: #1F2937; display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #EFF6FF; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #3B82F6;">📊</span>
+      Performance Analytics
+    </h3>
+    <p style="color: #4B5563; line-height: 1.6;">Track your progress with detailed insights, performance metrics, and personalized improvement suggestions.</p>
+  </div>
 
-<details>
-  <summary><strong>🧠 Personalized Learning</strong></summary>
-  <ul>
-    <li><strong>AI Learning Paths:</strong> Custom study roadmaps based on learning goals.</li>
-    <li><strong>Daily Study Routine:</strong> Consistent study habits with progress tracking.</li>
-  </ul>
-</details>
+  <!-- Feature Card 4 -->
+  <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #E5E7EB; transition: transform 0.2s, box-shadow 0.2s;">
+    <h3 style="margin-top: 0; color: #1F2937; display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #FEF2F2; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #EF4444;">📝</span>
+      Interactive Assessments
+    </h3>
+    <p style="color: #4B5563; line-height: 1.6;">Engage with various question types including multiple choice, coding challenges, and essay questions.</p>
+  </div>
 
-<details>
-  <summary><strong>🛠️ AI-Powered Tools</strong></summary>
-  <ul>
-    <li><strong>AI Audio Generator:</strong> Text-to-speech for offline learning.</li>
-    <li><strong>Career Counseling:</strong> AI-driven career path suggestions.</li>
-    <li><strong>AI Essay Evaluator:</strong> Instant feedback on writing.</li>
-    <li><strong>Chapter Summarizer & Q&A:</strong> Quick summaries and self-testing.</li>
-    <li><strong>AI Test Generator:</strong> Custom tests with optional AI proctoring.</li>
-  </ul>
-</details>
+  <!-- Feature Card 5 -->
+  <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #E5E7EB; transition: transform 0.2s, box-shadow 0.2s;">
+    <h3 style="margin-top: 0; color: #1F2937; display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #F5F3FF; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #7C3AED;">📱</span>
+      Mobile-First Design
+    </h3>
+    <p style="color: #4B5563; line-height: 1.6;">Seamless learning experience across all devices with responsive design and offline capabilities.</p>
+  </div>
 
-<details>
-  <summary><strong>💻 Developer-Focused Features</strong></summary>
-  <ul>
-    <li><strong>AI-Powered Code Generation:</strong> Code snippets in multiple languages.</li>
-    <li><strong>Interactive Coding Exercises:</strong> Real-time feedback on coding problems.</li>
-    <li><strong>Automated Code Debugging:</strong> AI-powered bug detection and fixes.</li>
-  </ul>
-</details>
-
-<details>
-  <summary><strong>📝 Dynamic Blog System</strong></summary>
-  <ul>
-    <li><strong>SEO-Optimized Content:</strong> Dynamic meta tags, OpenGraph, and Twitter Cards for better discoverability.</li>
-    <li><strong>Clean URLs:</strong> Semantic URL structure with readable slugs for individual blog posts.</li>
-    <li><strong>Responsive Design:</strong> Mobile-first approach ensuring great readability on all devices.</li>
-    <li><strong>Social Sharing:</strong> Built-in Twitter, Facebook, and LinkedIn sharing buttons on every article.</li>
-    <li><strong>Reading Progress:</strong> Visual progress indicator to track reading engagement.</li>
-    <li><strong>Author Profiles:</strong> Detailed author information with bio and social links.</li>
-    <li><strong>Category Filtering:</strong> Organize content by topics like Study Tips, Technology, Online Learning.</li>
-    <li><strong>Content Statistics:</strong> Track likes, comments, and share counts for engagement measurement.</li>
-    <li><strong>Rich Metadata:</strong> Structured data for better search engine understanding.</li>
-    <li><strong>Sanity CMS Integration:</strong> Headless CMS for content management and dynamic updates.</li>
-  </ul>
-  <h4>✨ Featured Blog Content:</h4>
-  <ul>
-    <li><strong>Effective Study Techniques for Pakistani Students</strong> - Culturally adapted study methods for matric and intermediate curriculum.</li>
-    <li><strong>AI Transforming Education in Pakistan</strong> - How artificial intelligence is revolutionizing Pakistan's education sector.</li>
-    <li><strong>The Future of Online Learning in Pakistan</strong> - Emerging technologies and opportunities for digital education growth.</li>
-  </ul>
-</details>
-
-<p align="right">(<a href="#top">back to top</a>)</p>
+  <!-- Feature Card 6 -->
+  <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #E5E7EB; transition: transform 0.2s, box-shadow 0.2s;">
+    <h3 style="margin-top: 0; color: #1F2937; display: flex; align-items: center; gap: 0.5rem;">
+      <span style="background: #F0F9FF; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0EA5E9;">🌙</span>
+      Dark Mode & Accessibility
+    </h3>
+    <p style="color: #4B5563; line-height: 1.6;">Reduce eye strain with dark theme and ensure accessibility with WCAG 2.1 AA compliance.</p>
+  </div>
+</div>
 
 ---
 
@@ -310,7 +413,7 @@ gtag('config', 'G-KQZSD36CPE', {
 
 ```typescript
 // Track AI tool usage
-gtagEducationalEvent.trackAIToolUsage('Essay Evaluator', 'English', 'Advanced');
+gtagEducationalEvent.trackAIToolUsage('Essay Evaluator', 'English Literature', 'Advanced');
 
 // Track test generation
 gtagEducationalEvent.trackTestGeneration('Mathematics', 'Intermediate', 20);
@@ -529,6 +632,12 @@ gtagEducationalEvent.trackCareerCounseling(['Technology', 'Writing'], ['Software
 See the [open issues](https://github.com/syed-mujtaba-stack/edugenius/issues) for a full list of proposed features and known issues.
 
 #### ✅ Recently Completed
+
+- **🎨 Enhanced About Page** - Redesigned with modern UI/UX and smooth animations
+- **📝 AI Quiz Generator** - Automatically generate quizzes from any study material
+- **📜 Certificate System** - Create and download course completion certificates
+- **📱 Mobile Optimization** - Improved responsive design for all device sizes
+- **🔒 Authentication** - Enhanced security with Firebase Authentication
 - [x] **Enhanced Google Analytics GTags Implementation** - Comprehensive educational platform analytics
 - [x] **Comprehensive Admin Dashboard** - Complete platform management with user controls and system monitoring
 - [x] **Educational Event Tracking** - Specialized GTags tracking for AI tools, assessments, and learning activities
