@@ -1,24 +1,174 @@
-# Google Analytics Integration
+# 📊 Google Analytics 4 Integration Guide
 
-Google Analytics has been successfully integrated into the EduGenius platform with tracking ID `G-KQZSD36CPE`.
+## 🌟 Overview
+This document provides a comprehensive guide to the Google Analytics 4 (GA4) implementation in the EduGenius platform. The integration uses Measurement ID `G-KQZSD36CPE` and includes both automatic and custom event tracking.
 
-## 🚀 Features Implemented
+## 🚀 Quick Start
 
-### 1. **Automatic Page Tracking**
-- All page visits are automatically tracked
-- Route changes in Next.js are monitored
-- Page titles and URLs are captured
+### 1. Prerequisites
+- Google Analytics 4 property set up
+- Editor access to the GA4 property
+- Next.js 13+ project
 
-### 2. **Custom Event Tracking**
-- Educational platform-specific events
-- User interaction tracking
-- Feature usage analytics
-
-### 3. **Environment Variable Support**
+### 2. Environment Setup
+Add the following to your `.env.local` file:
 ```bash
-# Add to your .env.local file (optional)
+# Google Analytics 4 Measurement ID
 NEXT_PUBLIC_GA_TRACKING_ID=G-KQZSD36CPE
+
+# Optional: Enable debug mode in development
+NEXT_PUBLIC_GA_DEBUG=false
 ```
+
+### 3. Installation
+No additional packages needed - the integration uses the official Google Analytics gtag.js script.
+
+## 🛠️ Implementation Details
+
+### Core Components
+
+#### 1. Google Analytics Component
+Location: `/src/components/seo/GoogleAnalytics.tsx`
+- Handles script loading and initialization
+- Manages consent and debugging
+- Provides tracking utilities
+
+#### 2. Custom Hooks
+Location: `/src/hooks/useGoogleAnalytics.ts`
+- `useGoogleAnalytics()`: Automatically tracks page views
+- `useTrackEvent()`: Hook for tracking custom events
+
+### Key Features
+
+#### 📌 Automatic Tracking
+- Page views and navigation
+- Session duration and engagement
+- Device and browser information
+- First-party cookie support
+
+#### 🎯 Custom Events
+```typescript
+// Example: Track test generation
+trackEvent('generate_test', {
+  category: 'Assessment',
+  label: 'Mathematics',
+  value: 1
+});
+
+// Example: Track content interaction
+trackEvent('content_interaction', {
+  content_type: 'video',
+  item_id: 'math-101-intro',
+  method: 'play'
+});
+```
+
+#### 🔄 User Properties
+Track user-specific data:
+```typescript
+// Set user properties
+gtag('set', 'user_properties', {
+  user_type: 'premium',
+  subscription_plan: 'pro',
+  total_courses_enrolled: 5
+});
+```
+
+## 📊 Event Reference
+
+### Standard Events
+| Event Name | Description | Parameters |
+|------------|-------------|------------|
+| `page_view` | Tracks page views | `page_title`, `page_location` |
+| `login` | User login | `method` (google, email, etc.) |
+| `search` | Site search | `search_term` |
+| `select_content` | Content selection | `content_type`, `item_id` |
+
+### Custom Events
+| Event Name | Description | Parameters |
+|------------|-------------|------------|
+| `generate_test` | Test generation | `subject`, `difficulty` |
+| `complete_lesson` | Lesson completion | `lesson_id`, `time_spent` |
+| `purchase_course` | Course purchase | `value`, `currency`, `items` |
+
+## 🧪 Testing & Debugging
+
+### 1. Development Mode
+Set `NEXT_PUBLIC_GA_DEBUG=true` in `.env.local` to enable debug mode.
+
+### 2. Real-time Reports
+1. Go to [GA4 Real-time Report](https://analytics.google.com/analytics/web/#/realtime)
+2. Verify events are being received
+
+### 3. DebugView
+1. Install [Google Analytics Debugger](https://chrome.google.com/webstore/detail/google-analytics-debugger/jnkmfdileelhofjcijamephohjechhna)
+2. Open Chrome DevTools (F12)
+3. Check the Console and Network tabs for GA events
+
+## 📈 Advanced Configuration
+
+### 1. Custom Dimensions
+Add to your GA4 property:
+1. Go to Admin > Custom Definitions > Custom Dimensions
+2. Create dimensions for:
+   - `user_role`
+   - `course_id`
+   - `content_type`
+
+### 2. Conversion Events
+Set up key events as conversions:
+1. Go to Admin > Events
+2. Toggle "Mark as conversion" for important events
+
+### 3. Funnels
+Create conversion funnels:
+1. Go to Reports > Engagement > Funnel Analysis
+2. Set up funnels for key user journeys
+
+## 🔒 Privacy & Compliance
+
+### 1. Cookie Consent
+- Implements cookie consent check before loading GA
+- Respects "Do Not Track" browser settings
+- Includes IP anonymization
+
+### 2. Data Retention
+- User and event data retention: 26 months
+- Reset on new activity: Enabled
+
+### 3. GDPR Compliance
+- Data processing terms accepted
+- Data processing location: United States
+- Data sharing settings optimized for compliance
+
+## 📚 Additional Resources
+
+- [GA4 Documentation](https://developers.google.com/analytics)
+- [GTag.js Reference](https://developers.google.com/tag-platform/gtagjs/reference)
+- [Next.js Analytics](https://nextjs.org/docs/advanced-features/measuring-performance)
+
+## 🚨 Troubleshooting
+
+### Common Issues
+1. **No data in reports**
+   - Check if the GA4 property is properly set up
+   - Verify the Measurement ID matches your property
+   - Ensure the gtag script is loading (check Network tab)
+
+2. **Events not showing**
+   - Check console for errors
+   - Verify event names match exactly
+   - Check if ad blockers are interfering
+
+3. **Debug mode not working**
+   - Clear site data and hard refresh
+   - Ensure `NEXT_PUBLIC_GA_DEBUG` is set to `true`
+
+## 📞 Support
+For additional help:
+1. Check the [GA4 Help Center](https://support.google.com/analytics/)
+2. Open an issue in our repository
+3. Contact your Google Analytics representative
 
 ## 📊 Usage Examples
 
