@@ -7,9 +7,10 @@ import { GoogleTagManager, GoogleTagManagerNoScript } from "@/components/seo/Goo
 import { GoogleAnalytics } from "@/components/seo/GoogleAnalytics";
 import { ThemeProvider } from "@/components/theme-provider";
 import { NotificationProvider } from "@/contexts/NotificationContext";
+import { GamificationProvider } from "@/contexts/GamificationContext";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:9002"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://mj-edugenius.vercel.app"),
   title: {
     default: "EduGenius - Your AI-Powered Learning Co-Pilot",
     template: "%s | EduGenius",
@@ -100,19 +101,22 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon1-16.png" />
       </head>
       <body className={cn("min-h-screen bg-background font-sans antialiased")}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <NotificationProvider>
-            <HydrationWrapper>
-              {children}
-              <Toaster />
-            </HydrationWrapper>
-          </NotificationProvider>
-        </ThemeProvider>
+        <GoogleTagManagerNoScript />
+        <HydrationWrapper>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <NotificationProvider>
+              <GamificationProvider>
+                {children}
+              </GamificationProvider>
+            </NotificationProvider>
+          </ThemeProvider>
+        </HydrationWrapper>
+        <Toaster />
       </body>
     </html>
   );

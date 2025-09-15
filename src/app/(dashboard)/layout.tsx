@@ -48,6 +48,7 @@ import {
 import { Logo } from '@/components/logo';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { GamificationProvider } from '@/contexts/GamificationContext';
 import { useEffect, useState, useRef } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { findBestMatch } from 'string-similarity';
@@ -253,27 +254,31 @@ export default function DashboardLayout({
   
   if (loading || !currentUser) {
     return (
-      <div className="flex h-screen overflow-hidden">
-        <div className="h-full w-[16rem] flex-col gap-2 border-r bg-card p-2 hidden md:flex">
-          <div className="flex items-center justify-between p-2">
-            <Skeleton className="h-8 w-32" />
-            <Skeleton className="h-7 w-7" />
+      <GamificationProvider>
+        <SidebarProvider>
+          <div className="flex h-screen overflow-hidden">
+            <div className="h-full w-[16rem] flex-col gap-2 border-r bg-card p-2 hidden md:flex">
+              <div className="flex items-center justify-between p-2">
+                <Skeleton className="h-8 w-32" />
+                <Skeleton className="h-7 w-7" />
+              </div>
+              <div className="flex-grow space-y-2 p-2">
+                {[...Array(12)].map((_, i) => (
+                  <Skeleton key={i} className="h-8 w-full" />
+                ))}
+              </div>
+              <div className="space-y-2 p-2 mt-auto">
+                <Skeleton className="h-8 w-full" />
+                <Skeleton className="h-8 w-full" />
+                <Skeleton className="h-8 w-full" />
+              </div>
+            </div>
+            <main className="flex-1 p-4">
+              <Skeleton className="h-full w-full rounded-lg" />
+            </main>
           </div>
-          <div className="flex-grow space-y-2 p-2">
-            {[...Array(12)].map((_, i) => (
-              <Skeleton key={i} className="h-8 w-full" />
-            ))}
-          </div>
-          <div className="space-y-2 p-2 mt-auto">
-            <Skeleton className="h-8 w-full" />
-            <Skeleton className="h-8 w-full" />
-            <Skeleton className="h-8 w-full" />
-          </div>
-        </div>
-        <main className="flex-1 p-4">
-          <Skeleton className="h-full w-full rounded-lg" />
-        </main>
-      </div>
+        </SidebarProvider>
+      </GamificationProvider>
     );
   }
   
@@ -338,89 +343,115 @@ export default function DashboardLayout({
 
 
   return (
-    <SidebarProvider>
-      <Sidebar>
-        <SidebarHeader>
-          <div className="flex items-center justify-between">
-             <div className="flex items-center gap-2">
+    <GamificationProvider>
+      <SidebarProvider>
+        <Sidebar>
+          <SidebarHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
                 <Logo className="w-8 h-8 text-primary" />
                 <span className="font-headline text-2xl text-primary group-data-[collapsible=icon]:hidden">EduGenius</span>
-             </div>
-             <div className='flex items-center gap-2'>
+              </div>
+              <div className='flex items-center gap-2'>
                 <RealtimeNotifications userId={currentUser?.uid || 'anonymous'} className="md:hidden" />
                 <SidebarTrigger className='hidden group-data-[collapsible=icon]:flex' />
-             </div>
-          </div>
-        </SidebarHeader>
-        <SidebarContent>
+              </div>
+            </div>
+          </SidebarHeader>
+          
+          <SidebarContent>
             <SidebarMenu>
-                <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname === '/dashboard'} tooltip="Dashboard">
-                        <Link href="/dashboard"><LayoutDashboard /><span>Dashboard</span></Link>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname.startsWith('/tutorials')} tooltip="Tutorials">
-                        <Link href="/tutorials"><GraduationCap className="h-4 w-4" /><span>Tutorials</span></Link>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname === '/dashboard'} tooltip="Dashboard">
+                  <Link href="/dashboard">
+                    <LayoutDashboard className="h-4 w-4" />
+                    <span>Dashboard</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname === '/progress'} tooltip="My Progress">
+                  <Link href="/dashboard/progress">
+                    <TrendingUp className="h-4 w-4" />
+                    <span>My Progress</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname.startsWith('/tutorials')} tooltip="Tutorials">
+                  <Link href="/tutorials">
+                    <GraduationCap className="h-4 w-4" />
+                    <span>Tutorials</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
-            
+
             <SidebarGroup>
-                <SidebarGroupLabel>AI Agents</SidebarGroupLabel>
-                <SidebarMenu>{renderMenuItems(aiAgentItems)}</SidebarMenu>
+              <SidebarGroupLabel>AI Agents</SidebarGroupLabel>
+              <SidebarMenu>{renderMenuItems(aiAgentItems)}</SidebarMenu>
             </SidebarGroup>
 
             <SidebarGroup>
-                <SidebarGroupLabel>Learning Tools</SidebarGroupLabel>
-                <SidebarMenu>{renderMenuItems(learningToolsItems)}</SidebarMenu>
+              <SidebarGroupLabel>Learning Tools</SidebarGroupLabel>
+              <SidebarMenu>{renderMenuItems(learningToolsItems)}</SidebarMenu>
             </SidebarGroup>
 
             <SidebarGroup>
-                <SidebarGroupLabel>Teacher's Corner</SidebarGroupLabel>
-                <SidebarMenu>{renderMenuItems(teachersCornerItems)}</SidebarMenu>
+              <SidebarGroupLabel>Teacher's Corner</SidebarGroupLabel>
+              <SidebarMenu>{renderMenuItems(teachersCornerItems)}</SidebarMenu>
             </SidebarGroup>
 
             <SidebarGroup>
-                <SidebarGroupLabel>Admin</SidebarGroupLabel>
-                <SidebarMenu>{renderMenuItems(adminItems)}</SidebarMenu>
+              <SidebarGroupLabel>Admin</SidebarGroupLabel>
+              <SidebarMenu>{renderMenuItems(adminItems)}</SidebarMenu>
             </SidebarGroup>
-
-        </SidebarContent>
-        <SidebarFooter>
-         <SidebarSeparator />
-          <SidebarMenu>
-            <SidebarMenuItem>
+          </SidebarContent>
+          
+          <SidebarFooter>
+            <SidebarSeparator />
+            <SidebarMenu>
+              <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   isActive={pathname === '/profile'}
                   tooltip="My Profile"
                 >
                   <Link href="/profile" className="justify-start">
-                     <Avatar className="h-7 w-7">
-                        <AvatarImage src={currentUser.photoURL || ''} alt={currentUser.displayName || ''} data-ai-hint="person avatar" />
-                        <AvatarFallback>
-                            {currentUser.displayName ? currentUser.displayName.charAt(0).toUpperCase() : (currentUser.email ? currentUser.email.charAt(0).toUpperCase() : 'U')}
-                        </AvatarFallback>
+                    <Avatar className="h-7 w-7">
+                      <AvatarImage 
+                        src={currentUser?.photoURL || ''} 
+                        alt={currentUser?.displayName || ''} 
+                        data-ai-hint="person avatar" 
+                      />
+                      <AvatarFallback>
+                        {currentUser?.displayName 
+                          ? currentUser.displayName.charAt(0).toUpperCase() 
+                          : (currentUser?.email ? currentUser.email.charAt(0).toUpperCase() : 'U')}
+                      </AvatarFallback>
                     </Avatar>
-                    <span className="truncate">{currentUser.displayName || currentUser.email}</span>
+                    <span className="truncate">{currentUser?.displayName || currentUser?.email}</span>
                   </Link>
                 </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="Toggle theme">
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-6 w-6 items-center justify-center">
-                      <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                      <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              </SidebarMenuItem>
+              
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Toggle theme">
+                  <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-6 w-6 items-center justify-center">
+                        <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                        <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                      </div>
+                      <span>Theme</span>
                     </div>
-                    <span>Theme</span>
+                    <ThemeToggle />
                   </div>
-                  <ThemeToggle />
-                </div>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
@@ -428,11 +459,12 @@ export default function DashboardLayout({
                   tooltip="Notification Settings"
                 >
                   <Link href="/notification-settings">
-                    <Bell />
+                    <Bell className="h-4 w-4" />
                     <span>Notifications</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
@@ -440,51 +472,56 @@ export default function DashboardLayout({
                   tooltip="API Settings"
                 >
                   <Link href="/api-settings">
-                    <Cog />
+                    <Cog className="h-4 w-4" />
                     <span>API Settings</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  onClick={toggleListening} 
+                  tooltip="Voice Assistant" 
+                  isActive={isListening}
+                >
+                  <Mic className="h-4 w-4" />
+                  <span>{isListening ? 'Listening...' : 'Voice Assistant'}</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  isActive={pathname === '/developer-info'}
+                  onClick={handleLogout}
+                  tooltip="Logout"
                 >
-                  <SidebarMenu>
-                    <SidebarMenuButton asChild>
-                      <Link href="/dashboard">
-                        <LayoutDashboard className="h-4 w-4" />
-                        <span>Dashboard</span>
-                      </Link>
-                    </SidebarMenuButton>
-                    
-                  </SidebarMenu>
+                  <div className="cursor-pointer">
+                    <LogOut className="h-4 w-4" />
+                    <span>Logout</span>
+                  </div>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-            <SidebarMenuItem>
-                <SidebarMenuButton onClick={toggleListening} tooltip="Voice Assistant" isActive={isListening}>
-                  <Mic />
-                  <span>{isListening ? 'Listening...' : 'Voice Assistant'}</span>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarFooter>
-      </Sidebar>
-      <SidebarInset>
-        <header className="sticky top-0 z-10 flex h-14 items-center justify-between gap-3 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-3 sm:h-16 sm:static sm:border-0 sm:bg-transparent sm:px-6 md:hidden">
+            </SidebarMenu>
+          </SidebarFooter>
+        </Sidebar>
+        
+        <SidebarInset>
+          <header className="sticky top-0 z-10 flex h-14 items-center justify-between gap-3 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-3 sm:h-16 sm:static sm:border-0 sm:bg-transparent sm:px-6 md:hidden">
             <div className="flex items-center gap-2">
-                <SidebarTrigger className="mr-1 h-9 w-9" />
-                <Logo className="w-6 h-6 text-primary" />
-                <span className="font-headline text-lg sm:text-xl text-primary truncate">EduGenius</span>
+              <SidebarTrigger className="mr-1 h-9 w-9" />
+              <Logo className="w-6 h-6 text-primary" />
+              <span className="font-headline text-lg sm:text-xl text-primary truncate">EduGenius</span>
             </div>
-             <div className='flex items-center gap-1'>
-                <RealtimeNotifications userId={currentUser?.uid || 'anonymous'} />
-             </div>
-        </header>
-        <div className="p-3 sm:p-4 md:p-6">
-          {children}
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+            <div className='flex items-center gap-1'>
+              <RealtimeNotifications userId={currentUser?.uid || 'anonymous'} />
+            </div>
+          </header>
+          
+          <div className="p-3 sm:p-4 md:p-6">
+            {children}
+          </div>
+        </SidebarInset>
+      </SidebarProvider>
+    </GamificationProvider>
   );
 }

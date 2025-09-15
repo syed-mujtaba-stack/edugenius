@@ -141,15 +141,29 @@ export default function AskAiPage() {
     });
   };
 
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatHistory, isTyping]);
+
+  // Auto-scroll to bottom when new messages arrive or when typing state changes
+  useEffect(() => {
+    // Small timeout to ensure DOM is updated
+    const timer = setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [chatHistory, isTyping]);
+
   return (
     <TooltipProvider>
-      <div className="flex h-screen overflow-hidden">
+      <div className="flex flex-row h-screen w-full overflow-hidden">
         {/* Sidebar */}
         <div className={cn(
-          'fixed inset-y-0 left-0 z-40 w-64 bg-background border-r transition-transform duration-300 ease-in-out transform',
+          'fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t p-4 transition-transform duration-300 ease-in-out transform',
+          'md:relative md:translate-x-0 md:w-80 md:flex-shrink-0 md:border-r md:border-t-0',
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full',
-          'md:relative md:translate-x-0 md:flex md:flex-col md:border-r md:border-gray-200 dark:border-gray-800',
-          'flex flex-col h-full'
+          'flex flex-col h-full z-20'
         )}>
           <div className="p-4 border-b">
             <div className="flex items-center justify-between">
@@ -265,8 +279,8 @@ export default function AskAiPage() {
         </div>
 
         {/* Main Chat Area */}
-        <div className="flex-1 flex flex-col h-screen overflow-hidden">
-          <header className="border-b h-16 flex items-center px-4 md:px-6">
+        <div className="flex-1 flex flex-col overflow-hidden relative w-full">
+          <header className="border-b h-16 flex-shrink-0 flex items-center px-4 md:px-6">
             <Button 
               variant="ghost" 
               size="icon" 
@@ -301,7 +315,13 @@ export default function AskAiPage() {
           </div>
           {/* 🔥 FIX END */}
 
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="flex-1 overflow-y-auto p-4 pb-32 md:pb-4" style={{
+            WebkitOverflowScrolling: 'touch',
+            paddingBottom: '8rem', // Extra space for input on mobile
+            height: 'calc(100vh - 4rem)', // Account for header height
+            marginLeft: '0',
+            width: '100%'
+          }}>
             {isTyping && (
               <div className="flex items-start gap-3">
                 <Bot className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
@@ -334,9 +354,13 @@ export default function AskAiPage() {
                   >
                     {chat.role === 'bot' && <Bot className="h-6 w-6 text-primary flex-shrink-0 mt-1" />}
                     <div 
-                      className={`rounded-lg p-3 max-w-xl relative group ${
+                      className={`rounded-lg p-3 max-w-[90%] sm:max-w-xl relative group ${
                         chat.role === 'bot' ? 'bg-secondary' : 'bg-primary text-primary-foreground'
                       }`}
+                      style={{
+                        wordBreak: 'break-word',
+                        overflowWrap: 'break-word'
+                      }}
                     >
                       <div className="flex items-center justify-between mb-1">
                         <span className="text-xs opacity-70">
@@ -459,9 +483,9 @@ export default function AskAiPage() {
             )}
           </div>
 
-          {/* Input Area */}
-          <div className="border-t p-4">
-            <div className="max-w-3xl mx-auto flex flex-col gap-3">
+          {/* Input Area - Fixed at bottom on mobile */}
+          <div className="border-t p-4 bg-background/95 backdrop-blur-sm fixed bottom-0 left-0 right-0 md:static z-10">
+            <div className="max-w-4xl mx-auto relative flex flex-col gap-3">
               <Input
                 placeholder="Topic (e.g. Physics, History, Math)"
                 value={topic}
