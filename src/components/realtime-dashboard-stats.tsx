@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { useToast } from '@/hooks/use-toast'
+import { QuickTest } from './quick-test/QuickTest'
 
 interface RealtimeDashboardStatsProps {
   userId: string
@@ -45,7 +46,9 @@ export function RealtimeDashboardStats({ userId }: RealtimeDashboardStatsProps) 
   
   const [currentSession, setCurrentSession] = useState<string | null>(null)
   const [sessionStartTime, setSessionStartTime] = useState<Date | null>(null)
-  const [sessionDuration, setSessionDuration] = useState(0)
+  const [sessionDuration, setSessionDuration] = useState<number>(0)
+  const [isSessionActive, setIsSessionActive] = useState<boolean>(false)
+  const [showQuickTest, setShowQuickTest] = useState<boolean>(false)
   const { toast } = useToast()
 
   // Update session timer
@@ -86,8 +89,7 @@ export function RealtimeDashboardStats({ userId }: RealtimeDashboardStatsProps) 
     }
   }
 
-  const handleQuickTest = async () => {
-    const score = Math.floor(Math.random() * 30) + 70 // Random score between 70-100
+  const handleQuickTestComplete = async (score: number) => {
     await completeTest('Quick Assessment', score, 'medium')
     toast({
       title: 'Test completed! 📝',
@@ -153,7 +155,7 @@ export function RealtimeDashboardStats({ userId }: RealtimeDashboardStatsProps) 
       {/* Quick Actions */}
       <div className="grid gap-3 grid-cols-2 md:grid-cols-4">
         <Button 
-          onClick={handleQuickTest} 
+          onClick={() => setShowQuickTest(true)} 
           variant="outline" 
           size="sm"
           className="h-auto p-3 flex flex-col items-center space-y-1"
@@ -161,6 +163,18 @@ export function RealtimeDashboardStats({ userId }: RealtimeDashboardStatsProps) 
           <FileText className="h-4 w-4" />
           <span className="text-xs">Quick Test</span>
         </Button>
+        
+        {/* Quick Test Dialog */}
+      {showQuickTest && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowQuickTest(false)}>
+          <div className="bg-background rounded-lg p-6 w-full max-w-md" onClick={e => e.stopPropagation()}>
+            <QuickTest 
+              onCompleteAction={handleQuickTestComplete}
+              onCloseAction={() => setShowQuickTest(false)}
+            />
+          </div>
+        </div>
+      )}
         
         <Button 
           onClick={handleQuickSummary} 
