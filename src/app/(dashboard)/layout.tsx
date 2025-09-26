@@ -25,6 +25,7 @@ import {
   Gamepad2,
   BookPlus,
   BookOpenCheck,
+  Sparkles,
   Sun,
   Moon,
   Search,
@@ -136,11 +137,13 @@ export default function DashboardLayout({
     { href: '/summarize', label: 'Chapter Summarizer', icon: BookText, keywords: ['summarizer', 'summary', 'chapter'] },
     { href: '/q-and-a', label: 'Q&A Generator', icon: MessageSquarePlus, keywords: ['q&a', 'questions', 'answers'] },
     { href: '/test-generator', label: 'Test Generator', icon: FileText, keywords: ['test generator', 'test', 'exam'] },
+    { href: '/flashcards', label: 'Flashcard Studio', icon: Sparkles, keywords: ['flashcards', 'revision', 'study cards'] },
     { href: '/essay-evaluator', label: 'Essay Evaluator', icon: FileSignature, keywords: ['essay evaluator', 'essay', 'writing'] },
     { href: '/ask-ai', label: 'AI Tutor', icon: Bot, keywords: ['ai tutor', 'tutor', 'ask'] },
     { href: '/audio-generator', label: 'Audio Generator', icon: Music4, keywords: ['audio generator', 'audio', 'voice', 'sound'] },
     { href: '/book-generator', label: 'AI Book Generator', icon: BookPlus, keywords: ['book generator', 'book', 'write book'] },
     { href: '/video-generator', label: 'Video Generator', icon: Video, keywords: ['video generator', 'video', 'create video'] },
+    { href: '/coding-playground', label: 'Coding Playground', icon: Code, keywords: ['coding playground', 'playground', 'code editor', 'programming'] },
     { href: '/career-counseling', label: 'Career Counseling', icon: Briefcase, keywords: ['career', 'counseling', 'advice'] },
     { href: '/community', label: 'Community', icon: Users, keywords: ['community', 'hub', 'discussion'] },
     { href: '/lesson-planner', label: 'Lesson Planner', icon: BookCopy, keywords: ['lesson planner', 'teacher tool', 'plan'] },
@@ -291,6 +294,10 @@ export default function DashboardLayout({
     { href: '/learning-path', label: 'Learning Path', icon: TrendingUp },
     { href: '/career-counseling', label: 'Career Counseling', icon: Briefcase },
     { href: '/book-generator', label: 'AI Book Generator', icon: BookPlus },
+    { href: '/flashcards', label: 'Flashcard Studio', icon: Sparkles },
+    { href: '/coding-playground', label: 'Coding Playground', icon: Code },
+
+
   ];
 
   const learningToolsItems: MenuItem[] = [
